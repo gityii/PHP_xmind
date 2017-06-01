@@ -1,0 +1,1 @@
+一个函数的参数不能是对变量的引用，除非在php.ini中把allow_call_time_pass_reference设为on.

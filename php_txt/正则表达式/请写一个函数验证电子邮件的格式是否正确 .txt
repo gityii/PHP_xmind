@@ -1,0 +1,17 @@
+function checkEmail($email)
+  {
+    $pregEmail = "/([a-z0-9]*[-_\.]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?/i";
+    return preg_match($pregEmail,$email);  
+  }
+
+-------------------------------------------------------------------------------------------
+
+//if the email address is valid, return true,else return false
+function validateEmail($email)
+{
+    if(eregi('^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*$',$email) ){
+        return true;
+    }else{
+        return false;
+    }
+}

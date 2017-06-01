@@ -1,0 +1,23 @@
+有一个网页地址, 比如PHP开发资源网主页: http://www.phpres.com/index.html,如何得到它的内容?
+
+file_get_contents();
+
+
+答:方法1(对于PHP5及更高版本):
+   $readcontents = fopen("http://www.phpres.com/index.html", "rb");
+   $contents = stream_get_contents($readcontents);
+   fclose($readcontents);
+   echo $contents;
+   方法2:
+   echo file_get_contents("http://www.phpres.com/index.html");
+
+
+----------------------------------------------------------------------------
+
+答:方法1(对于PHP5及更高版本):
+$readcontents = fopen(”http://www.phpres.com/index.html”, “rb”);
+$contents = stream_get_contents($readcontents);
+fclose($readcontents);
+echo $contents;
+方法2:
+echo file_get_contents(”http://www.phpres.com/index.html”);

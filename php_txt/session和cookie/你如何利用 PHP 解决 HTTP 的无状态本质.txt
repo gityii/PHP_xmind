@@ -1,0 +1,2 @@
+最主要的俩各选择是 session 和 cookie。使用 session 的方法是在每一页的开始加上 session_start()，然后利用 $_SESSION 散列表来储存 session 变量。至于 cookie 你只需记着一个原则：在输出任何文字之前调用 set_cookie() 函式，此外只需使用 $_COOKIE 散列表便可以存取所有 cookie 变量。
+还有一个不那么可靠的方法，就是利用访客的 IP 地址，这个方法有特定的危险性。

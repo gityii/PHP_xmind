@@ -1,0 +1,11 @@
+$users[] = 'john';
+成功把 John 新增到阵列 users。 
+
+array_add($users,’john’);
+函式 array_add() 无定义。
+ 
+array_push($users,‘john’);
+成功把 John 新增到阵列 users。 
+
+$users ||= 'john';
+语法错误。

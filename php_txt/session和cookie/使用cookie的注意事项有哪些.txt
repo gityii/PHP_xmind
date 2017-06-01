@@ -1,0 +1,6 @@
+使用cookie的注意事项有哪些？
+1） setcookie()之前不可以有任何页面输出，就是空格，空白行也不可以；
+2） setcookie()后，在当前页面调用$_COOKIE['cookiename']不会有输出，必须刷新或到下一个页面才可以看到cookie值；
+3） 不同的浏览器对cookie处理不同，客户端可以禁用cookie，浏览器也可以闲置cookie的数量，一个浏览器能创建的cookie数量最多300个，并且每个不可以超过4kb，
+每个web站点能设置的cookie总数不能超过20个。
+4） cookie是保存在客户端的，用户禁用了cookie，那么setcookie就不会起作用了。所以不可以过度依赖cookie。

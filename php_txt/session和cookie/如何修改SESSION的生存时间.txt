@@ -1,0 +1,40 @@
+我们来手动设置 Session 的生存期：
+＜?php
+	session_start(); 
+	// 保存一天 
+	$lifeTime = 24 * 3600; 
+	setcookie(session_name(), session_id(), time() + $lifeTime, "/"); 
+?＞
+
+　　
+其实 Session 还提供了一个函数 session_set_cookie_params(); 来设置 Session 的生存期的，该函数必须在 session_start() 函数调用之前调用：
+＜?php 
+	// 保存一天 
+	$lifeTime = 24 * 3600; 
+	session_set_cookie_params($lifeTime); 
+	session_start();
+	$_SESSION["admin"] = true; 
+?＞
+
+如果客户端使用 IE 6.0 ， session_set_cookie_params(); 函数设置 Cookie 会有些问题，所以我们还是手动调用 setcookie 函数来创建 cookie。
+
+-------------------------
+
+
+setcookie()
+或
+session_set_cookie_params($lifeTime)
+
+--------------------------------------------------------------------------
+
+如何修改SESSION的生存时间(1分).
+答:方法1:将php.ini中的session.gc_maxlifetime设置为9999重启apache
+方法2:$savePath = “./session_save_dir/”;
+$lifeTime = 小时 * 秒;
+session_save_path($savePath);
+session_set_cookie_params($lifeTime);
+session_start();
+方法3:setcookie() and session_set_cookie_params($lifeTime);
+
+
+

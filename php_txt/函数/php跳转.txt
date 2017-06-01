@@ -1,0 +1,7 @@
+1.php如何跳转
+方法一：php函数跳转,缺点，header头之前不能有输出，跳转后的程序继续执行，可用exit中断执行后面的程序。
+Header("Location: 网址"); 	//直接跳转
+header("refresh:3;url=http://axgle.za.net");	//三秒后跳转
+
+方法二：利用meta 
+echo "<meta http-equiv=refresh content='0; url=网址'>"; 

@@ -1,0 +1,5 @@
+$mail = “gaofei@163.com”;
+
+echo strstr($mail,'163');
+echo substr($mail,7);
+$arr = explode("@",$mail); echo $arr[1];

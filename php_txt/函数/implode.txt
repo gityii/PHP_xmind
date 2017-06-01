@@ -1,0 +1,3 @@
+$arr = array('james', 'tom', 'symfony');请将$arr数组的值用’,’分割并合并成字符串输出
+
+echo implode(‘,’,$arr);

@@ -1,0 +1,14 @@
+程序文件名和目录名均采用有意义的英文命名，不使用拼音或无意义的字母，只允许出现字母、数字、下划线和中画线字符，多个词间使用驼峰法命名。
+//类
+DemoTest.class.php
+
+//接口
+DemoTest.interface.php
+
+//其他按照各自的方式
+DemoTest.{style}.php
+
+//其他一些文件按照
+demoTest.inc.php
+
+zend/demo.lib.php

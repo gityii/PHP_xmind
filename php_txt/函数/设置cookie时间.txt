@@ -1,0 +1,3 @@
+ 如何设置一个cookie的名字为username,值为jack，并且让此cookie一周后失效？
+ 
+ setcookie(‘username’,’jack’,time()+7*24*3600);

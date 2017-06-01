@@ -1,0 +1,25 @@
+city:
+id City Provinceid
+1 广州 1
+2 深圳 1
+3 惠州 1
+4 长沙 2
+5 武汉 3
+………. 广州
+province:
+id Province
+1 广东
+2 湖南
+3 湖北
+……….
+（1） 写一条sql语句关系两个表，实现：显示城市的基本信息。？
+（2） 显示字段：城市id ，城市名， 所属省份 。
+如：
+Id（城市id） Cityname(城市名) Privence(所属省份)
+。。。。。。。。。
+。。。。。。。。。
+（2）如果要统计每个省份有多少个城市，请用group by 查询出来。？
+显示字段：省份id ，省份名，包含多少个城市。
+ANSWER:
+1.select A.id,A.Cityname,B.Province from city A,province B where A.provinceid=B.id
+2.select B.id,B.Province,count(*) as num from city A,province B where A.provinceid=B.id group by B.id

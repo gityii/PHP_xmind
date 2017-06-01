@@ -1,0 +1,2 @@
+可以直接在php.ini中开启session.auto_start=1或者在页面头部用session_start();
+开启session，session_start()前面不能有任何输出，包括空行。

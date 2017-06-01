@@ -1,0 +1,6 @@
+class test{
+   function Get_test($num){
+      $num=md5(md5($num)."En");
+      return $num;
+   }
+}

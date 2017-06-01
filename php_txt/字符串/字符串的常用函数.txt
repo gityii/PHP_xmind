@@ -1,0 +1,8 @@
+trim();--去除空格
+strlen();--字符串长度
+substr();--截取字符串
+str_replace();--替换字符串函数
+substr_replace() -- 对指定字符串中的部分字符串进行替换
+strstr();--检索字符串函数
+explode();--分割字符串函数
+strcasecmp();--比较字符串函数

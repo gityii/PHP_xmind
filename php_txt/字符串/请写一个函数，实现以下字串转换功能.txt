@@ -1,0 +1,19 @@
+字符串“open_door” 转换成 “OpenDoor”、”make_by_id” 转换成 ”MakeById”
+
+
+<?php
+function changeStyle(& $str) {
+
+/*$str = str_replace ( "_", " ", $str );
+$str = ucwords ( $str );
+$str = str_replace ( " ", "", $str );
+return $str;*/
+
+$arrStr=explode('_',$str);
+foreach($arrStr as $key=>$value){
+  $arrStr[$key]=strtoupper(substr($value,0,1)).substr($value,1);
+}
+return implode('',$arrStr);
+}
+$s = "open_door";
+echo changeStyle ( $s );

@@ -1,0 +1,5 @@
+php支持8种原始数据类型。
+包括：
+四种标量类型（布尔型boolean，整型interger，浮点型float/double , 字符串string）
+两种复合类型(数组array ， 对象object)
+两种特殊类型（资源resource，NULL）

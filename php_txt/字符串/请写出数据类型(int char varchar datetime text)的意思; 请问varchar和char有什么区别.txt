@@ -1,0 +1,2 @@
+int是数字类型,char固定长度字符串,varchar实际长度字符串,datetime日期时间型,text文本字符串
+   char的场地固定为创建表设置的长度,varchar为可变长度的字符

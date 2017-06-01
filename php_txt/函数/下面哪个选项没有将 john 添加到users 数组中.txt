@@ -1,0 +1,6 @@
+    (a) $users[] = ‘john’;
+　　(b) array_add($users,’john’);
+　　(c) array_push($users,‘john’);
+　　(d) $users ||= ‘john’; 
+
+ [  a , c  ]

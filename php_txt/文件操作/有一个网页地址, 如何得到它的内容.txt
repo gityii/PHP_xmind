@@ -1,0 +1,2 @@
+比如PHP开发资源网主页 httpwww.phpres.comindex.html
+$str = file_get_contents(‘http://www.phpres.com/index.html’);

@@ -1,0 +1,15 @@
+1. 记录用户访问的部分信息
+2. 在页面间传递变量
+3. 将所查看的internet页存储在cookies临时文件夹中，可以提高以后的浏览速度。
+
+创建cookie：
+	setcookie(string cookiename , string value , int expire);
+读取cookie：
+	通过超级全局数组$_COOKIE来读取浏览器端的cookie的值。
+删除cookie：有两种方法
+	1.手工删除方法：
+	右击浏览器属性，可以看到删除cookies，执行操作即可将所有cookie文件删除。
+	2.setcookie()方法：
+	跟设置cookie的方法一样，不过此时讲cookie的值设置为空，有效时间为0或小于当前时间戳。
+	
+

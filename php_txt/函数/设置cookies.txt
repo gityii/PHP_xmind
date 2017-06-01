@@ -1,0 +1,6 @@
+bool setcookie ( string name [, string value [, int expire [, string path [, string domain [, bool secure]]]]] )
+参数说明: Cookie 的名字，Cookie的值，过期时间，Cookie 在服务器端的有效路径，该 cookie 有效的域名，指明 cookie 是否仅通过安全的 HTTPS 连接传送。当设成 TRUE 时，cookie 仅在安全的连接中被设置。默认值为 FALSE
+$value = 'something from somewhere';
+setcookie("TestCookie", $value);
+setcookie("TestCookie", $value,time()+3600);  /*有效期为一小时 */
+setcookie("TestCookie", $value,time()+3600, "/~rasmus/", ".utoronto.ca", 1); 

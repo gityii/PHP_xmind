@@ -1,0 +1,13 @@
+function seq_sch($array, $n, $k){ 
+      $array[$n] = $k; 
+      for($i=0; $i<$n; $i++){ 
+          if($array[$i]==$k){ 
+              break; 
+          } 
+      } 
+      if ($i<$n){ 
+          return $i; 
+      }else{ 
+          return -1; 
+      } 
+}

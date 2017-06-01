@@ -1,0 +1,8 @@
+在不影响可读性的前提下，习惯对变量进行缩写，常见于一些函数的参数。
+此规则适用于PHP之外的代码，如js代码，数据库表字段命名等，例如：
+image  -> img
+string -> str
+database -> db
+array  -> arr
+count -> cnt
+

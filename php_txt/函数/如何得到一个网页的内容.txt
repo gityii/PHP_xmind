@@ -1,0 +1,3 @@
+有一个网页地址, 比如PHP开发资源网主页: http://www.phpres.com/index.html,如何得到它的内容?
+
+file_get_contents($url)

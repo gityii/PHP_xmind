@@ -1,0 +1,10 @@
+2，一般要加上隐藏域：<input type=hidden name='MAX_FILE_SIZE' value=dddddd>，位置在file域前面。value的值是上传文件的客户端字节限制。据说可以减少文件超标时客户端的等待时间，不过我没觉得有什么区别。
+3，出于安全考虑，file域是不许赋值的。随便在file域输入字符串，然后按submit也不会有反应。必须是第二个字符是冒号的时候（比如空格跟随冒号可以上传一个长度为0字节的“文件”），submit才同意“服务”——不过这个是客户端的措施，跟MAX_FILE_SIZE一样很容易绕过去。
+
+限制上传文件大小的因素有
+1，客户端的隐藏域MAX_FILE_SIZE的数值（可以被绕开）。
+2，服务器端的upload_max_filesize，post_max_size和memory_limit。这几项不能够用脚本来设置。
+3，自定义文件大小限制逻辑。即使服务器的限制是能自己决定，也会有需要个别考虑的情况。所以这个限制方式经常是必要的。
+4，$_FILE['fn']['size']
+
+is_uploaded_file()    ,    move_uploaded_file()

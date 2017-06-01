@@ -1,0 +1,25 @@
+create database phpinterview;
+use phpinterview
+create table tbl_user
+(
+    ID                             int                            not null,
+    name                        varchar(50)                not null,
+   primary key (ID)
+);
+create table tbl_score
+(
+    ID                             int                            not null,
+    score                        dec(6,2)                    not null,
+    subject                      varchar(20)               not null
+);
+insert into tbl_user (ID, name) values (1, 'beimu');
+insert into tbl_user (ID, name) values (2, 'aihui');
+insert into tbl_score (ID, score, subject) values (1, 90, '语文');
+insert into tbl_score (ID, score, subject) values (1, 80, '数学');
+insert into tbl_score (ID, score, subject) values (2, 86, '数学');
+insert into tbl_score (ID, score, subject) values (2, 96, '语文');
+select A.id,sum(B.score) as sumscore
+from tbl_user A left join tbl_score B
+on A.ID=B.ID
+group by A.id
+

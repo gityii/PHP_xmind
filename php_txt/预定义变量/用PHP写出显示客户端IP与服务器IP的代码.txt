@@ -1,0 +1,17 @@
+打印客户端IP:echo $_SERVER[‘REMOTE_ADDR’]; 或者: getenv('REMOTE_ADDR');
+打印服务器IP:echo gethostbyname("www.bolaiwu.com")
+
+----------------------------------------------------------
+
+function get_client_ip() {#
+ if(getenv('HTTP_CLIENT_IP')) {
+  $client_ip = getenv('HTTP_CLIENT_IP');
+ } elseif(getenv('HTTP_X_FORWARDED_FOR')) {
+  $client_ip = getenv('HTTP_X_FORWARDED_FOR');
+ } elseif(getenv('REMOTE_ADDR')) {
+  $client_ip = getenv('REMOTE_ADDR');
+ } else {
+  $client_ip = $HTTP_SERVER_VAR['REMOTE_ADDR'];
+ }
+ return $client_ip;
+}

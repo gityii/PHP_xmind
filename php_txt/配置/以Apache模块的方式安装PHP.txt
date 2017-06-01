@@ -1,0 +1,6 @@
+以Apache模块的方式安装PHP，在文件http.conf中首先要用语句____动态装载PHP模块，
+然后再用语句____使得Apache把所有扩展名为php的文件都作为PHP脚本处理。
+答：
+LoadModule php5_module "c:/php/php5apache2.dll";
+AddType application/x-httpd-php .php
+见参考手册》目录》II. 安装与配置》6. Windows 系统下的安装》Microsoft Windows 下的 Apache 2.0.x

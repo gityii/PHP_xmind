@@ -1,0 +1,27 @@
+存储过程：
+<?php
+DELIMITER //
+create procedure proc_countNum(in columnId int,out rowsNo int)
+begin
+  select count(*) into rowsNo from member where member_id=columnId;    
+end
+call proc_countNum(1,@no);
+select @no;
+
+
+视图：
+create view v_countNum as select member_id,count(*) as countNum from member group by member_id
+select countNum from v_countNum where member_id=1
+7 表中有A B C三列,用SQL语句实现：当A列大于B列时选择A列否则选择B列，当B列大于C列时选择B列否则选择C列。
+[php]
+select
+case
+when first_name>middle_name then
+case when first_name>last_name then first_name
+else last_name end
+else
+case when middle_name>last_name then middle_name else last_name
+end
+end as name
+from member
+[/php]

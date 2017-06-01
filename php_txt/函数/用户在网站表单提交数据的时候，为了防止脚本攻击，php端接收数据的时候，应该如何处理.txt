@@ -1,0 +1,3 @@
+比如用户输入<script>alert（111）；</script>
+
+htmlspecialchars($_POST[‘title’]);

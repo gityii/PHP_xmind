@@ -1,0 +1,20 @@
+一个完整独立的PHP项目，其文件和目录结构如下：
+
+     ——app   				    //独立的应用
+     ——class           	        //单个的类文件，共用的类文件（比如工具类）
+     ——conf/inc     		    //配置文件目录
+     ——data          		    //数据文件目录
+     ——doc           		    //程序相关文档
+     ——htdocs      		        //document_root
+     ——images       		    //所有图片文件存放路径（在里面根据目录结构设立子目录）
+     ——css             		    //CSS文件
+     ——js              		    //js脚本文件
+     ——lib              		//共用类库
+     ——template   			    //模板文件
+     ——temp         			//临时文件目录
+       |——cache 
+       |——session
+       |——template_c
+       |——other
+     ——upload       			//上传文件（按特定规则分目录存放）
+     ——manage     			    //后台管理文件存放目录

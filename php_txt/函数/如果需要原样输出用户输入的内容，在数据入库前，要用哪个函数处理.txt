@@ -1,0 +1,1 @@
+<script>alert(1)</script>  $titlt = htmlspecialchars($_POST[‘title’]);  < &lt;  > &gt;

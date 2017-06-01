@@ -1,0 +1,9 @@
+redir()
+这不是一个 PHP 函式，会引致执行错误。
+header()
+这个是正确答案，header() 用来插入卷头资料，可以用来使浏览器转向到另一个页面，例如：
+header("Location: http://www.search-this.com/");
+location()
+这不是一个 PHP 函式，会引致执行错误。
+redirect()
+这不是一个 PHP 函式，会引致执行错误。

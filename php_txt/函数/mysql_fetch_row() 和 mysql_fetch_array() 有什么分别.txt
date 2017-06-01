@@ -1,0 +1,8 @@
+mysql_fetch_row() 把数据库的一列储存在一个以零为基数的阵列中，第一栏在阵列的索引 0，第二栏在索引 1，如此类推。mysql_fetch_assoc() 把数据库的一列储存在一个关联阵列中，阵列的索引就是栏位名称，例如我的数据库查询送回“first_name”、“last_name”、 “email”三个栏位，阵列的索引便是“first_name”、“last_name”和“email”。mysql_fetch_array() 可以同时送回 mysql_fetch_row() 和 mysql_fetch_assoc() 的值。 
+
+mysql_fetch_row() 和mysql_fetch_assoc()和mysql_fetch_array之间有什么区别？
+
+第一个是返回结果集中的一行作为索引数组，第二个是返回关联数组，而第三个既可以返回索引数组也可以返回关联数组，取决于它的第二个参数 MYSQL_BOTH MYSQL_NUM  MYSQL_ASSOC 默认为MYSQL_BOTH
+$sql =”select * from table1”;
+$result = mysql_query($sql);
+mysql_fetch_array($result, MYSQL_NUM);

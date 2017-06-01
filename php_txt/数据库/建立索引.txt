@@ -1,0 +1,12 @@
+a.格式:
+(普通索引)->
+创建:CREATE INDEX <索引名> ON tablename (索引字段)
+修改:ALTER TABLE tablename ADD INDEX [索引名] (索引字段)
+创表指定索引:CREATE TABLE tablename([...],INDEX[索引名](索引字段))
+(唯一索引)->
+创建:CREATE UNIQUE <索引名> ON tablename (索引字段)
+修改:ALTER TABLE tablename ADD UNIQUE [索引名] (索引字段)
+创表指定索引:CREATE TABLE tablename([...],UNIQUE[索引名](索引字段))
+(主键)->
+它是唯一索引,一般在创建表是建立,格式为:
+CREATA TABLE tablename ([...],PRIMARY KEY[索引字段])

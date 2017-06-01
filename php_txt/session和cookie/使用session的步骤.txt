@@ -1,0 +1,10 @@
+1. 启动session：
+	使用session_start()函数来启动。
+2. 注册会话：
+	直接给$_SESSION数组添加元素即可。
+3. 使用会话：
+	判断session是否为空或者是否已经注册，如果已经存在则像普通数组使用即可。
+4. 删除会话：
+	1.可以使用unset删除单个session；
+	2.使用$_SESSION=array()的方式，一次注销所有的会话变量；
+3.使用session_destroy()函数来彻底销毁session。

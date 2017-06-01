@@ -1,0 +1,19 @@
+function quick_sort($array) { 
+          if (count($array) <= 1) return $array;
+
+          $key = $array[0]; 
+          $left_arr = array(); 
+          $right_arr = array();
+
+          for ($i=1; $i<count($array); $i++){ 
+                  if ($array[$i] <= $key) 
+                          $left_arr[] = $array[$i]; 
+                  else 
+                          $right_arr[] = $array[$i]; 
+          }
+
+          $left_arr = quick_sort($left_arr); 
+          $right_arr = quick_sort($right_arr);
+
+          return array_merge($left_arr, array($key), $right_arr); 
+}

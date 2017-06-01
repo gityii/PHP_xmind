@@ -1,0 +1,3 @@
+(a) fget() (b) file_open() (c) fopen() (d) open_file()   
+
+   [  c  ]

@@ -1,0 +1,4 @@
+<?php
+$begin=strtotime('2007-2-5');
+$end=strtotime('2007-3-6');
+echo ($end-$begin)/(24*3600);

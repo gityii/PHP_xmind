@@ -1,0 +1,3 @@
+ $str = ‘jack,james,tom,symfony’; 请将$str用’,’分割，并把分割后的值放到$arr数组中
+ 
+ $arr = explode(‘,’,$str);

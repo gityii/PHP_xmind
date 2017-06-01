@@ -1,0 +1,16 @@
+1. 你会如何定义一个没有成员函式或特性的类别 myclass？
+class myclass{}
+
+
+2. 你如何产生一个 myclass 的对象？
+$obj = new myclass();
+
+
+3. 在一个类别内如何存取这个类别的特性及变改它的值？
+
+使用语句：$this->propertyName，例如：
+class myclass{ 
+    private $propertyName;
+    public function __construct()
+   {   $this->propertyName = "value"; }
+}

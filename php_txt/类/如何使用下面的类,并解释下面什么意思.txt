@@ -1,0 +1,11 @@
+class test{
+     function Get_test($num){
+　　    $num=md5(md5($num)."En");
+　　    return $num;
+　　 }
+　　}
+答:$testnum = "123";
+   $object = new test();
+   $encrypt = $object->Get_test($testnum);
+   echo $encrypt;
+   类test里面包含Get_test方法,实例化类调用方法多字符串加密

@@ -1,0 +1,1 @@
+md5($str); 	sha1($str);

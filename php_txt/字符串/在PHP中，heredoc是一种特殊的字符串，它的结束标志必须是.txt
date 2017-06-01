@@ -1,0 +1,5 @@
+heredoc的语法是用"<<<"加上自己定义成对的标签，在标签范围內的文字视为一个字符串
+   例子:
+   $str = <<<SHOW
+   my name is Jiang Qihui!
+   SHOW; 	

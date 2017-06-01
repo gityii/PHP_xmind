@@ -1,0 +1,21 @@
+例如: http://www.sina.com.cn/abc/de/fg.php?id=1 需要取出 php 或 .php
+答案1:
+   function getExt($url){
+   $arr = parse_url($url);
+   
+   $file = basename($arr['path']);
+   $ext = explode(".",$file);
+   return $ext[1];
+}
+
+答案2:
+    function getExt($url) {
+    $url = basename($url);
+    $pos1 = strpos($url,".");
+    $pos2 = strpos($url,"?");
+    if(strstr($url,"?")){
+         return substr($url,$pos1 + 1,$pos2 - $pos1 - 1);
+    } else {
+      return substr($url,$pos1);
+    }
+}

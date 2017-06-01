@@ -1,0 +1,3 @@
+$sql = “select username from members order by posts desc limit 0,10”;
+
+答:SELECT * FROM `members` ORDER BY posts DESC limit 0,10;

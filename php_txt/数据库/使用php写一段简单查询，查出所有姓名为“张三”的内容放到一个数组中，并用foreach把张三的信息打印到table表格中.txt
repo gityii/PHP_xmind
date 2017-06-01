@@ -1,0 +1,21 @@
+表名User
+Name Tel Content Date
+张三 13333663366 大专毕业 2006-10-11
+张三 13612312331 本科毕业 2006-10-15
+张四 021-55665566 中专毕业 2006-10-15
+
+请根据上面的题目完成代码：
+$link = mysql_connect(‘localhost’,’root’,’’) or die(‘连接mysql失败’);
+mysql_select_db(‘database1’);
+mysql_query(‘set names utf8’);
+$sql = “select * from table1 where name=’张三’”;
+$result = mysql_query($sql);
+while( $row = mysql_fetch_assoc($result) ){
+$arr[] = $row;
+}
+$str .= ‘<table>’;
+foreach( $arr as $v ){
+$str .= ‘<tr><td>’.$v[‘name’].’</td><td>’.$v[‘age’].’</td><td>’.$v[‘class’].’</td></tr>’;
+}
+$str .= ‘</table>’;
+echo $str;

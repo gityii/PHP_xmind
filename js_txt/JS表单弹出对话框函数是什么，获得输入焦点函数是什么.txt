@@ -1,0 +1,2 @@
+弹出对话框: alert(),prompt(),confirm()
+获得输入焦点 focus()

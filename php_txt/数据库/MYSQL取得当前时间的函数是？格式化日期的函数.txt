@@ -1,0 +1,4 @@
+now(),date()
+
+在数据库中格式化时间 用DATE_FORMA T(date, format) .
+根据格式串format 格式化日期或日期和时间值date，返回结果串。

@@ -1,0 +1,4 @@
+ 如何把2009-9-2 103025变成unix时间戳？
+ 
+ $unix_time = strtotime("2009-9-2 10:30:25");//变成unix时间戳
+echo date("Y-m-d H:i:s",$unix_time);//格式化为正常时间格式

@@ -1,0 +1,13 @@
+表名User
+　　Name Tel Content Date
+　　张三 13333663366 大专毕业 2006-10-11
+　　张三 13612312331 本科毕业 2006-10-15
+　　张四 021-55665566 中专毕业 2006-10-15
+　　(a) 有一新记录(小王 13254748547 高中毕业 2007-05-06)请用SQL语句新增至表中
+    mysql_query("INSERT INTO `user` (name,tel,content,date) VALUES 
+    ('小王','13254748547','高中毕业','2007-05-06')")
+　　(b) 请用sql语句把张三的时间更新成为当前系统时间
+    $nowDate = date("Ymd");
+    mysql_query("UPDATE `user` SET date='".$nowDate."' WHERE name='张山'");
+　　(c) 请写出删除名为张四的全部记录
+    mysql_query("DELETE FROM `user` WHERE name='张四'");

@@ -1,0 +1,5 @@
+1 数据库中库和表都用utf8_general_ci编码
+2 php连接mysql，指定数据库编码为utf8 mysql_query(“set names utf8”);
+3 php文件指定头部编码为utf-8 header(“content-type:text/html;charset=utf-8”);
+4 网站下所有文件的编码为utf8
+5 html文件指定编码为utf-8 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

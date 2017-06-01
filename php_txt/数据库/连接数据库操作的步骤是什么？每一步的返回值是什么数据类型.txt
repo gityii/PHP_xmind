@@ -1,0 +1,5 @@
+$coon = mysql_connect('localhost', 'root' ,''); //返回资源类型
+mysql_select_db('bbs', $coon);	// 布尔类型
+mysq_query('set names utf8');  //布尔类型
+$qry = mysql_query('select * from bbsinfo');  // 资源类型
+mysql_fetch_row($qry)；	// 数组类型

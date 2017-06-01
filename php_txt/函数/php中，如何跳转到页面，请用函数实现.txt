@@ -1,0 +1,3 @@
+php中，如何跳转到blogview.php页面，请用函数实现
+
+header(“location:blog/view.php”);

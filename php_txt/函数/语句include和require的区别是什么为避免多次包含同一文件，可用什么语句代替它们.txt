@@ -1,0 +1,5 @@
+require->require是无条件包含也就是如果一个流程里加入require,无论条件成立与否都会先执行require 
+  include->include有返回值，而require没有(可能因为如此require的速度比include快) 
+  注意:包含文件不存在或者语法错误的时候require是致命的,include不是
+
+require_once()/include_once()

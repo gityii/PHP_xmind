@@ -1,0 +1,10 @@
+a.最好在相同字段进行比较操作,在建立好的索引字段上尽量减少函数操作
+例子1:
+SELECT * FROM order WHERE YEAR(orderDate)<2008;(慢)
+SELECT * FROM order WHERE orderDate<”2008-01-01″;(快)
+例子2:
+SELECT * FROM order WHERE addtime/7<24;(慢)
+SELECT * FROM order WHERE addtime<24*7;(快)
+例子3:
+SELECT * FROM order WHERE title like “%good%”;
+SELECT * FROM order WHERE title>=”good” and name<”good”;

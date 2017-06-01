@@ -1,0 +1,5 @@
+// 对文件操作
+$file = "a.txt"; 
+$fp = fopen($file, 'a+');	// 资源类型
+$fd = fread($fp, 10);		// 字符串
+$fw = fwrite($fp, '国家宁'); // 整型(写入的长度)

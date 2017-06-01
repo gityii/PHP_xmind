@@ -1,0 +1,1 @@
+二维数组。第一维是上传控件的name，二维下标分别为name/type/tmp_name/size/error.

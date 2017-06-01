@@ -1,0 +1,12 @@
+1.连接数据库服务器：
+	mysql_connect('数据库服务器的主机名或ip','数据库服务器的用户名','数据库服务器的密码');
+2.选择数据库：		
+	mysql_select_db(数据库名);
+3.设置从数据库提取数据的字符集：
+	mysql_query("set names utf8");
+4.执行sql语句：
+	mysql_query(sql语句);
+5.关闭结果集，释放资源：
+	mysql_free_result($result);
+6.关闭与数据库服务器的连接：
+	mysql_close($link);

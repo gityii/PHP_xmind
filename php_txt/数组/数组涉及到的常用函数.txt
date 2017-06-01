@@ -1,0 +1,15 @@
+array --  声明一个数组
+count -- 计算数组中的单元数目或对象中的属性个数
+foreach -- 遍历数组
+list -- 遍历数组
+explode -- 将字符串转成数组
+implode -- 将数组转成一个新字符串
+array_merge -- 合并一个或多个数组
+is_array -- 检查是否是数组		
+
+print_r -- 输出数组
+sort -- 数组排序
+
+array_keys -- 返回数组中所有的键名
+array_values -- 返回数组中所有的值
+key -- 从关联数组中取得键名

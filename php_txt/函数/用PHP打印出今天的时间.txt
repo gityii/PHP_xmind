@@ -1,0 +1,2 @@
+格式是2009-9-2 22:21:21
+date(“Y-m-d H:i:s”,time());  date(“Y-n-j H:i:s”);

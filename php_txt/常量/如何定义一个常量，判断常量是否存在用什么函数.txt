@@ -1,0 +1,4 @@
+define(“TEST”,’happy new year!’);
+If( defined(“TEST”)){
+		echo TEST;
+}

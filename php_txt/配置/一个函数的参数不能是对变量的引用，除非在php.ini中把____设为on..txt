@@ -1,0 +1,1 @@
+allow_call_time_pass_reference boolean :是否启用在函数调用时强制参数被按照引用传递, 见参考手册》附录G

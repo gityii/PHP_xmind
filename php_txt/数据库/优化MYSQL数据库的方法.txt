@@ -1,0 +1,84 @@
+  1、选取最适用的字段属性,尽可能减少定义字段长度,尽量把字段设置NOT NULL,例如'省份,性别',最好设置为ENUM
+   2、使用连接（JOIN）来代替子查询:
+      a.删除没有任何订单客户:DELETE FROM customerinfo WHERE customerid NOT in(SELECT customerid FROM orderinfo)
+      b.提取所有没有订单客户:SELECT FROM customerinfo WHERE customerid NOT in(SELECT customerid FROM orderinfo)
+      c.提高b的速度优化:SELECT FROM customerinfo LEFT JOIN orderid customerinfo.customerid=orderinfo.customerid
+      WHERE orderinfo.customerid IS NULL
+      3、使用联合(UNION)来代替手动创建的临时表
+      a.创建临时表:SELECT name FROM `nametest` UNION SELECT username FROM `nametest2`
+      4、事务处理:
+      a.保证数据完整性,例如添加和修改同时,两者成立则都执行,一者失败都失败
+                  mysql_query("BEGIN");
+         mysql_query("INSERT INTO customerinfo (name) VALUES ('$name1')";
+         mysql_query("SELECT * FROM `orderinfo` where customerid=".$id");
+         mysql_query("COMMIT");
+  5、锁定表,优化事务处理:
+     a.我们用一个 SELECT 语句取出初始数据，通过一些计算，用 UPDATE 语句将新值更新到表中。
+     包含有 WRITE 关键字的 LOCK TABLE 语句可以保证在 UNLOCK TABLES 命令被执行之前，
+     不会有其它的访问来对 inventory 进行插入、更新或者删除的操作
+          mysql_query("LOCK TABLE customerinfo READ, orderinfo WRITE");
+          mysql_query("SELECT customerid FROM `customerinfo` where id=".$id);
+          mysql_query("UPDATE `orderinfo` SET ordertitle='$title' where customerid=".$id);
+          mysql_query("UNLOCK TABLES");
+  6、使用外键,优化锁定表
+     a.把customerinfo里的customerid映射到orderinfo里的customerid,
+     任何一条没有合法的customerid的记录不会写到orderinfo里
+           CREATE TABLE customerinfo
+           (
+               customerid INT NOT NULL,
+                PRIMARY KEY(customerid) 
+            )TYPE = INNODB;
+           CREATE TABLE orderinfo
+           (
+               orderid INT NOT NULL,
+               customerid INT NOT NULL,
+               PRIMARY KEY(customerid,orderid),
+               FOREIGN KEY (customerid) REFERENCES customerinfo
+               (customerid) ON DELETE CASCADE 
+           )TYPE = INNODB;
+           注意:'ON DELETE CASCADE',该参数保证当customerinfo表中的一条记录删除的话同时也会删除order
+           表中的该用户的所有记录,注意使用外键要定义事务安全类型为INNODB;
+  7、建立索引:
+      a.格式:
+           (普通索引)->
+           创建:CREATE INDEX <索引名> ON tablename (索引字段)
+           修改:ALTER TABLE tablename ADD INDEX [索引名] (索引字段)
+           创表指定索引:CREATE TABLE tablename([...],INDEX[索引名](索引字段)) 
+           (唯一索引)->
+           创建:CREATE UNIQUE <索引名> ON tablename (索引字段)
+           修改:ALTER TABLE tablename ADD UNIQUE [索引名] (索引字段)
+           创表指定索引:CREATE TABLE tablename([...],UNIQUE[索引名](索引字段)) 
+           (主键)->
+           它是唯一索引,一般在创建表是建立,格式为:
+           CREATA TABLE tablename ([...],PRIMARY KEY[索引字段])
+  8、优化查询语句
+      a.最好在相同字段进行比较操作,在建立好的索引字段上尽量减少函数操作
+       例子1:
+           SELECT * FROM order WHERE YEAR(orderDate)<2008;(慢)
+           SELECT * FROM order WHERE orderDate<"2008-01-01";(快)
+       例子2:
+           SELECT * FROM order WHERE addtime/7<24;(慢)
+           SELECT * FROM order WHERE addtime<24*7;(快)
+        例子3:
+           SELECT * FROM order WHERE title like "%good%";
+           SELECT * FROM order WHERE title>="good" and name<"good";
+
+
+其他表述：
+(1).数据库设计方面,这是DBA和Architect的责任,设计结构良好的数据库,必要的时候,去正规化(英文是这个:denormalize,中文翻译成啥我不知道),允许部分数据冗余,避免JOIN操作,以提高查询效率 
+(2).系统架构设计方面,表散列,把海量数据散列到几个不同的表里面.快慢表,快表只留最新数据,慢表是历史存档.集群,主服务器Read & write,从服务器read only,或者N台服务器,各机器互为Master 
+(3).(1)和(2)超越PHP Programmer的要求了,会更好,不会没关系.检查有没有少加索引 
+(4).写高效的SQL语句,看看有没有写低效的SQL语句,比如生成笛卡尔积的全连接啊,大量的Group By和order by,没有limit等等.必要的时候,把数据库逻辑封装到DBMS端的存储过程里面.缓存查询结果,explain每一个sql语句 
+(5).所得皆必须,只从数据库取必需的数据,比如查询某篇文章的评论数,select count(*) ... where article_id = ? 就可以了,不要先select * ... where article_id = ?然后msql_num_rows. 
+只传送必须的SQL语句,比如修改文章的时候,如果用户只修改了标题,那就update ... set title = ? where article_id = ?不要set content = ?(大文本) 
+(6).必要的时候用不同的存储引擎.比如InnoDB可以减少死锁.HEAP可以提高一个数量级的查询速度
+
+
+-------------------------------------------------------------------------------------
+
+(1).选取最适用的字段属性,应该尽量把字段设置为NOT NULL，这样在将来执行查询的时候，数据库不用去比较NULL值。
+(2).使用连接（JOIN）来代替子查询(Sub-Queries)
+(3).使用联合(UNION)来代替手动创建的临时表
+(4).尽量少使用 LIKE 关键字和通配符
+(5).使用事务和外键
+
