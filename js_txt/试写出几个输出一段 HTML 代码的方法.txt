@@ -1,3 +1,0 @@
-你可以使用 PHP 中任何一种输出语句，包括 echo、print、printf，大部分人都使用如下例的 echo：
-echo "My string $variable";你也可以使用这种方法：
-echo <<<ENDThis text is written to the screen as output and this $variable is parsed too. If you wanted you can have <span> HTML tags in here as well.</span> The END; remarks must be on a line of its own, and can't contain any extra white space.END;

@@ -1,0 +1,83 @@
+﻿
+路径：
+绝对路径: / 代码目录 
+相对路径：
+	Image/mog.gif    当前目录下的 image目录下的mog.gif
+	../   上一级目录
+
+	
+
+A标签  ：实现页面跳转 
+Href : 要跳转的页面
+<a href=””>跳到本页</a>   为空，刷新本页（跳到当前页）
+<a href=mailto:fortheday@126.com>打开邮件</a>  点击时，打开系统默认发邮件的软件
+<a href=”#锚点的名字”>跳到页面内的某个地方</a>
+定义锚点：<a name=”top”></a>
+<a href=”#”>跳到当面页的最顶端</a>
+<a href=”javascript:void(0);”>什么也不做</a>
+
+
+
+Table 标签 ：显示一个表格结构
+Width,height，可以指定准确的像素如，500px;也可以指定为上级的百分比,如50%
+<div style=”width:500px;”>
+	<table width=”50%”>     ---------    250px;
+		<tr>
+			<td></td>
+		</tr>
+	</table>
+</div>
+
+<body>
+	<table width=”50%”></table>    ------- 浏览器宽度的50%
+</body>
+
+
+
+如果一个table 即有 bgcolor又有background 那只有background生效
+<table bgcolor=”背景色” background="背景图片” width=”宽度” height=”高度” border=”边框的宽度” bordercolor="#边框的颜色” cellspacing=”单元格之间的距离” cellpadding=”内容与单元格的距离”>
+
+	<tr>   ---   一行
+
+		<td rowspan=”占几行” colspan=”占几列” align=”水平对齐” valign=”垂直对齐” width=”宽” height=”高”>            ---- 一列
+		</td>
+
+	</tr>
+
+</table>
+
+定义单元格宽时，只有同一列的第一个有效
+Align: left (默认),center,right
+Valign:top, middle(默认), bottom
+
+
+<hr size = "尺寸" noshade /> 水平线
+<br />换行  比p标签间距小
+<center></center>居中
+<strike></strike>划线
+<font color="" size="" face="" ></font>
+<body bgcolor="整个页面背景色" alink="超连接的颜色"
+text="非链接文字的颜色"
+link="链接的颜色" background = "整个页面背景图片">
+
+
+框架集标签 frameset  不需要body
+框架集可以嵌套
+切割页面
+<html>
+<head></head>
+<frameset frameborder = "1",cols="150,*">//同一时间rows和cols只能用一个
+<frame src = "left.html">
+<frame src = "right.html">
+</frameset>
+</html>
+
+
+
+
+
+
+
+
+
+	

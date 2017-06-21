@@ -1,0 +1,50 @@
+字符串：
+strncmp — 二进制安全比较字符串开头的若干个字符
+int strncmp ( string $str1 , string $str2 , int $len )
+如果 str1 小于 str2 返回 < 0； 如果 str1 大于 str2 返回 > 0；如果两者相等，返回 0。 
+
+
+
+strpos — 查找字符串首次出现的位置
+mixed strpos ( string $haystack , mixed $needle [, int $offset = 0 ] )
+返回 needle 在 haystack 中首次出现的数字位置。如果没找到 needle，将返回 FALSE。 
+
+substr — 返回字符串的子串
+string substr ( string $string , int $start [, int $length ] )
+返回字符串 string 由 start 和 length 参数指定的子字符串。 返回提取的子字符串， 或者在失败时返回 FALSE。 
+
+
+rtrim — 删除字符串末端的空白字符（或者其他字符）
+string rtrim ( string $str [, string $character_mask ] )
+该函数删除 str 末端的空白字符并返回。 
+
+
+is_string — 检测变量是否是字符串
+bool is_string ( mixed $var )
+如果 var 是 string 则返回 TRUE，否则返回 FALSE。
+
+
+
+变量：
+isset — 检测变量是否设置
+bool isset ( mixed $var [, mixed $... ] )	
+检测变量是否设置，并且不是 NULL。 如果 var 存在并且值不是 NULL 则返回 TRUE，否则返回 FALSE。 
+
+
+
+
+数组：
+krsort — 对数组按照键名逆向排序
+bool krsort ( array &$array [, int $sort_flags = SORT_REGULAR ] )
+对数组按照键名逆向排序，保留键名到数据的关联。主要用于结合数组。 成功时返回 TRUE， 或者在失败时返回 FALSE。 
+
+
+
+
+
+
+
+
+
+
+

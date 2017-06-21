@@ -1,0 +1,30 @@
+CSS：
+CSS禅意花园
+
+
+
+
+《Code Complete (2nd Ed) by Steve McConnell》，中文版《代码大全(第二版)》,两届Software Jolt Award震撼大奖得主！
+ 《The Pragmatic Programmer》，中文版《程序员修炼之道》
+《Structure and Interpretation of Computer Programs》，中文版《计算机程序的构造和解释》
+《The C Programming Language》，中文版《C程序设计语言》
+《Refactoring: Improving the Design of Existing Code》，中文版《重构：改善既有代码的设计》
+《Introduction to algorithms》，中文版《算法导论》
+《The Mythical Man-Month》，中文版《人月神话》
+《Design Patterns》，中文版《设计模式》
+《The Art of Computer Programming(First Volume Hardcover)》，中文版《计算机程序设计艺术第 (第一卷)》
+《Compilers: Principles, Techniques, and Tools 》，中文版《编译原理》
+《Head-First Design Patterns》，中文版《Head First 设计模式》
+
+
+
+《jQuery基础》（jQuery Fundamentals）
+
+
+《JavaScript高级程序设计》(Professional JavaScript for Web Developers)中文版高清扫描版&英文版&英文第二版[PDF]
+
+
+1.PHP基础入门（语法，常用函数和扩展）
+2.面向对象的PHP（书籍：《深入PHP，面向对象、模式与实践》）
+3.网站软件架构设计（设计模式、框架等）
+4.网站物理层次架构设计（分布式计算、存储、负载均衡、高可用性等）

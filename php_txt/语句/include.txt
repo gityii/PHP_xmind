@@ -1,0 +1,81 @@
+include 语句包含并运行指定文件。 
+被包含文件先按参数给出的路径寻找，如果没有给出目录（只有文件名）时则按照 include_path 指定的目录寻找。
+如果在 include_path 下没找到该文件则 include 最后才在调用脚本文件所在的目录和当前工作目录下寻找。如果最后仍未找到文件则 include 结构会发出一条警告。
+
+如果定义了路径——不管是绝对路径（在 Windows 下以盘符或者 \ 开头，在 Unix/Linux 下以 / 开头）还是当前目录的相对路径（以 . 或者 .. 开头）——include_path 都会被完全忽略。例如一个文件以 ../ 开头，则解析器会在当前目录的父目录下寻找该文件。 
+
+ include_path (string)
+
+    Specifies a list of directories where the require, include, fopen(), file(), readfile() and file_get_contents() functions look for files. The format is like the system's PATH environment variable: a list of directories separated with a colon in Unix or semicolon in Windows.
+
+    PHP considers each entry in the include path separately when looking for files to include. It will check the first path, and if it doesn't find it, check the next path, until it either locates the included file or returns with a warning or an error. You may modify or set your include path at runtime using set_include_path(). 
+	
+Example #1 Unix include_path
+
+include_path=".:/php/includes"
+
+Example #2 Windows include_path
+
+include_path=".;c:\php\includes"
+
+
+set_include_path — 设置 include_path 配置选项
+	
+ string set_include_path ( string $new_include_path )
+为当前脚本设置 include_path 运行时的配置选项。 
+
+
+返回值： 成功时返回旧的 include_path 或者在失败时返回 FALSE。
+
+
+1、set_include_path() 例子
+<?php
+set_include_path('/usr/lib/pear');
+
+// 或使用 ini_set
+ini_set('include_path', '/usr/lib/pear');
+?>
+
+
+2、添加到include path
+
+利用常量 PATH_SEPARATOR 可跨平台扩展 include path。
+
+这个例子中我们把 /usr/lib/pear 添加到了 现有的 include_path 的尾部。
+<?php
+$path = '/usr/lib/pear';
+set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+?>
+
+
+3、当一个文件被包含时，其中所包含的代码继承了include所在行的变量范围。从该处开始，调用文件在该行处可用的任何变量在被调用的文件中也都可用。不过所有在包含文件中定义的函数和类都具有全局作用域。 
+
+4、如果include出现于调用文件中的一个函数里，则被调用的文件中所包含的所有代码将表现得如同它们是在该函数内部定义的一样。所以它将遵循该函数的变量范围。
+
+ 例子：函数中的包含
+<?php
+
+function foo()
+{
+    global $color;
+
+    include 'vars.php';
+
+    echo "A $color $fruit";
+}
+
+/* vars.php is in the scope of foo() so     *
+ * $fruit is NOT available outside of this  *
+ * scope.  $color is because we declared it *
+ * as global.                               */
+
+foo();                    // A green apple
+echo "A $color $fruit";   // A green
+
+?>
+
+
+
+
+
+

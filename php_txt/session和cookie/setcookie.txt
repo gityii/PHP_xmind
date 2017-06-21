@@ -1,0 +1,30 @@
+
+setcookie() defines a cookie to be sent along with the rest of the HTTP headers. Like other headers, cookies must be sent before any output from your script (this is a protocol restriction). 
+This requires that you place calls to this function prior to any output, including <html> and <head> tags as well as any whitespace. 
+
+bool setcookie ( string $name [, string $value = "" [, int $expire = 0 [, string $path = "" [, string $domain = "" [, bool $secure = false [, bool $httponly = false ]]]]]] )
+
+
+参数：
+name 是必选参数，其值是Cookie的名称，即_COOKIE这个全局数组的键值。
+第二个参数用来设置cookie的值，参数为空时，cookie的值为空。把cookie的值设为false会使客户端尝试删除这个cookie，应该用0表示false，1表示true。
+第三参数用来设置有效时间，以秒为单位，这个值很重要，决定了cookie的存储方式。
+第四个参数用来设置cookie的有效目录，默认为“/”，即整个域名下有效，如果有需要，可以设置仅在某目录下有效。
+第五个参数，domain，用来设置cookie的作用域名，默认在本域名下，需要注意的是，在IE下，包括点号长度小于等于5的短域名如果带了domain参数，会导致cookie设置失败。
+参数secure用来设置是否对cookie进行加密传输，默认为false。如果设置为true，只有使用HTTPS，这个cookie才会被设置。通常情况下，不设置此参数或使用默认值false。
+第七个参数表示是否只使用HTTP访问cookie，如果为1或者true，客户端的js就无法操作这个cookie。使用此参数可以减少XSS攻击的风险，但是不是所有的浏览器都支持这个参数。此参数只在PHP5.2以上版本有效。
+
+
+
+setrawcookie() — Send a cookie without urlencoding the cookie value
+setrawcookie() is exactly the same as setcookie() except that the cookie value will not be automatically urlencoded when sent to the browser. 
+
+
+设置cookie时需要注意以下几点：
+函数返回值，如果是false，代表设置失败，如果为true，代表成功。但这个返回值仅供参考，不代表客户端一定能接收到。
+由PHP在当前页面设置的cookie不能立即生效，要等到下一个页面才能看到。这是由于设置的这个页面里面的cookie由服务器传递给客户浏览器，在下一个页面，浏览器才能把cookie从客户的机器里面取出传回浏览器，如果是JS设置的，是立即生效的。
+cookie没有显式的删除函数，如果想删除cookie，应该将cookie的expire设置为过期时间，如一小时以前等，这会自动触发浏览器的删除机制。
+
+
+
+

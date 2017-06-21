@@ -1,0 +1,4 @@
+<input type=button value=前进 onclick=history.go(1)>   
+<input type=button value=前进 onclick=history.forward()>       
+<input type=button value=后退 onclick=history.go(-1)>   
+<input type=button value=后退 onclick=history.back()>  

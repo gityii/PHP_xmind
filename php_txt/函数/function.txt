@@ -1,0 +1,299 @@
+
+1、filter_var — 使用特定的过滤器过滤一个变量
+
+  Filter 
+
+PHP 过滤器用于对来自非安全来源的数据（比如用户输入）进行验证和过滤。
+
+
+2、mysqli_connect() 函数
+打开一个到 MySQL 服务器的新的连接，返回值是一个代表到 MySQL 服务器的连接的对象。
+
+
+3、mysqli_real_escape_string(connection,escapestring) 函数 
+PHP连接MySQL数据库后，在对数据库进行查询或插入操作时，为了防止恶意访问，通常对输入的字符串进行转义。
+第一个参数为数据库连接，第二个参数为需转义的字符串。
+
+
+4、string strip_tags ( string $str [, string $allowable_tags ] )
+该函数尝试返回给定的字符串 str 去除空字符、HTML 和 PHP 标记后的结果。
+
+5、mysqli_query(connection,query,resultmode); 
+是对数据库的查询，query为查询数据库的命令字符串
+函数执行某个针对数据库的查询，针对成功的 SELECT、SHOW、DESCRIBE 或 EXPLAIN 查询，将返回一个 mysqli_result 对象。针对其他成功的查询，将返回 TRUE。如果失败，则返回 FALSE。
+
+6、mysql_affected_rows() 函数返回前一次 MySQL 操作所影响的记录行数。
+这个函数有什么意义？
+
+
+7、list — 把数组中的值赋给一些变量 
+array list ( mixed $varname [, mixed $... ] )不是真正的函数，而是语言结构。
+list() 用一步操作给一组变量进行赋值。
+
+8、mysql_fetch_array() 函数
+mysql_fetch_array(data,array_type) 函数从结果集中取得一行作为关联数组，或数字数组，或二者兼有
+返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false。 
+参数：
+data 	    可选。规定要使用的数据指针。该数据指针是 mysql_query() 函数产生的结果。
+array_type 	可选。规定返回哪种结果。可能的值：
+                  MYSQL_ASSOC - 关联数组
+                  MYSQL_NUM - 数字数组
+                  MYSQL_BOTH - 默认。同时产生关联和数字数组
+
+mysql_fetch_array()是mysql_fetch_row()的扩展版本。除了将数据以数字索引方式储存在数组中之外，还可以将数据作为关联索引储存，用字段名作为键名。
+提示：有很重要的一点必须指出，用 mysql_fetch_array() 并不明显比用 mysql_fetch_row() 慢，而且还明显提供了更多的值。
+注释：本函数返回的字段名是区分大小写的。
+
+9、echo  函数实际不是一个函数，所以您不必对它使用括号。
+echo() 函数比 print() 速度稍快。
+单引号和双引号的区别：单引号将输出变量名称，而不是值
+
+10、scandir — 列出指定路径中的文件和目录
+array scandir ( string $directory [, int $sorting_order [, resource $context ]] )
+返回一个 array，包含有 directory 中的文件和目录。 
+
+参数： 
+directory     要被浏览的目录 
+sorting_order  
+默认的排序顺序是按字母升序排列。如果使用了可选参数 sorting_order（设为 1），则排序顺序是按字母降序排列。 
+
+
+11、is_dir — 判断给定文件名是否是一个目录
+如果文件名存在并且为目录则返回 TRUE。如果 filename 是一个相对路径，则按照当前工作目录检查其相对路径。
+如果文件名存在，并且是个目录，返回 TRUE，否则返回FALSE。 
+
+
+12、array_map — 将回调函数作用到给定数组的单元上 
+array array_map ( callable $callback , array $arr1 [, array $... ] )
+array_map() 返回一个数组，该数组包含了 arr1 中的所有单元经过 callback 作用过之后的单元。
+
+13、substr — 返回字符串的子串
+string substr ( string $string , int $start [, int $length ] )
+返回字符串 string 由 start 和 length 参数指定的子字符串。 
+
+
+14、in_array — 检查数组中是否存在某个值
+bool in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] )
+在 haystack 中搜索 needle，如果没有设置 strict 则使用宽松的比较。 
+如果第三个参数 strict 的值为 TRUE 则 in_array() 函数还会检查 needle 的类型是否和 haystack 中的相同。 
+如果找到 needle 则返回 TRUE，否则返回 FALSE。 
+
+
+
+15、debug_print_backtrace 
+void debug_print_backtrace ([ int $options = 0 [, int $limit = 0 ]] )
+debug_print_backtrace() 打印了一条 PHP 回溯。它打印了函数调用、被 included/required 的文件和 eval() 的代码。 
+
+
+16、error_log — 发送错误信息到某个地方
+bool error_log ( string $message [, int $message_type = 0 [, string $destination [, string $extra_headers ]]] )
+把错误信息发送到 web 服务器的错误日志，或者到一个文件里。 
+message：应该被记录的错误信息。 
+message_type：设置错误应该发送到何处。可能的信息类型有以下几个： 
+error_log() 日志类型：
+0 message 发送到 PHP 的系统日志，使用 操作系统的日志机制或者一个文件，取决于 error_log 指令设置了什么。 这是个默认的选项。  
+1 message 发送到参数 destination 设置的邮件地址。 第四个参数 extra_headers 只有在这个类型里才会被用到。  
+2 不再是一个选项。  
+3 message 被发送到位置为 destination 的文件里。 字符 message 不会默认被当做新的一行。  
+4 message 直接发送到 SAPI 的日志处理程序中。  
+
+
+
+17、set_error_handler — 设置一个用户定义的错误处理函数
+mixed set_error_handler ( callable $error_handler [, int $error_types = E_ALL | E_STRICT ] )
+设置一个用户的函数(error_handler)来处理脚本中出现的错误。
+
+
+
+18、header — 发送原生 HTTP 头
+void header ( string $string [, bool $replace = true [, int $http_response_code ]] )
+header() 用于发送原生的 HTTP 头。
+
+参数 
+string ：头字符串。 
+      有两种特别的头。第一种以"HTTP/"开头的 (case is not significant)，将会被用来计算出将要发送的HTTP状态码。 例如在 Apache 服务器上用 PHP 脚本来处理不存在文件的请求（使用 ErrorDocument 指令）， 就会希望脚本响应了正确的状态码。 
+      <?php
+      header("HTTP/1.0 404 Not Found");
+      ?>  
+      
+      第二种特殊情况是"Location:"的头信息。它不仅把报文发送给浏览器，而且还将返回给浏览器一个 REDIRECT（302）的状态码，除非状态码已经事先被设置为了201或者3xx。 
+      <?php
+      header("Location: http://www.example.com/"); /* Redirect browser */
+      /* Make sure that code below does not get executed when we redirect. */
+      exit;
+      ?> 
+
+
+19、session_set_save_handler — 设置用户自定义会话存储函数
+session_set_save_handler() 设置用户自定义 会话存储函数。 如果想使用 PHP 内置的会话存储机制之外的方式， 可以使用本函数。 例如，可以自定义会话存储函数来将会话数据存储到数据库。 
+bool session_set_save_handler ( callable $open , callable $close , callable $read , callable $write , callable $destroy , callable $gc [, callable $create_sid ] )
+
+open(string $savePath, string $sessionName)
+     open 回调函数类似于类的构造函数， 在会话打开的时候会被调用。 这是自动开始会话或者通过调用 session_start() 手动开始会话 之后第一个被调用的回调函数。 此回调函数操作成功返回 TRUE，反之返回 FALSE。 
+	 
+close()
+     close 回调函数类似于类的析构函数。 在 write 回调函数调用之后调用。 当调用 session_write_close() 函数之后，也会调用 close 回调函数。 此回调函数操作成功返回 TRUE，反之返回 FALSE。 
+	 
+read(string $sessionId)
+
+     如果会话中有数据，read 回调函数必须返回将会话数据编码（序列化）后的字符串。 如果会话中没有数据，read 回调函数返回空字符串。 
+     在自动开始会话或者通过调用 session_start() 函数手动开始会话之后，PHP 内部调用 read 回调函数来获取会话数据。 在调用 read 之前，PHP 会调用 open 回调函数。 
+     read 回调返回的序列化之后的字符串格式必须与 write 回调函数保存数据时的格式完全一致。 PHP 会自动反序列化返回的字符串并填充 $_SESSION 超级全局变量。 虽然数据看起来和 serialize() 函数很相似， 但是需要提醒的是，它们是不同的。 请参考： session.serialize_handler。 
+	 
+write(string $sessionId, string $data)
+
+     在会话保存数据时会调用 write 回调函数。 此回调函数接收当前会话 ID 以及 $_SESSION 中数据序列化之后的字符串作为参数。 序列化会话数据的过程由 PHP 根据 session.serialize_handler 设定值来完成。  
+     序列化后的数据将和会话 ID 关联在一起进行保存。 当调用 read 回调函数获取数据时，所返回的数据必须要和 传入 write 回调函数的数据完全保持一致。 
+
+PHP 会在脚本执行完毕或调用 session_write_close() 函数之后调用此回调函数。 注意，在调用完此回调函数之后，PHP 内部会调用 close 回调函数。 
+
+
+Note: 
+PHP 会在输出流写入完毕并且关闭之后 才调用 write 回调函数， 所以在 write 回调函数中的调试信息不会输出到浏览器中。 如果需要在 write 回调函数中使用调试输出， 建议将调试输出写入到文件。 
+destroy($sessionId)
+当调用session_destroy()函数，或者调用session_regenerate_id()函数并且设置destroy参数为TRUE时，会调用此回调函数。此回调函数操作成功返回 TRUE，反之返回 FALSE。 
+gc($lifetime)
+为了清理会话中的旧数据，PHP 会不时的调用垃圾收集回调函数。 调用周期由 session.gc_probability 和 session.gc_divisor 参数控制。 传入到此回调函数的 lifetime 参数由 session.gc_maxlifetime 设置。 此回调函数操作成功返回 TRUE，反之返回 FALSE。 
+create_sid()
+当需要新的会话 ID 时被调用的回调函数。 回调函数被调用时无传入参数， 其返回值应该是一个字符串格式的、有效的会话 ID。 
+
+返回值 
+成功时返回 TRUE， 或者在失败时返回 FALSE。 
+
+
+20、sprintf — Return a formatted string
+string sprintf ( string $format [, mixed $args [, mixed $... ]] )
+Returns a string produced according to the formatting string format. 
+
+
+21、get_class — 返回对象的类名
+string get_class ([ object $obj ] )
+返回对象实例 obj 所属类的名字。如果 obj 不是一个对象则返回 FALSE。 
+
+<?php
+class foo {
+    function name()
+    {
+        echo "My name is " , get_class($this) , "\n";
+    }
+}
+
+// create an object
+$bar = new foo();
+
+// external call
+echo "Its name is " , get_class($bar) , "\n";
+
+// internal call
+$bar->name();
+?> 
+
+
+22、get_object_vars — 返回由对象属性组成的关联数组
+array get_object_vars ( object $obj )
+返回由 obj 指定的对象中定义的属性组成的关联数组。 如果在 obj 对象实例中声明的变量没有被赋值，这些变量作为键名将被赋予 NULL 值。 
+
+<?php
+class Point2D {
+    var $x, $y;
+    var $label;
+
+    function Point2D($x, $y)
+    {
+        $this->x = $x;
+        $this->y = $y;
+    }
+
+    function setLabel($label)
+    {
+        $this->label = $label;
+    }
+
+    function getPoint()
+    {
+        return array("x" => $this->x,
+                     "y" => $this->y,
+                     "label" => $this->label);
+    }
+}
+
+    // "$label" is declared but not defined
+    $p1 = new Point2D(1.233, 3.445);
+    print_r(get_object_vars($p1));
+    
+    $p1->setLabel("point #1");
+    print_r(get_object_vars($p1));
+?> 
+
+
+23、get_class_methods — 返回由类的方法名组成的数组
+array get_class_methods ( mixed $class_name )
+
+
+24、fgetcsv — 从文件指针中读入一行并解析 CSV 字段
+和 fgets() 类似，只除了 fgetcsv() 解析读入的行并找出 CSV 格式的字段然后返回一个包含这些字段的数组。 
+逗号分隔值（Comma-Separated Values，CSV，有时也称为字符分隔值，因为分隔字符也可以不是逗号）
+
+
+25、strcasecmp — 二进制安全比较字符串（不区分大小写）
+如果 str1 小于 str2 返回 < 0； 如果 str1 大于 str2 返回 > 0；如果两者相等，返回 0。 
+
+
+26、set_include_path
+
+<?php
+echo dirname(__FILE__).'</br>';//当前文件路径
+$path = '\usr\lib\pear';
+set_include_path(dirname(__FILE__).$path);//set_include_path的返回值是个旧值
+
+$b = set_include_path(get_include_path().PATH_SEPARATOR.$path);
+echo "$b";
+
+
+27、str_replace — 子字符串替换
+mixed str_replace ( mixed $search , mixed $replace , mixed $subject [, int &$count ] )
+该函数返回一个字符串或者数组。该字符串或数组是将 subject 中全部的 search 都被 replace 替换之后的结果。 
+如果 search 和 replace 为数组，那么 str_replace() 将对 subject 做二者的映射替换。如果 replace 的值的个数少于 search 的个数，多余的替换将使用空字符串来进行。如果 search 是一个数组而 replace 是一个字符串，那么 search 中每个元素的替换将始终使用这个字符串。该转换不会改变大小写。 
+如果 search 和 replace 都是数组，它们的值将会被依次处理。 
+
+返回值 
+该函数返回替换后的数组或者字符串。 
+
+Example #1 str_replace() 基本范例
+
+<?php
+// 赋值: <body text='black'>
+$bodytag = str_replace("%body%", "black", "<body text='%body%'>");
+
+// 赋值: Hll Wrld f PHP
+$vowels = array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U");
+$onlyconsonants = str_replace($vowels, "", "Hello World of PHP");
+
+// 赋值: You should eat pizza, beer, and ice cream every day
+$phrase  = "You should eat fruits, vegetables, and fiber every day.";
+$healthy = array("fruits", "vegetables", "fiber");
+$yummy   = array("pizza", "beer", "ice cream");
+
+$newphrase = str_mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &$count ]] )
+
+搜索subject中匹配pattern的部分， 以replacement进行替换。 
+replace($healthy, $yummy, $phrase);
+
+// 赋值: 2
+$str = str_replace("ll", "", "good golly miss molly!", $count);
+echo $count;
+?> 
+
+
+28、preg_replace — 执行一个正则表达式的搜索和替换
+mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject [, int $limit = -1 [, int &$count ]] )
+搜索subject中匹配pattern的部分， 以replacement进行替换。 
+pattern  要搜索的模式。可以使一个字符串或字符串数组。 
+	  
+	  
+
+	  
+	  
+	  
+	  
+	  

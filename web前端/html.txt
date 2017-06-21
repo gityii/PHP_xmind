@@ -1,0 +1,81 @@
+1、fieldset
+
+fieldset 元素可将表单内的相关元素分组。
+
+示例：
+<!DOCTYPE HTML>
+<html>
+<body>
+<form>
+  <fieldset>
+    <legend>健康信息</legend>
+    身高：<input type="text" />
+    体重：<input type="text" />
+  </fieldset>
+</form>
+<p>如果表单周围没有边框，说明您的浏览器太老了。</p>
+</body>
+</html>
+
+2、<legend> 标签为 fieldset 元素定义标题。
+
+3、select 元素可创建单选或多选菜单。<select&> 元素中的 <option> 标签用于定义列表中的可用选项。
+
+4、option 元素定义下拉列表中的一个选项（一个条目）。
+浏览器将 <option> 标签中的内容作为 <select> 标签的菜单或是滚动列表中的一个元素显示。
+option 元素位于 select 元素内部。
+
+5、<ol> 标签定义有序列表。
+
+
+6、<li> 标签定义列表项目。
+<li> 标签可用在有序列表 (<ol>) 和无序列表 (<ul>) 中。
+
+
+7、HTML DOM Hidden 对象
+Hidden 对象
+Hidden 对象代表一个 HTML 表单中的某个隐藏输入域。
+这种类型的输入元素实际上是隐藏的。这个不可见的表单元素的 value 属性保存了一个要提交给 Web 服务器的任意字符串。如果想要提交并非用户直接输入的数据的话，就是用这种类型的元素。
+在 HTML 表单中 <input type="hidden"> 标签每出现一次，一个 Hidden 对象就会被创建。
+<html>
+<head>
+<script type="text/javascript">
+function alertValue()
+  {
+  alert(document.getElementById("hidden1").value)
+  }
+</script>
+</head>
+<body>
+
+<form>
+<input type="hidden" id="hidden1" value="W3School" />
+<input type="button" id="button1" onclick="alertValue()" value="Show value of the hidden field" />
+</form>
+
+</body>
+</html>
+
+
+8、HTML <img> 标签的 alt 属性
+alt 属性是一个必需的属性，它规定在图像无法显示时的替代文本。
+假设由于下列原因用户无法查看图像，alt 属性可以为图像提供替代的信息：
+    网速太慢
+    src 属性中的错误
+    浏览器禁用图像
+    用户使用的是屏幕阅读器
+<img> 标签的 alt 属性指定了替代文本，用于在图像无法显示或者用户禁用图像显示时，代替图像显示在浏览器中的内容。
+注释：alt 属性的值是一个最多可以包含 1024 个字符的字符串，其中包括空格和标点。这个字符串必须包含在引号中。这段 alt 文本中可以包含对特殊字符的实体引用，但它不允许包含其他类别的标记，尤其是不允许有任何样式标签。
+
+
+
+
+
+
+
+
+
+
+
+
+

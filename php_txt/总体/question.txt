@@ -1,0 +1,6 @@
+
+1、php代码里面生成html代码
+一般来说有两种混合写法，一种是HTML套PHP，写作<?php  ?>；另一种是PHP套HTML，写作<?php echo ?>
+2、html文档里面嵌套php代码
+
+3、有没有什么工具可以对php进行单步调试
