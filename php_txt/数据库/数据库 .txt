@@ -1,0 +1,179 @@
+CREATE TABLE tasks(
+task_id INT UNSIGNED NOT NULL AUTO_INCREMENT,  //字段task_id是一个自动增加的主键
+parent_id INT UNSIGNED NOT NULL DEFAULT 0,
+task VARCHAR(100) NOT NULL,//任务本身的描述使用VARCHAR(100)，如果需要更长的描述，则可定义为文本类型（text type）
+date_added TIMESTAMP NOT NULL,
+date_completed TIMESTAMP,
+PRIMARY KEY(task_id),
+INDEX parent(parent_id),
+INDEX added(date_added),
+INDEX completed(date_completed)
+);
+
+
+删除数据库：
+drop database database1;
+
+创建数据库：   
+mysql> create database test;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use test;
+Database changed
+
+创建表：
+mysql> CREATE TABLE sessions(
+    -> id CHAR(32) NOT NULL,
+    -> data TEXT,
+    -> last_accessed TIMESTAMP NOT NULL,
+    -> PRIMARY KEY(id)
+    -> );   
+
+查看表字段：
+mysql> DESCRIBE sessions;
++---------------+-----------+------+-----+-------------------+-----------------------------+
+| Field         | Type      | Null | Key | Default           | Extra                       |
++---------------+-----------+------+-----+-------------------+-----------------------------+
+| id            | char(32)  | NO   | PRI | NULL              |                             |
+| data          | text      | YES  |     | NULL              |                             |
+| last_accessed | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++---------------+-----------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.04 sec)
+
+
+--------------------------------------------------------------------------------------------
+一、如何连接mysql:
+     > mysql -u root -p
+     > 没有密码，直接回车键
+	 
+二、数据库操作
+	 
+show databases;//显示系统中都存在哪些数据库
+use dbname;    //选择要操作的数据库
+show tables;   //查看dbname数据库中创建的所有数据表
+drop database dbname; //删除dbname数据库
+
+例子：
+CREATE DATABASE cms;  //创建cms数据库
+USE cms;              //选择cms数据库
+
+CREATE TABLE users (      //在cms数据库中创建一张名为users的表
+//列的名字，列的数据类型，列的约束条件
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+userType ENUM('public','author','admin'),
+username VARCHAR(30) NOT NULL,
+email VARCHAR(40) NOT NULL,
+pass CHAR(40) NOT NULL,
+dateAdded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (id),
+UNIQUE (username),
+UNIQUE (email),
+INDEX login (email, pass)
+);
+
+drop table tablename; //表的删除命令
+
+//表的修改：
+表的修改都使用alter table语句
+alter table emp modify ename varchar(20);//修改表emp的enmae字段定义，将varchar(10)改为varchar(20)
+alter table emp add column age int(3);//在表emp中增加字段age，类型为int(3)
+alter table emp drop column age;//将字段age删除掉
+alter table emp change age age1 int(4);//将age改名为age1，同时修改字段类型为int(4);
+alter table emp add birth date after ename;//将新增的字段birth date 加在ename之后。date表示类型
+alter table emp modify age int(3) first;//修改字段age,将它放在最前面
+alter table emp rename emp1;//修改表名，将表emp改名为emp1
+
+
+ 
+//显示表的字段(结构)
+desc users;
+
+DML语句（insert,update,delete,select）
+插入记录：
+表创建好后就可以往里面插入记录了语法如下：
+向表emp中插入以下记录：ename为zzx1,hiredate为2000-01-01，sal为2000，deptno为1，命令如下
+insert into emp(ename,hiredate,sal,deptno)values('zzx','2000-01-01','2000',1);
+也可以不指定字段名称，但是value后面的顺序应该和字段的排列顺序一致。
+insert into emp values('zzx','2000-01-01','2000',1);
+也可以一次插入多条记录。
+
+//查看表中的记录
+select * from emp;
+查询不重复部门的记录，可以用distinct关键字来实现：
+select distinct deptno from emp;
+将结果集中的记录按一定的条件显示出来，使用where条件语句，where后面的条件是一个字段的比较运算，多条件
+之间还可以用or、and等逻辑运算
+//数据库的排序操作，用关键字ORDER BY来实现，DESC和ASC是排序关键字，DESC表示按照字段进行降序排列，ASC则表示按升序排列
+把emp表中的记录按照工资高低进行降序排列
+select * from emp order by sal desc;
+//分页显示，只显示一部分，使用limit关键字，limit经常和order by一起配合使用来进行记录的分页显示
+显示emp表中按照sal排序后的前3条记录：
+select * from emp order by sal limit 3;
+//检索记录行 6-15
+SELECT * FROM table LIMIT 5,10;  
+
+
+//聚合查询,比如整个公司的人数等，常用的聚合函数有sum，count(*)记录数，max，min
+在emp表中统计公司的总人数
+select count(1) from emp;
+在此基础上统计各个部门的人数
+select deptno, count(1) from emp group by deptno;
+既要统计各部门人数，又要统计总人数(group by表示要进行分类聚合的字段)
+select deptno, count(1) from emp group by deptno with rollup;
+统计所有员工的薪水总额、最高和最低薪水
+select sum(sal),max(sal),min(sal) from emp;
+
+
+//修改表中的记录
+将表emp中ename为'zzxl'的薪水从2000更改为4000:
+update emp set sal=4000 where ename='zzx1';
+也可将zzx1改成zzx:
+update emp set ename=zzx where deptno=1;
+
+//删除记录
+在emp中将ename为zzx的记录全部删除：
+delete from emp where ename='zzx';
+
+//表连接
+当需要同时显示多个表中的字段时，就可以用表连接来实现这一的功能。表连接分为内连接和外连接，内连接仅选出两张表中互相匹配
+的记录，而外连接会选出其他不匹配的记录。
+选出emp表和dept表中，部门号相同的ename字段和deptname字段。
+select ename,deptname from emp, dept where emp.deptno=dept.deptno;
+
+外连接又分为左连接和右连接，左连接要包含所有的左边表中的记录，右连接要包含所有的右边表中的记录
+select ename,deptname from emp left join dept on emp.deptno=dept.deptno;(左连)
+select ename,deptname from emp right join dept on emp.deptno=dept.deptno;(右连)
+
+//子查询
+当进行查询的时候，需要的条件是另外一个select语句的结果，这个时候就要用到子查询。
+某些情况下，子查询可以转化为表连接
+
+
+//记录联合
+将两个表的数据按照一定的查询条件查询出来后，将结果合并到一起显示出来，这就需要union和union all关键字
+union all是把结果集直接合并在一起，而union是将union all后的结果进行一次distinct，去除重复记录后的结果。
+
+
+//帮助的使用
+可以使用"? 类别名称"的方式来查看帮助 	
+
+===================================================================================================================
+CURRENT_TIMESTAMP用法：
+
+alter table users modify CreateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+不仅插入时current_timestamp值，更新时也有current_timestamp值。
+（1）.TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+在创建新记录和修改现有记录的时候都对这个数据列刷新
+
+（2）.TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
+在创建新记录的时候把这个字段设置为当前时间，但以后修改时，不再刷新它
+
+（3）.TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
+在创建新记录的时候把这个字段设置为0,自动UPDATE 和INSERT 到当前的时间
+
+ 
+例子：ALTER TABLE car MODIFY modify_date  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  
+ 
+ 
+ 

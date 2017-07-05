@@ -9,9 +9,7 @@ strpos — 查找字符串首次出现的位置
 mixed strpos ( string $haystack , mixed $needle [, int $offset = 0 ] )
 返回 needle 在 haystack 中首次出现的数字位置。如果没找到 needle，将返回 FALSE。 
 
-substr — 返回字符串的子串
-string substr ( string $string , int $start [, int $length ] )
-返回字符串 string 由 start 和 length 参数指定的子字符串。 返回提取的子字符串， 或者在失败时返回 FALSE。 
+
 
 
 rtrim — 删除字符串末端的空白字符（或者其他字符）

@@ -10,9 +10,7 @@ PHP 过滤器用于对来自非安全来源的数据（比如用户输入）进�
 打开一个到 MySQL 服务器的新的连接，返回值是一个代表到 MySQL 服务器的连接的对象。
 
 
-3、mysqli_real_escape_string(connection,escapestring) 函数 
-PHP连接MySQL数据库后，在对数据库进行查询或插入操作时，为了防止恶意访问，通常对输入的字符串进行转义。
-第一个参数为数据库连接，第二个参数为需转义的字符串。
+
 
 
 4、string strip_tags ( string $str [, string $allowable_tags ] )
@@ -25,10 +23,6 @@ PHP连接MySQL数据库后，在对数据库进行查询或插入操作时，为
 6、mysql_affected_rows() 函数返回前一次 MySQL 操作所影响的记录行数。
 这个函数有什么意义？
 
-
-7、list — 把数组中的值赋给一些变量 
-array list ( mixed $varname [, mixed $... ] )不是真正的函数，而是语言结构。
-list() 用一步操作给一组变量进行赋值。
 
 8、mysql_fetch_array() 函数
 mysql_fetch_array(data,array_type) 函数从结果集中取得一行作为关联数组，或数字数组，或二者兼有
@@ -48,28 +42,11 @@ mysql_fetch_array()是mysql_fetch_row()的扩展版本。除了将数据以数�
 echo() 函数比 print() 速度稍快。
 单引号和双引号的区别：单引号将输出变量名称，而不是值
 
-10、scandir — 列出指定路径中的文件和目录
-array scandir ( string $directory [, int $sorting_order [, resource $context ]] )
-返回一个 array，包含有 directory 中的文件和目录。 
-
-参数： 
-directory     要被浏览的目录 
-sorting_order  
-默认的排序顺序是按字母升序排列。如果使用了可选参数 sorting_order（设为 1），则排序顺序是按字母降序排列。 
-
-
-11、is_dir — 判断给定文件名是否是一个目录
-如果文件名存在并且为目录则返回 TRUE。如果 filename 是一个相对路径，则按照当前工作目录检查其相对路径。
-如果文件名存在，并且是个目录，返回 TRUE，否则返回FALSE。 
 
 
 12、array_map — 将回调函数作用到给定数组的单元上 
 array array_map ( callable $callback , array $arr1 [, array $... ] )
 array_map() 返回一个数组，该数组包含了 arr1 中的所有单元经过 callback 作用过之后的单元。
-
-13、substr — 返回字符串的子串
-string substr ( string $string , int $start [, int $length ] )
-返回字符串 string 由 start 和 length 参数指定的子字符串。 
 
 
 14、in_array — 检查数组中是否存在某个值

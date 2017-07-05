@@ -1,0 +1,7 @@
+//old way
+$a = array(); //empty
+$b = array('this' => 'that');
+
+//new way
+$a = []; //empty
+$b = ['this' => 'that'];
