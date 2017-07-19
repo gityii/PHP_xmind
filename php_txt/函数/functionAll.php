@@ -173,20 +173,6 @@ Foo::$variable();  // This calls $foo->Variable() reading $variable in this scop
 //PHP 手册按照不同的扩展库组织了它们的文档。
 
 
-//匿名函数 
-/*
-匿名函数（Anonymousfunctions），也叫闭包函数（closures），允许临时创建一个没有指定名称的函数。最经常用作回调函数（callback）参数的值。当然，也有其它应用的情况。 
-*/
-
-//闭包函数也可以作为变量的值来使用。
-
-$greet = function($name)
-{
-    printf("Hello %s\r\n", $name);
-};
-
-$greet('World');
-$greet('PHP');
 
 
 

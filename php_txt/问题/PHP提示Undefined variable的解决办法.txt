@@ -1,0 +1,5 @@
+解决方法：修改php.ini
+
+将： error_reporting = E_ALL
+
+修改为：error_reporting = E_ALL & ~E_NOTICE

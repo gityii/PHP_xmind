@@ -2,6 +2,9 @@
 //PHP 支持一个错误控制运算符：@。当将其放置在一个 PHP 表达式之前，该表达式可能产生的任何错误信息都被忽略掉。 
 /*
 用 set_error_handler() 设定了自定义的错误处理函数，仍然会被调用，但是此错误处理函数可以（并且也应该）调用 error_reporting()，而该函数在出错语句前有 @ 时将返回 0。 	
+mixed set_error_handler ( callable $error_handler [, int $error_types = E_ALL | E_STRICT ] )
+设置一个用户的函数(error_handler)来处理脚本中出现的错误。
+
 */
 /*
 如果激活了 track_errors  特性，表达式所产生的任何错误信息都被存放在变量 $php_errormsg 中。此变量在每次出错时都会被覆盖，所以如果想用它的话就要尽早检查。 

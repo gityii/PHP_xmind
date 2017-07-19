@@ -16,9 +16,7 @@ PHP 过滤器用于对来自非安全来源的数据（比如用户输入）进�
 4、string strip_tags ( string $str [, string $allowable_tags ] )
 该函数尝试返回给定的字符串 str 去除空字符、HTML 和 PHP 标记后的结果。
 
-5、mysqli_query(connection,query,resultmode); 
-是对数据库的查询，query为查询数据库的命令字符串
-函数执行某个针对数据库的查询，针对成功的 SELECT、SHOW、DESCRIBE 或 EXPLAIN 查询，将返回一个 mysqli_result 对象。针对其他成功的查询，将返回 TRUE。如果失败，则返回 FALSE。
+
 
 6、mysql_affected_rows() 函数返回前一次 MySQL 操作所影响的记录行数。
 这个函数有什么意义？
@@ -44,61 +42,7 @@ echo() 函数比 print() 速度稍快。
 
 
 
-12、array_map — 将回调函数作用到给定数组的单元上 
-array array_map ( callable $callback , array $arr1 [, array $... ] )
-array_map() 返回一个数组，该数组包含了 arr1 中的所有单元经过 callback 作用过之后的单元。
 
-
-14、in_array — 检查数组中是否存在某个值
-bool in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] )
-在 haystack 中搜索 needle，如果没有设置 strict 则使用宽松的比较。 
-如果第三个参数 strict 的值为 TRUE 则 in_array() 函数还会检查 needle 的类型是否和 haystack 中的相同。 
-如果找到 needle 则返回 TRUE，否则返回 FALSE。 
-
-
-
-15、debug_print_backtrace 
-void debug_print_backtrace ([ int $options = 0 [, int $limit = 0 ]] )
-debug_print_backtrace() 打印了一条 PHP 回溯。它打印了函数调用、被 included/required 的文件和 eval() 的代码。 
-
-
-16、error_log — 发送错误信息到某个地方
-bool error_log ( string $message [, int $message_type = 0 [, string $destination [, string $extra_headers ]]] )
-把错误信息发送到 web 服务器的错误日志，或者到一个文件里。 
-message：应该被记录的错误信息。 
-message_type：设置错误应该发送到何处。可能的信息类型有以下几个： 
-error_log() 日志类型：
-0 message 发送到 PHP 的系统日志，使用 操作系统的日志机制或者一个文件，取决于 error_log 指令设置了什么。 这是个默认的选项。  
-1 message 发送到参数 destination 设置的邮件地址。 第四个参数 extra_headers 只有在这个类型里才会被用到。  
-2 不再是一个选项。  
-3 message 被发送到位置为 destination 的文件里。 字符 message 不会默认被当做新的一行。  
-4 message 直接发送到 SAPI 的日志处理程序中。  
-
-
-
-17、set_error_handler — 设置一个用户定义的错误处理函数
-mixed set_error_handler ( callable $error_handler [, int $error_types = E_ALL | E_STRICT ] )
-设置一个用户的函数(error_handler)来处理脚本中出现的错误。
-
-
-
-18、header — 发送原生 HTTP 头
-void header ( string $string [, bool $replace = true [, int $http_response_code ]] )
-header() 用于发送原生的 HTTP 头。
-
-参数 
-string ：头字符串。 
-      有两种特别的头。第一种以"HTTP/"开头的 (case is not significant)，将会被用来计算出将要发送的HTTP状态码。 例如在 Apache 服务器上用 PHP 脚本来处理不存在文件的请求（使用 ErrorDocument 指令）， 就会希望脚本响应了正确的状态码。 
-      <?php
-      header("HTTP/1.0 404 Not Found");
-      ?>  
-      
-      第二种特殊情况是"Location:"的头信息。它不仅把报文发送给浏览器，而且还将返回给浏览器一个 REDIRECT（302）的状态码，除非状态码已经事先被设置为了201或者3xx。 
-      <?php
-      header("Location: http://www.example.com/"); /* Redirect browser */
-      /* Make sure that code below does not get executed when we redirect. */
-      exit;
-      ?> 
 
 
 19、session_set_save_handler — 设置用户自定义会话存储函数
@@ -137,10 +81,7 @@ create_sid()
 返回值 
 成功时返回 TRUE， 或者在失败时返回 FALSE。 
 
-
-20、sprintf — Return a formatted string
-string sprintf ( string $format [, mixed $args [, mixed $... ]] )
-Returns a string produced according to the formatting string format. 
+	
 
 
 21、get_class — 返回对象的类名
@@ -212,8 +153,6 @@ array get_class_methods ( mixed $class_name )
 逗号分隔值（Comma-Separated Values，CSV，有时也称为字符分隔值，因为分隔字符也可以不是逗号）
 
 
-25、strcasecmp — 二进制安全比较字符串（不区分大小写）
-如果 str1 小于 str2 返回 < 0； 如果 str1 大于 str2 返回 > 0；如果两者相等，返回 0。 
 
 
 26、set_include_path
