@@ -12,5 +12,5 @@ $sSql = "SELECT username FROM test_t";
 $sSql .= "WHERE username = ${user}";
 $hRes = mysql_query($sSql);
 
-在echo中使用逗号做字符串连接符，比使用点号代码更美观。
-单引号的效率优于双引号，但二者在用法上有区别，注意使用上的区分。
+
+单引号的效率优于双引号，但二者在用法上有区别，注意使用上的区分。单引号和双引号的区别：单引号将输出变量名称，而不是值

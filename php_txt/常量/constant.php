@@ -1,6 +1,5 @@
 <?php
 
-
 /*
 常量是一个简单值的标识符（名字）。在脚本执行期间该值不能改变（除了所谓的魔术常量，它们其实不是常量）
 常量默认为大小写敏感。
@@ -10,6 +9,21 @@
 字母指的是 a-z，A-Z，以及从 127 到 255（0x7f-0xff）的 ASCII 字符。 
 用正则表达式是这样表达的：[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*。 
 */
+
+/*
+bool define ( string $name , mixed $value [, bool $case_insensitive = false ] )
+在运行时定义一个常量。 
+
+参数：
+name					常量名。 
+value					常量的值；在 PHP 5 中，value 必须是标量( integer、 float、string、boolean、NULL）在 PHP 7 中还允许是个 array 的值。 
+						(Warning常量还可以定义为 resource 类型，但并不推荐这样做，因为可能会有不可预知的行为发生。) 
+case_insensitive		如果设置为 TRUE，该常量则大小写不敏感。默认是大小写敏感的。比如， CONSTANT 和 Constant 代表了不同的值。 
+
+返回值:					成功时返回 TRUE， 或者在失败时返回 FALSE。 
+
+*/
+
 
 // 合法的常量名
 define("FOO",     "something");
@@ -24,6 +38,7 @@ define("2FOO",    "something");
 // 也许将来有一天PHP会定义一个__FOO__的魔术常量
 // 这样就会与你的代码相冲突
 define("__FOO__", "something");
+
 
 /*
 bool define ( string $name , mixed $value [, bool $case_insensitive = false ] )

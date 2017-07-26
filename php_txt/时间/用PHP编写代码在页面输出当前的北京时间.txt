@@ -1,0 +1,6 @@
+格式为“2007-01-18 09:22:03”
+
+date_default_timezone_set('PRC');  //设定用于一个脚本中所有日期时间函数的默认时区
+
+echo date("Y-m-d H:i:s",time());
+
