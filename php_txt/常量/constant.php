@@ -63,7 +63,7 @@ echo Greeting; // outputs "Hello you."
 /*
 defined — 检查某个名称的常量是否存在   bool defined ( string $name )
 如果你要检查一个变量是否存在，请使用 isset()。 defined() 函数仅对 constants 有效。
-如果你要检测一个函数是否存在，使用 function_exists()。 
+如果你要检测一个函数是否存在，使用 function_exists()，function_exists — 如果给定的函数已经被定义就返回 TRUE 。
 */
 if(defined("CONSTANT"))//单引号和双引号都可以
 {
