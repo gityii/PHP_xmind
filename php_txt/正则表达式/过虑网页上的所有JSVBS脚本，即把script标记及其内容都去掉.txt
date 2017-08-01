@@ -1,7 +1,0 @@
-<?php
-$script=”以下内容不显示：<script language=’javascript’>alert(‘cc’);</script>”;
-echo preg_replace(“/<script[^>].*?>.*?</script>/si”, “替换内容”, $script);
-
-
-(即把scrīpt标记及其内容都去掉):
-preg_replace(" /<script[^>].*?>.*?</script>/si", "newinfo", $script);

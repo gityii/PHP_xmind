@@ -1,2 +1,0 @@
-首先，PHP 有内建函式 strip_tags() 除去 HTML 标签，为何要自行编写正规表达式？好了，便当作是面试的一道考题吧，我会这样回答：
-$stringOfText = "<p>This is a test</p>";$expression = "/<(.*?)>(.*?)<\/(.*?)>/";echo preg_replace($expression, "[url=file://2/]\\2[/url]", $stringOfText);// 有人说也可以使用 /(<[^>]*>)/ $expression = "/(<[^>]*>)/";echo preg_replace($expression, "", $stringOfText);

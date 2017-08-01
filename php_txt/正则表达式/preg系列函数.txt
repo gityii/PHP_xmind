@@ -1,8 +1,0 @@
-string preg_quote ( string str [, string delimiter] )
-	转义正则表达式字符 正则表达式的特殊字符包括：. \\ + * ? [ ^ ] $ ( ) { } = ! < > | :。
-preg_replace -- 执行正则表达式的搜索和替换
-mixed preg_replace ( mixed pattern, mixed replacement, mixed subject [, int limit] )
-preg_replace_callback -- 用回调函数执行正则表达式的搜索和替换
-mixed preg_replace_callback ( mixed pattern, callback callback, mixed subject [, int limit] )
-preg_split -- 用正则表达式分割字符串
-array preg_split ( string pattern, string subject [, int limit [, int flags]] )

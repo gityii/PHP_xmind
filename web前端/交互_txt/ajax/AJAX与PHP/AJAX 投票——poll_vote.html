@@ -1,0 +1,51 @@
+<!-- 将演示一个投票程序，通过它，投票结果在网页不进行刷新的情况下被显示 
+当用户选择上面的某个选项时，会执行名为 "getVote()" 的函数。该函数由 "onclick" 事件触发
+-->
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>菜鸟教程(runoob.com)</title>
+<script>
+function getVote(int) {
+  if (window.XMLHttpRequest) {
+    // IE7+, Firefox, Chrome, Opera, Safari 执行代码
+    xmlhttp=new XMLHttpRequest();
+  } else {
+    // IE6, IE5 执行代码
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function() {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      document.getElementById("poll").innerHTML=xmlhttp.responseText;
+    }
+  }
+  xmlhttp.open("GET","poll_vote.php?vote="+int,true);
+  xmlhttp.send();
+}
+</script>
+</head>
+<body>
+
+<div id="poll">
+<h3>你喜欢 PHP 和 AJAX 吗?</h3>
+<form>
+是:
+<input type="radio" name="vote" value="0" onclick="getVote(this.value)">
+<br>否:
+<input type="radio" name="vote" value="1" onclick="getVote(this.value)">
+</form>
+</div>
+
+</body>
+</html>
+
+<!--
+getVote() 函数会执行以下步骤：
+
+    创建 XMLHttpRequest 对象
+    创建在服务器响应就绪时执行的函数
+    向服务器上的文件发送请求
+    请注意添加到 URL 末端的参数（q）（包含下拉列表的内容）
+-->	

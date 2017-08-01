@@ -1,0 +1,8 @@
+window.location.href,<script type="text/javascript" src="js/js_function.js"></script>
+
+
+------------------------------------------------------
+
+JS的转向函数是?怎么引入一个外部JS文件?
+window.location.href
+<scrīpt src=""/>

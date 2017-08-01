@@ -1,0 +1,63 @@
+
+<!-- 
+输入框中键入字符时，网页如何与 Web 服务器进行通信
+
+当用户在上面的输入框中键入字符时，会执行 "showHint()" 函数。该函数由 "onkeyup" 事件触发 
+-->
+<html>
+<head>
+<script>
+function showHint(str)
+{
+	if (str.length==0)
+	{ 
+		document.getElementById("txtHint").innerHTML="";
+		return;
+	}
+	if (window.XMLHttpRequest)
+	{
+		// IE7+, Firefox, Chrome, Opera, Safari 浏览器执行的代码
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{	
+		//IE6, IE5 浏览器执行的代码
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET","gethint.php?q="+str,true);//这段通过 JavaScript 调用的服务器页面是名为 "gethint.php" 的 PHP 文件
+	xmlhttp.send();
+}
+</script>
+</head>
+<body>
+
+<p><b>在输入框中输入一个姓名:</b></p>
+<form> 
+姓名: <input type="text" onkeyup="showHint(this.value)">
+</form>
+<p>返回值: <span id="txtHint"></span></p>
+
+</body>
+</html>
+
+<!-- 
+源代码解释：
+
+如果输入框是空的（str.length==0），该函数会清空 txtHint 占位符的内容，并退出该函数。
+
+如果输入框不是空的，那么 showHint() 会执行以下步骤：
+
+    创建 XMLHttpRequest 对象
+    创建在服务器响应就绪时执行的函数
+    向服务器上的文件发送请求
+    请注意添加到 URL 末端的参数（q）（包含输入框的内容）
+-->
+
+

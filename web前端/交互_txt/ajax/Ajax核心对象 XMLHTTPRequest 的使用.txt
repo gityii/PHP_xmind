@@ -1,0 +1,153 @@
+
+AJAX = Asynchronous JavaScript andXML（异步的 javascript 和 XML）。通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。Ajax的核心思想在于异步交互。
+
+要明白异步交互可以通过同步和异步的对比很容易明白：
+
+    －同步交互，就是最常见的click-refresh模式，点一个连接或提交一个表单，然后就必须重载整个页面
+
+    －异步交互，提交请求返回对象是不可见的层，通过javascripts根据返回数据，不刷新页面而改变当前页面的显示，例如：新浪微博，百度地图
+
+    显而易见，Ajax使得web应用更加完善，和用户的交互更加友好。
+	
+Ajax的异步交互如何开始的，那就是从XMLHttpRequest这个对象开始，它允许通过javascript来执行HTTP请求，并且将会解析一个XML格式的服务器响应，这个过程用户不用等待服务器的响应，用户可以继续进行其它操作，然后，服务器将数据返回JavaScript（仍然在 Web 表单中），然后对数据进行处理。这个过程可以迅速更新表单数据，可以不刷新页面使得用户得到了新数据。	
+
+
+
+下面就来看XMLHTTPRequest的五步使用法，来实现异步交互：	
+
+1.建立XMLHTTPRequest对象
+
+	if (window.XMLHttpRequest) {  
+		//IE7 8，firefox，chrome  
+		//alert("IE7 8，firefox，chrome");  
+		xmlhttp = new XMLHttpRequest();  
+		if (xmlhttp.overrideMimeType) {  
+			xmlhttp.overrideMimeType("text/xml");  
+		}  
+	}else if (window.ActiveXObject) {  
+		//IE6 及以下  
+		//alert("IE6 -");  
+		var activexName = ["MSXML2.XMLHTTP.6.0","MSXML2.XMLHTTP.5.0"];  
+		for (var i = 0; i < activexName.length; i++) {  
+			try {  
+				var xmlhttp = new ActiveXObject(activexName[i]);  
+				break;  
+			} catch (e) {  
+
+			}  
+		}  
+	}  
+	if (xmlhttp === undefined || xmlhttp === null) {  
+		alert("当前浏览器不支持XMLHttpRequest对象");  
+		return;  
+	}
+	
+	
+    注意事项：
+
+　　不同浏览器中XMLHttpRequest对象的建立方式是不同的，其实只分为两类，主要是IE版本的问题：
+
+　　一是IE6 及以下版本,需要通过某一个正确的ActiveXObject控件的名称通过new ActiveXObject(控件名)的方式
+
+　　二是IE7 及以上版本，firefox，chrome等非IE浏览器，直接new XMLHttpRequest()
+
+    详见以上代码。	
+	
+
+2.注册回调函数
+
+        //状态检测  
+        //array.push(xmlhttp.readyState);  
+      
+        //2.注册回调函数  
+        http.onreadystatechange = callback;  
+      
+        //回调函数callback见第5步	
+
+		注意事项：　　　
+
+　　　　设置回调函数时，不要再函数名后面加括号。加括号表示将回调函数的返回值注册给onreadystatechange属性，正确的方式应该是将回调函　　　数的名字注册给这个属性。
+
+　　　　实际上每次readyState的值发生变化时，回调函数都会被调用，但是一般我们只关心状态4，表示响应已经完全接受。
+
+　　　  如果只关心正确的响应数据，只要在执行send方法之前设置回调函数即可，但是仍然建议在XMLHttpRequest对象创建后就先设置回调函数，这样　　　回调函数还可以处理其他的状态。	
+
+
+3.使用open方法设置和服务器端交互的基本信息
+
+　　　  代码见４
+
+
+4.设置发送的数据，开始和服务器端交互
+
+        //从文本框中获取内容  
+        var userName = document.getElementById("UserName").value;  
+          
+        //alert(userName);//测试  
+          
+        //Get方式，传输的数据都在url中，？后面  
+        //3.设置和服务器端交互的相应参数,true表示异步方式交互  
+        xmlhttp.open("GET","AJAX?name=" + userName,true);  
+        //4.设置服务器端发送的数据，启动和服务器端的交互  
+        xmlhttp.send(null);//get方式不需要数据，null  
+          
+        /* 
+        //post方式交互 
+        //3.设置和服务器端交互的相应参数 
+        xmlhttp.open("POST","AJAX",true); 
+        //设置post请求头信息 
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded"); 
+        //4.设置服务器端发送的数据，启动和服务器端的交互 
+        xmlhttp.send("name=" + userName); 
+        //alert("test"); 
+        */
+
+          注意事项：
+
+　　　　　open方法最多可以有五个参数，其中前三个参数是必须的。
+
+　　　　　使用GET方式时，请求数据位于url连接中，后面的send方法的参数直接写null。
+
+　　　　　使用POST方式时，open方法后面需要先调用setRequestHeader方法，来设置Content-Type的值，然后调用send方法，send的参数就是请求的数据。
+
+　　　　　回调函数中，最好将判断readyState和statue的两个if条件分来写，readyState的判断位于外层，status的位于内层。以便于分别处理服务器不是200响应的情况和readyState不是4的情况。
+
+
+
+5.在回调函数中判断交互是否结束，响应是否正确，并根据需要获取服务器端返回的数据，更新页面内容
+
+//回调函数  
+            function callback(){                
+                //状态检测  
+                //array.push(xmlhttp.readyState);  
+                  
+                //alert("1122");  
+                //5.判断和服务器端的交互是否完成，还要判断服务器是否正确返回了数据  
+                if (xmlhttp.readyState === 4) {  
+                    //表示和服务器端的交互已经完成  
+                    if (xmlhttp.status === 200) {  
+                        //表示服务器的相应代码是200，正确的返回了数据  
+                        //两个判断成功后，从XMLHttpRequest对象中取回服务器端返回的数据，可以通过两种方式返回：  
+                            //纯文本方式或XML对应的DOM对象  
+                        //纯文本数据的接受方式  
+                        var message = xmlhttp.responseText;  
+                        //alert("1122");  
+                        //XML对应的DOM对象的接受方式  
+                        //使用前提是，服务器端需要设置contenttype为text/xml  
+                        //var domXml = xmlhttp.responseXML;  
+                          
+                        //记忆向div标签中填充文本内容的方法  
+                        var div = document.getElementById("message");  
+                        div.innerHTML = message;                
+                       <span style="font-family:SimSun;">                        </span>//<span style="font-family:SimSun;">输出</span>状态  
+                       <span style="font-family:SimSun;">                        </span>//alert(array);  
+                          
+                    }  
+                }  
+            }
+			
+
+          注意事项：
+          当服务器端没有正确返回XML数据时，在js中使用responseXML的方式获取返回的XML数据对应的DOM对象是，firefox和ie的结果是有差别的，ie获取根元素节点为null，而firefox获取根元素节点则是一个表示解析错误的元素节点。	
+
+		  

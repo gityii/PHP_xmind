@@ -1,0 +1,67 @@
+
+<!-- 下面的例子将演示网页如何通过 AJAX 从数据库读取信息： 请在下面的下拉列表中选择一个客户 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script>
+function showCustomer(str)
+{
+  var xmlhttp;    
+  if (str=="")
+  {
+    document.getElementById("txtHint").innerHTML="";
+    return;
+  }
+  if (window.XMLHttpRequest)
+  {
+    // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+    xmlhttp=new XMLHttpRequest();
+  }
+  else
+  {
+    // IE6, IE5 浏览器执行代码
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+  xmlhttp.onreadystatechange=function()
+  {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+      document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+    }
+  }
+  xmlhttp.open("GET","/try/ajax/getcustomer.php?q="+str,true);
+  xmlhttp.send();
+}
+</script>
+</head>
+<body>
+
+<form action=""> 
+<select name="customers" onchange="showCustomer(this.value)" style="font-family:Verdana, Arial, Helvetica, sans-serif;">
+<option value="APPLE">Apple Computer, Inc.</option>
+<option value="BAIDU ">BAIDU, Inc</option>
+<option value="Canon">Canon USA, Inc.</option>
+<option value="Google">Google, Inc.</option>
+<option value="Nokia">Nokia Corporation</option>
+<option value="SONY">Sony Corporation of America</option>
+</select>
+</form>
+<br>
+<div id="txtHint">客户信息将显示在这...</div>
+
+</body>
+</html>
+
+<!--
+当用户在上面的下拉列表中选择某个客户时，会执行名为 "showCustomer()" 的函数。该函数由 "onchange" 事件触发,
+
+showCustomer() 函数执行以下任务：
+
+    检查是否已选择某个客户
+    创建 XMLHttpRequest 对象
+    当服务器响应就绪时执行所创建的函数
+    把请求发送到服务器上的文件
+    请注意我们向 URL 添加了一个参数 q （带有输入域中的内容）
+-->	

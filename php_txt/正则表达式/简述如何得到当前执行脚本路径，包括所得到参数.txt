@@ -1,4 +1,0 @@
-$script_name = basename(__file__); print_r($script_name);
-
--------------------------------------------------------------
-echo $_SERVER['scrīpt_FILENAME']."?".$_SERVER['QUERY_STRING'];
