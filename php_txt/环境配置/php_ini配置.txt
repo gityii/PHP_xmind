@@ -1,0 +1,9 @@
+php.ini配置
+
+其实设置include_path的作用就是设置用include()函数包函文件时的路径，当然也可以不设置include_path，只要在包函文件时写出具体的文件相对或绝对路即可。
+
+php.ini中一共有两处include_path，一处是Unix下使用的，一处是windows下使用的，要修改windows下使用的。
+
+
+
+

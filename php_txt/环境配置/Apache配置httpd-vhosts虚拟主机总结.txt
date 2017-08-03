@@ -1,0 +1,25 @@
+
+一、配置虚拟主机需要3个文件
+
+ 1、Apache/conf/httpd.conf
+
+ 2、Apache/conf/extra/httpd-vhosts.conf(这个地版本的apache可能没有，可自己创建，也可以不要此文件，
+  而将配置直接写在httpd.conf里面，写在extra/httpd-vhosts.conf只是为了管理方便，不让httpd.conf文件内容很多而已)
+
+ 3、C:\WINDOWS\system32\drivers\etc\hosts
+
+ 
+ 二、配置步骤
+ ① httpd.conf 找到 Virtual hosts，在后面引入httpd-vhosts.conf文件：
+Include conf/extra/httpd-vhosts.conf
+这个句话，apache里面已经写有了，只需吧Include前面的#号去掉就OK
+
+② httpd-vhosts.conf配置文件的内容如下：
+#
+# DocumentRoot 是网站文件存放的根目录
+# ServerName 是网站域名, 需要跟 DNS 指向的域名一致
+#
+
+
+关于端口：
+默认是80端口，如果改成监听81端口，那么要写成www.jsgahost.com:81，host文件里面的www.jsgahost.com要和httpd-vhosts.conf里面的一致

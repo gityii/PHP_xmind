@@ -1,0 +1,28 @@
+如果你想让你上线项目的域名解析的是你本地的IP，该怎么做呢？难道要一个个的改配置文件吗？
+
+1.本地hosts
+
+什么是本地hosts？我们知道访问一个域名，通过dns服务器得到该域名所指向的服务器ip地址，然后通过ip地址和服务器建立连接，完成剩下的事情。那么当开发过程中我们没有域名的时候如何才能模拟一个域名呢？答案就是hosts文件
+地址：     C:\Windows\System32\Drivers\etc\hosts 文件或者 方法2)    用记事本打开它，在末尾添加一行：
+127.0.0.1 localhost www.aaa.com
+
+方法2) 或者你不修改hosts文件，下载 Firefox浏览器，安装 change hosts 插件(怎么安装插件，百度一下)，然后在这个插件的弹出框中写的内容与你在hosts中将要写的内容一样。
+
+
+2.apache虚拟主机配置
+假设apache安装在x:\apache ，那么先打开x:\apache\conf\httpd.conf,查找"Include conf/extra/httpd-vhosts.conf" 若前面有‘#’将其删掉，若没有这行语句，则手动添加。
+
+   接着到  找到你Apache安装的目录  例如：    D:\xampp\apache\conf\extra    目录中找到或新建httpd-vhosts.conf文件(如果你要解析的域名为http协议，则修改此处，若为HTTPS协议，则修改httpd-ssl.conf文件)，打开文件后，在末尾添加：
+       <VirtualHost *:80>  
+        DocumentRoot"D:/xampp/htdocs"  
+        ServerName localhost  
+    </VirtualHost>  
+    <VirtualHost *:80>  
+        DocumentRoot"D:/xampp/htdocs/aaa"(此处意思为 你对应解析的域名的代码位置)  
+        ServerName www.aaa.com(此处地址与你在hosts文件中写的一样)  
+    </VirtualHost>  
+	
+
+当开启虚拟主机功能的时候，所有请求都将进入<VirtruaHost>，而第一个<VirtruaHost>将作为默认处理配置，也就是说www.aaa.com将进入第二个<VirtruaHost>，
+
+而其他没匹配到的都将进入第一个<VirtruaHost>配置，如localhost系列。	
