@@ -1,0 +1,467 @@
+控制器
+控制器是 MVC 模式中的一部分， 是继承yii\base\Controller类的对象，负责处理请求和生成响应。 具体来说，控制器从应用主体接管控制后会分析请求数据并传送到模型， 传送模型结果到视图， 最后生成输出响应信息。
+yii2把所有的控制器放在controllers 文件夹下面。
+每个类都必须有命名空间，命名空间就是文件存放的目录路径。
+控制器由 操作 组成，它是执行终端用户请求的最基础的单元， 一个控制器可有一个或多个操作。
+
+控制器负责处理请求和产生响应。用户请求后，控制器将分析请求数据，将它们传递到模型，模型中获得的结果插入的视图中，并且产生一个响应。
+控制器包含动作（操作）。它们是用户请求执行的基本单位。一个控制器中可以有一个或几个动作。 
+
+命名空间通过自动加载方式联系到相应的文件
+-----------
+
+
+
+在Yii中，当请求一个Url的时候，首先在application中获取request信息，然后由request通过urlManager解析出route，再在Module中根据route来创建controller并处理request。
+
+Yii中总共有三种控制器类：
+    base\Controller.php      这个是下面两个的基类
+    console\Controller.php   这个是控制台控制器
+    web\Controller.php       这个是web控制器
+
+先看看基类base\Controller.php，在基类中大致可分为三个部分
+
+	和action相关的功能
+	和render相关的功能
+	其它功能
+	
+
+1、 和action相关的函数
+	我们按照这些函数的调用顺序来一一说明
+	
+	a、执行路由：public function run($route, $params = [])	
+	首先处理路由请求：
+	
+/*
+* route值即可以为当前controller中的action id,
+* 
+* 也可为module id/controller id/action id/这种格式
+* 如果以“/”开头，将于application来处理，否则，用控制器所属模块来处理
+*/
+public function run($route, $params = [])
+{
+        //先判断route中有没有“/”
+        $pos = strpos($route, '/');
+        if ($pos === false) {
+                //如果没有“/”，则为action id，直接调用runAction来执行这个action。如：index
+            return $this->runAction($route, $params);
+        } elseif ($pos > 0) {
+                //如果“/”在中间，由当前的模块来处理这个route。如：test/index
+            return $this->module->runAction($route, $params);
+        } else {
+                //如果以“/”开头，则用当前的应用程序来处理这个route。如：/test/index;
+            return Yii::$app->runAction(ltrim($route, '/'), $params);
+        }
+}	
+
+	
+	b、执行动作：public function runAction($id, $params = [])
+/*
+* $id 为action的id,如定义的actionIndex，那么id就为Index。
+* 
+*/
+public function runAction($id, $params = [])
+{
+        //创建action
+        $action = $this->createAction($id);
+        if ($action === null) {
+            throw new InvalidRouteException('Unable to resolve the request: ' . $this->getUniqueId() . '/' . $id);
+        }
+
+        Yii::trace("Route to run: " . $action->getUniqueId(), __METHOD__);
+
+        if (Yii::$app->requestedAction === null) {
+            Yii::$app->requestedAction = $action;
+        }
+
+        $oldAction = $this->action;
+        $this->action = $action;
+
+        //用来保存当前控制器的所有父模块，顺序为由子模块到父模块
+        $modules = [];
+        $runAction = true;
+
+        /*
+         * 获取当前控制器的所以的模块，并执行每个模块的beforeAction来检查当前的action是否可以执行，
+         * 注意：getModules返回的数组顺序为：从父模块到子模块，
+         * 所以在执行beforeAction的时候，先检查最外层的父模块，然后检查子模块。
+         * 
+         * 然而在执行afterAction的时候，顺序就反过来了，先执行子模块，最后执行父模块。
+         * 
+         */
+        foreach ($this->getModules() as $module) {
+            if ($module->beforeAction($action)) {
+                array_unshift($modules, $module);
+            } else {
+                $runAction = false;
+                break;
+            }
+        }
+
+        $result = null;
+
+        //如果所以的父模块都满足执行的条件
+        if ($runAction) {
+                /*
+                 * 再判断当前控制器中是beforeAction，
+                 * 最后由生成的action对象来执行runWithParams方法
+                 * 
+                 * 执行完后，再执行afterAction方法
+                 */
+            if ($this->beforeAction($action)) {
+                $result = $action->runWithParams($params);
+                $result = $this->afterAction($action, $result);
+            }
+        }
+
+        //执行所有父模块的afterAction
+        foreach ($modules as $module) {
+            /** @var Module $module */
+            $result = $module->afterAction($action, $result);
+        }
+
+        $this->action = $oldAction;
+
+        return $result;
+}
+
+
+	c、创建动作 public function createAction($id)
+
+//由action id来创建action对象
+public function createAction($id)
+{
+        //使用默认的action id ，默认值为：index
+        if ($id === '') {
+            $id = $this->defaultAction;
+        }
+
+        $actionMap = $this->actions();
+        if (isset($actionMap[$id])) {
+                //如果在actions方法中指定了独立的动作，则直接使用此动作。
+            return Yii::createObject($actionMap[$id], [$id, $this]);
+        } elseif (preg_match('/^[a-z0-9\\-_]+$/', $id) && strpos($id, '--') === false && trim($id, '-') === $id) {
+                /*
+                 * action id由：a到z、0到9、\、-、_ 这五种字符组成，
+                 * 并且不能包含“--”
+                 * 并且不能以“-”为开头或结尾
+                 * 
+                 * 先以“-”把id分隔为数组，再以“ ”连接到字符串，把每个单词首字母大写，最后把“ ”去掉，并和"action"连接
+                 * 如;
+                 * 1、new-post-v-4
+                 * 2、['new','post','v','4']
+                 * 3、new post v 4
+                 * 4、New Post V 4
+                 * 5、NewPostV4
+                 * 6、actionNewPostV4
+                 */
+            $methodName = 'action' . str_replace(' ', '', ucwords(implode(' ', explode('-', $id))));
+            if (method_exists($this, $methodName)) {
+                    /*
+                     * 如果当前控制器中存在这个actionXXX方法，
+                     * 再通过反射生成方法，再次检查一遍，最后生成InlineAction
+                     */
+                $method = new \ReflectionMethod($this, $methodName);
+                if ($method->getName() === $methodName) {
+                    return new InlineAction($id, $this, $methodName);
+                }
+            }
+        }
+        return null;
+}
+所以，如果一个动作在定义的时候是用骆驼格式名称的，如actionNewArticle，那么写url的时候r=site/new-article。
+
+
+	d、定义独立动作的数组：public function actions()
+/*
+* 独立action定义
+* 这个用来指定独立的action，返回格式为name-value的数组，name为action的id,value为action类的实现，如：
+* return [
+*     'action1' => 'app\components\Action1',
+*     'action2' => [
+*         'class' => 'app\components\Action2',
+*         'property1' => 'value1',
+*         'property2' => 'value2',
+*     ],
+* ];
+* 这个主要是用于在子类中重写
+*/
+public function actions()
+{
+        return [];
+}
+
+
+由createAction可知，当controller在创建action的时候，会根据动作ID先在这个数组里面查找，如果找到则返回这个动作。所以这里定义的动作的优先级要大于在控制器里面定义的actionXXX函数。
+
+
+	e、绑定动作的参数：public function bindActionParams($action, $params)
+
+/*
+* 绑定action的参数。
+* 比如定义了动作 actionCrate($id,$name=null)
+* 那个这个函数的作用就是从params(一般为$_GET)中提取$id，$name,
+* 
+* 具体的实现在web\Controller.php和console\Controller.php中
+*/
+public function bindActionParams($action, $params)
+{
+        return [];
+}
+
+
+	f、beforeAction、afterAction，事件触发
+//在具体的动作执行之前会先执行beforeAction，如果返回false,则动作将不会被执行，
+//后面的afterAction也不会执行（但父模块跌afterAction会执行）
+public function beforeAction($action)
+{
+        $event = new ActionEvent($action);
+        $this->trigger(self::EVENT_BEFORE_ACTION, $event);
+        return $event->isValid;
+}
+
+//当前动作执行之后，执行afterAction
+public function afterAction($action, $result)
+{
+        $event = new ActionEvent($action);
+        $event->result = $result;
+        $this->trigger(self::EVENT_AFTER_ACTION, $event);
+        return $event->result;
+}
+
+在这个都会触发事件，beforeAction触发EVENT_BEFORE_ACTION事件，afterAction触发EVENT_AFTER_ACTION
+
+2、和render相关的功能
+   a、获取、设置view组件：public function getView()、public function setView($view)
+
+//获取view组件，
+public function getView()
+{
+        if ($this->_view === null) {
+            $this->_view = Yii::$app->getView();
+        }
+
+        return $this->_view;
+}
+//设置view组件
+public function setView($view)
+{
+        $this->_view = $view;
+}
+
+
+	b、渲染视图文件和布局文件（如果有布局的话）：public function render($view, $params = [])
+
+//渲染视图文件和布局文件（如果有布局的话）
+public function render($view, $params = [])
+{
+        //由view对象渲染视图文件
+        $output = $this->getView()->render($view, $params, $this);
+        //查找布局文件
+        $layoutFile = $this->findLayoutFile($this->getView());
+        if ($layoutFile !== false) {
+                //由view对象渲染布局文件，
+                //并把上面的视图结果作为content变量传递到布局中，所以布局中才会有$content变量来表示
+            return $this->getView()->renderFile($layoutFile, ['content' => $output], $this);
+        } else {
+            return $output;
+        }
+}
+
+
+渲染视图文件，不会应用布局：public function renderPartial($view, $params = [])
+
+//这个只渲染视图文件，不会应用布局
+public function renderPartial($view, $params = [])
+{
+        return $this->getView()->render($view, $params, $this);
+}
+
+渲染文件：public function renderFile($file, $params = [])
+
+//这个就是用来渲染一个文件，$file为文件实路径或别名路径
+public function renderFile($file, $params = [])
+{
+        return $this->getView()->renderFile($file, $params, $this);
+}
+
+获取这个控制器对应的view的文件路径：public function getViewPath()
+
+//获取这个控制器对应的view的文件路径，如@app/views/site/xxxx.php
+public function getViewPath()
+{
+        return $this->module->getViewPath() . DIRECTORY_SEPARATOR . $this->id;
+}
+
+	c、查找布局文件：protected function findLayoutFile($view)
+
+//查找布局文件
+protected function findLayoutFile($view)
+{
+        $module = $this->module;
+        //如果当前控制器设置了布局文件，则直接使用所设置的布局文件
+        if (is_string($this->layout)) {
+            $layout = $this->layout;
+        } elseif ($this->layout === null) {
+                //如果没有设置布局文件，则查找所有的父模块的布局文件。
+            while ($module !== null && $module->layout === null) {
+                $module = $module->module;
+            }
+            if ($module !== null && is_string($module->layout)) {
+                $layout = $module->layout;
+            }
+        }
+
+        //如果没有设置布局文件，返回false
+        if (!isset($layout)) {
+            return false;
+        }
+
+        /*
+         * 布局文件有三种路径写法
+         * 1、以“@”开头，这种会在别名路径中查找布局文件
+         * 2、以“/”开头，这个会从应用程序的布局文件目录下面查找布局文件
+         * 3、其它情况，   这个会从当前模块的布局文件目录下查查找布局文件
+         */
+        if (strncmp($layout, '@', 1) === 0) {
+            $file = Yii::getAlias($layout);
+        } elseif (strncmp($layout, '/', 1) === 0) {
+            $file = Yii::$app->getLayoutPath() . DIRECTORY_SEPARATOR . substr($layout, 1);
+        } else {
+            $file = $module->getLayoutPath() . DIRECTORY_SEPARATOR . $layout;
+        }
+
+        //如果布局文件有文件扩展名，返回
+        if (pathinfo($file, PATHINFO_EXTENSION) !== '') {
+            return $file;
+        }
+        //加上默认的文件扩展名。
+        $path = $file . '.' . $view->defaultExtension;
+        //如果文件不存在，并且，默认的文件扩展名也不是php，则给加上php作为扩展名。
+        if ($view->defaultExtension !== 'php' && !is_file($path)) {
+            $path = $file . '.php';
+        }
+
+        return $path;
+}
+
+
+3、其它功能
+
+	a、获取当前控制器所有的父模块：public function getModules()
+
+//获取当前控制器所有的父模块
+public function getModules()
+{
+        $modules = [$this->module];
+        $module = $this->module;
+        while ($module->module !== null) {
+                //由这里可知，返回的数组顺序为从父模块到子模块
+            array_unshift($modules, $module->module);
+            $module = $module->module;
+        }
+        return $modules;
+}
+
+
+	b、获取控制器id：public function getUniqueId()
+//返回控制器id
+public function getUniqueId()
+{
+        //如果当前所属模块为application，则就为该id,否则要前面要加上模块id
+        return $this->module instanceof Application ? $this->id : $this->module->getUniqueId() . '/' . $this->id;
+}
+
+
+	c、获取路由信息：public function getRoute()
+
+//获取路由信息
+public function getRoute()
+{
+        return $this->action !== null ? $this->action->getUniqueId() : $this->getUniqueId();
+}
+
+另外还有几个变量和2个事件
+
+//在执行beforeAction方法时触发的事件，
+//如果对事件的isValid属性设置为false，将取消action的执行
+const EVENT_BEFORE_ACTION = 'beforeAction';
+//在执行afterAction方法是触发的事件
+const EVENT_AFTER_ACTION = 'afterAction';
+//控制器id
+public $id;
+//所属模块
+public $module;
+//控制器中默认动作
+public $defaultAction = 'index';
+//布局文件，如果设置为false，则不使用布局文件
+public $layout;
+//当前下面执行的action，可在事件中根据这个action来执行不同的操作
+public $action;
+//视图对象
+private $_view;
+
+
+====================例子===================================
+
+控制器由 操作 组成，它是执行终端用户请求的最基础的单元， 一个控制器可有一个或多个操作。
+操作必须声明在控制器中。为了简单起见， 你可以直接在 SiteController 控制器里声明操作。这个控制器是由文件 controllers/SiteController.php 定义的。 
+如下示例显示包含两个操作view and create 的控制器post：
+namespace app\controllers;
+
+use Yii;
+use app\models\Post;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+
+class PostController extends Controller
+{
+    public function actionView($id)
+    {
+        $model = Post::findOne($id);
+        if ($model === null) {
+            throw new NotFoundHttpException;
+        }
+
+        return $this->render('view', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new Post;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+}
+
+在操作 view (定义为 actionView() 方法)中， 代码首先根据请求模型ID加载 模型， 如果加载成功，会渲染名称为view的视图并显示，否则会抛出一个异常。
+
+在操作 create (定义为 actionCreate() 方法)中, 代码相似。 先将请求数据填入模型， 然后保存模型，如果两者都成功，会跳转到ID为新创建的模型的view操作， 否则显示提供用户输入的create视图。
+
+在上述 PostController 代码中，view 操作被定义为 actionView 方法。 Yii 使用 action 前缀区分普通方法和操作。 action 前缀后面的名称被映射为操作的 ID。
+
+涉及到给操作命名时，你应该理解 Yii 如何处理操作 ID。 操作 ID 总是被以小写处理，如果一个操作 ID 由多个单词组成， 单词之间将由连字符连接（如 create-comment）。操作 ID 映射为方法名时移除了连字符， 将每个单词首字母大写，并加上 action 前缀。 例子：操作 ID create-comment 相当于方法名 actionCreateComment。
+
+上述代码中的操作方法没有参数。
+
+在操作方法中，yii\web\Controller::render() 被用来渲染一个名为 view 的视图文件。 操作方法会返回渲染结果。 结果会被应用接收并显示给最终用户的浏览器（作为整页 HTML 的一部分）。
+
+
+
+
+
+
+
+
+
+
+	
+

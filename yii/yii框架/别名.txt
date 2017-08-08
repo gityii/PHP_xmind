@@ -1,0 +1,59 @@
+别名：
+别名用来表示文件路径和 URL，这样就避免了在代码中硬编码一些绝对路径 和 URL。
+一个别名必须以 @ 字符开头，以区别于传统的文件路径和 URL。
+别名 @yii 指的是 Yii 框架本身的安装 目录，而 @web 表示的是当前运行应用的根 URL。
+
+定义别名：
+你可以调用 Yii::setAlias() 来给文件路径或 URL 定义别名：
+可以通过在一个别名后面加斜杠 / 和一至多个路径分段生成新别名。
+我们把通过 Yii::setAlias() 定义的别名称为根别名，而用他们衍生出去的别名成为衍生别名。 例如，@foo 就是根别名，而 @foo/bar/file.php 是一个衍生别名。
+你还可以用别名去定义新别名（根别名与衍生别名均可）：
+Yii::setAlias('@foobar', '@foo/bar');
+根别名通常在引导阶段定义。比如你可以在 入口脚本里调用 Yii::setAlias()。为 了方便起见，应用提供了一个名为 aliases的 可写属性，你可以在应用配置中设置它，就像这样：
+return [
+    // ...
+    'aliases' => [
+        '@foo' => '/path/to/foo',
+        '@bar' => 'http://www.example.com',
+    ],
+];
+
+解析别名
+
+你可以调用 Yii::getAlias() 命令来解析根别名到对应的文件路径或 URL。 同样的页面也可以用于解析衍生别名。例如
+echo Yii::getAlias('@foo');               // 输出：/path/to/foo
+echo Yii::getAlias('@bar');               // 输出：http://www.example.com
+echo Yii::getAlias('@foo/bar/file.php');  // 输出：/path/to/foo/bar/file.php
+
+
+预定义的别名
+
+Yii 预定义了一系列别名来简化常用路径和 URL 的使用：
+
+    @yii, BaseYii.php 文件所在的目录（也被称为框架安装目录）
+    @app, 当前运行的应用 yii\base\Application::basePath (yii2\base\application.php)
+    @runtime, 当前运行的应用的 yii\base\Application::runtimePath. Defaults to @app/runtime.
+    @webroot, the Web root directory of the currently running Web application. It is determined based on the directory containing the entry script.
+    @web,the base URL of the currently running Web application. It has the same value as yii\web\Request::baseUrl.
+    @vendor,yii\base\Application::vendorPath. Defaults to @app/vendor.
+    @bower, the root directory that contains bower packages. Defaults to @vendor/bower.
+    @npm, the root directory that contains npm packages. Defaults to @vendor/npm.
+
+@yii 别名是在入口脚本里包含 Yii.php 文件时定义的， 其他的别名都是在配置应用的时候， 于应用的构造方法内定义的。
+
+
+
+扩展的别名  
+
+每一个通过 Composer 安装的 扩展 都自动添加了一个别名。 该别名会以该扩展在 composer.json 文件中所声明的根命名空间为名，且他直接代指该包的根目录。 例如，如果你安装有 yiisoft/yii2-jui 扩展， 会自动得到 @yii/jui 别名，它定义于引导启动阶段：
+
+Yii::setAlias('@yii/jui', 'VendorPath/yiisoft/yii2-jui');
+
+
+=================================================================
+YII基础版：
+别名在文件路径\vendor\yiisoft\yii2下的BaseYii.php里面定义的。
+yii\BaseYii::$aliases 用于保存整个Yii应用的所有的别名。 这里默认地把 yii\BaseYii.php 所在的目录作为 @yii 别名。
+-----------------------------------------------------------------
+
+

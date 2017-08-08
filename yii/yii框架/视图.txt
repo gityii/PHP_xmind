@@ -1,0 +1,48 @@
+
+视图是用来生成响应内容的脚本，它是展示数据到终端用户的代码。
+在组织视图上有一些约定：
+    控制器渲染的视图文件默认放在 @app/views/ControllerID 目录下， 其中 ControllerID 对应 控制器 ID, 例如控制器类为 PostController，视图文件目录应为 @app/views/post， 控制器类 PostCommentController对应的目录为 @app/views/post-comment， 如果是模块中的控制器，目录应为 yii\base\Module::basePath 模块目录下的 views/ControllerID 目录；
+    对于 小部件 渲染的视图文件默认放在 WidgetPath/views 目录， 其中 WidgetPath 代表小部件类文件所在的目录；
+    对于其他对象渲染的视图文件，建议遵循和小部件相似的规则。
+
+可覆盖控制器或小部件的 yii\base\ViewContextInterface::getViewPath() 方法来自定义视图文件默认目录。
+
+下面是一个很简单的例子，更详细的内容，以后更新
+===============================例子==================================
+//控制器
+<?php
+namespace app\controllers;
+use yii\web\Controller;
+class SiteController extends Controller
+{
+    // ...其它代码...
+    public function actionSay($message = 'Hello')
+    {
+        return $this->render('say', ['message' => $message]);
+    }
+}
+
+上面，在操作方法中，yii\web\Controller::render() 被用来渲染一个名为 say 的视图文件。 message 参数也被传入视图，这样就可以在里面使用。操作方法会返回渲染结果。 结果会被应用接收并显示给最终用户的浏览器（作为整页 HTML 的一部分）。
+
+需要创建一个 say 视图，以便显示从操作方法中传来的 message 参数。
+
+//视图
+<?php
+use yii\helpers\Html;
+?>
+<?= Html::encode($message) ?>
+
+say 视图应该存为 文件夹views/site/下的say.php 文件。当一个操作中调用了 yii\web\Controller::render() 方法时， 它将会按 views/控制器 ID/视图名.php 路径加载 PHP 文件。	
+注意以上代码，message 参数在输出之前被 yii\helpers\Html::encode() 方法处理过。
+可以在 say 视图里放入更多内容。内容可以由 HTML 标签，纯文本， 甚至 PHP 语句组成。实际上 say 视图就是一个由 yii\web\Controller::render() 执行的 PHP 脚本。 视图脚本输出的内容将会作为响应结果返回给应用。应用将依次输出结果给最终用户。
+
+
+
+
+
+
+
+
+
+
+
