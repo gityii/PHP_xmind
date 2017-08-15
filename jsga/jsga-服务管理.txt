@@ -1,0 +1,50 @@
+ZERO、项目目录
+代码E:\www_jsga\data\code\will\jsga.wiiqq.com下面：
+(这个目录是基于yii框架的)
+builder：存放项目脚本，主要关注其中sql、和es即可
+
+commands：文件夹内TaskController为应用常驻脚本（定时任务）;
+
+config：配置文件，production.conf.php（生产环境） development.conf.php(开发环境)，test.conf.php（测试环境），apache或者nginx配置指定环境变量
+filters：放置的为过滤权限的文件文件名对应模块名，文件夹内的其他文件为各个环境下的配置文件；
+
+Models：文件夹内放置的为项目实体模型，其中task文件夹为具体定时任务实体类；
+
+Runtime：文件夹放置项目运行时的日志信息；
+
+Web：index.php根目录 下面的assets会存放wau加载时的临时文件
+重要：runtime文件夹 和web/assets文件夹要给777权限
+
+
+一、从基础模板增加模块的大致步骤如下：
+1，在项目根目录新建一个modules（命名随意）用于存储模块的代码文件。
+2，在modules目录新建一个以模块名命名的子目录，作为该模块的controllers,models,views的存储目录。比如demo
+3，在demo目录下面新建controllers,models,views（你也可以将原来的拷贝过来，但注意命名空间），然后新建一个Module.php作为模块的启动类（请仿照我前面提供的例子中的demo/Module.php，注意命名空间）。
+4，在web.php的component一节增加对modules的注入配置。格式为：
+
+    "modules" => [
+        ['class'=>'\namespace\to\Module']
+    ]
+
+5,在项目启动文件增加到modules目录的别名，以帮助Yii找到你的modules代码目录。
+
+
+二、服务管理的主要功能是对应用服务进行增、删、改、查；给“数据统计-应用数据”模块提供基础的服务档案。
+代码结构如下：
+控制器：    \will\jsga.wiiqq.com\modules\app\controllers\*
+model类：   \will\jsga.wiiqq.com\models\app\*
+ajax请求类：\will\jsga.wiiqq.com\modules\api\controllers\app\*
+views：     \will\jsga.wiiqq.com\modules\app\views\*
+权限过滤filter配置文件：app.yml
+
+
+
+
+
+
+
+
+	
+	
+
+	

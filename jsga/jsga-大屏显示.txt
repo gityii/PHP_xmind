@@ -1,0 +1,120 @@
+一、大屏展示
+用户中心、用户统计模块为\will\jsga.wiiqq.com\modules\screen
+接口在\will\jsga.wiiqq.com\modules\api\controllers\screen
+用户中心展示的数据大多存在缓存中，由\will\jsga.wiiqq.com\models\task\ SyncEsTask.php控制，具体实现在\will\jsga.wiiqq.com\models\redis文件夹中，CoolService.php为大屏展示数据缓存实现类。
+
+二、
+\will\jsga.wiiqq.com\modules\screen\Module.php     作为模块的启动类，代码如下：  
+
+<?php
+namespace app\modules\screen;
+
+/**
+ * usercenter module definition class
+ */
+class Module extends \wii\base\Module    //will是从哪儿配置过来的? 模块被组织成一个称为yii\base\Module::basePath的目录
+{
+//每个模块都有一个继承yii\base\Module的模块类， 该类文件直接放在模块的yii\base\Module::basePath目录下， 并且能被 自动加载。
+    /**
+     * @inheritdoc
+     */
+    public $controllerNamespace = 'app\modules\screen\controllers';  //可配置yii\base\Module::$controllerNamespace属性来自定义控制器类的命名空间，这个地方应该就是干这个事
+
+    /**
+     * @inheritdoc
+     */
+    public function init()   //名字初始化？初始化要初始化哪些信息？
+    {
+        parent::init();
+
+    }
+}
+ 
+
+
+三、模块中的控制器 
+创建模块的控制器时，惯例是将控制器类放在模块类命名空间的controllers子命名空间中， 也意味着要将控制器类文件放在模块 yii\base\Module::basePath目录中的controllers子目录中。
+
+\will\jsga.wiiqq.com\modules\screen\controllers\ScreenController.php
+例如，要在screen模块中创建controllers控制器， 应像如下申明控制器类：
+
+<?php
+namespace app\modules\screen\controllers;
+
+use app\controllers\BaseController;
+use app\models\admin\Admin;
+use app\models\applies\Applies;
+use app\models\es\BusinessEs;
+use app\models\common\City;
+use app\models\constant\Constant;
+use app\models\redis\CoolService;
+use app\models\redis\RedisService;
+use app\models\usercenter\UserCenter;
+use app\models\usercenter\UserCenterBase;
+use app\models\usercenter\UserCenterLies;
+use app\models\usercenter\UserCenterMongodb;
+use app\models\util\HYFilterUtil;
+use wii\helpers\Utils;
+use wii\web\User;
+
+class ScreenController extends BaseController
+{
+.....
+}
+
+
+
+四、模块中的视图 
+视图应放在模块的yii\base\Module::basePath对应目录下的 views 目录，对应模块中控制器的视图文件应放在 views/ControllerID 目录下， 其中ControllerID对应 控制器 ID. 
+目录\will\jsga.wiiqq.com\modules\screen\views\screen，对应于控制器类ScreenController
+模块可指定 布局，它用在模块的控制器视图渲染。 布局文件默认放在 views/layouts 目录下， 可配置yii\base\Module::$layout属性指定布局名， 如果没有配置 layout 属性名，默认会使用应用的布局。
+当前的布局放在\will\jsga.wiiqq.com\modules\screen\views\layouts
+
+
+
+
+五、使用模块
+要在应用中使用模块，只需要将模块加入到应用主体配置的yii\base\Application::modules属性的列表中
+在哪儿配置？？？？？？
+
+
+
+
+
+六、路由动作？
+
+E:\www_jsga\data\code\will\jsga.wiiqq.com\modules\api\controllers\screen\Chart2Action.php    新增关注用户与新增实人用户
+
+
+http://www.jsgahost.com/screen/screenapi/map        url重写？？？
+
+\will\jsga.wiiqq.com\modules\api\controllers\screen\MapAction.php      对应地图数据
+\will\jsga.wiiqq.com\modules\api\controllers\screen\Chart2Action.php   对应具体数据  
+
+
+修改内容：
+
+大屏：
+3、点击地图某一地市时，大屏右上角需显示对应地市全市数据柱形图；（可修改）
+把省的改成市的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
