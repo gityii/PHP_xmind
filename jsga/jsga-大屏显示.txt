@@ -95,24 +95,37 @@ http://www.jsgahost.com/screen/screenapi/map        url重写？？？
 修改内容：
 
 大屏：
-3、点击地图某一地市时，大屏右上角需显示对应地市全市数据柱形图；（可修改）
+3、点击地图某一地市时，大屏右上角需显示对应地市全市数据柱形图；（已修改）
 把省的改成市的
 
 
+54b74b34a49982f98ed9fabf8e5adbc32329ef78
 
 
 
+                //$cA[] = $data['city_name'];
+               // $cA[] = $cityId ? $data['city_name'] : {$vA, $data['city_name']};
 
 
 
+ 数组赋值？？？？
+$pA[ ] = 0;这个写法是给$pA[0]赋值为0，还是给$pA全部赋值为0？
+如果$nA里面没值得话，就应该给键名0赋值为0，如果$nA有值得话，就追加一个值为0的元素
+没有值的话   指的是给键值为0 也就是第一个   赋值为0
+这种写法 通常是用来存储
 
 
 
+            $cA = $cityId ? $cA : array($vA, $data['city_name']);
+            $nA = $cityId ? $nA : array($provCount_n, $nA);
+            $pA = $cityId ? $nA : array($provCount_p, $pA);
 
 
-
-
-
+			
+			
+			
+			
+			
 
 
 
