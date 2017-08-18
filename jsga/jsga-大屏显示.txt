@@ -1,20 +1,24 @@
-一、大屏展示
-用户中心、用户统计模块为\will\jsga.wiiqq.com\modules\screen
-接口在\will\jsga.wiiqq.com\modules\api\controllers\screen
-用户中心展示的数据大多存在缓存中，由\will\jsga.wiiqq.com\models\task\ SyncEsTask.php控制，具体实现在\will\jsga.wiiqq.com\models\redis文件夹中，CoolService.php为大屏展示数据缓存实现类。
+一、大屏展示模块
 
-二、
-\will\jsga.wiiqq.com\modules\screen\Module.php     作为模块的启动类，代码如下：  
+模块是独立的软件单元，由模型, 视图, 控制器和其他支持组件组成， 终端用户可以访问在应用主体中已安装的模块的控制器， 模块被当成小应用主体来看待，和应用主体不同的是， 模块不能单独部署，必须属于某个应用主体。
+新建大屏显示模块的目录  为\will\jsga.wiiqq.com\modules\screen。
+在该目录中有子目录如controllers, models, views 分别为对应控制器，模型，视图和其他代码，和应用非常类似。
+
+
+
+
+二、模块类
+\will\jsga.wiiqq.com\modules\screen\Module.php作为模块的启动类，该类文件直接放在模块的yii\base\Module::basePath目录下， 并且能被自动加载，代码如下：  
 
 <?php
-namespace app\modules\screen;
+namespace app\modules\screen;  //定义模块的命名空间？为什么是app？
 
 /**
  * usercenter module definition class
  */
-class Module extends \wii\base\Module    //will是从哪儿配置过来的? 模块被组织成一个称为yii\base\Module::basePath的目录
+class Module extends \wii\base\Module    //will是从哪儿配置过来的? 这个命名空间如何解析？
 {
-//每个模块都有一个继承yii\base\Module的模块类， 该类文件直接放在模块的yii\base\Module::basePath目录下， 并且能被 自动加载。
+//每个模块都有一个继承yii\base\Module的模块类
     /**
      * @inheritdoc
      */
@@ -23,23 +27,201 @@ class Module extends \wii\base\Module    //will是从哪儿配置过来的? 模�
     /**
      * @inheritdoc
      */
-    public function init()   //名字初始化？初始化要初始化哪些信息？
+    public function init()   
     {
         parent::init();
-
+        //加载配置来初始化模块, 配置文件可能包含以下内容， 类似应用主体配置
     }
 }
  
+ /*
+ 
+ class Module extends ServiceLocator
+{
+
+    public $controllerNamespace;
+
+    /**
+     * Initializes the module.
+     *
+     * This method is called after the module is created and initialized with property values
+     * given in configuration. The default implementation will initialize [[controllerNamespace]]
+     * if it is not set.
+     *
+     * If you override this method, please make sure you call the parent implementation.
+     */
+	
+ init函数如下：
+    public function init()
+    {
+        if ($this->controllerNamespace === null) {
+            $class = get_class($this);
+            if (($pos = strrpos($class, '\\')) !== false) {
+                $this->controllerNamespace = substr($class, 0, $pos) . '\\controllers';
+            }
+        }
+    }
+...
+}	
+*/	
 
 
 三、模块中的控制器 
+控制器是 MVC 模式中的一部分， 是继承yii\base\Controller类的对象，负责处理请求和生成响应。 具体来说，控制器从应用主体接管控制后会分析请求数据并传送到模型， 传送模型结果到视图， 最后生成输出响应信息。
 创建模块的控制器时，惯例是将控制器类放在模块类命名空间的controllers子命名空间中， 也意味着要将控制器类文件放在模块 yii\base\Module::basePath目录中的controllers子目录中。
 
+
+    动作：
+    控制器由 动作 组成，它是执行终端用户请求的最基础的单元， 一个控制器可有一个或多个动作。
+    
+	
+    创建动作：
+    创建动作可简单地在控制器类中定义所谓的 操作方法 来完成，操作方法必须是以action开头的公有方法。 动作方法的返回值会作为响应数据发送给终端用户， 如下代码定义了两个动作 index 和 hello-world:
+    namespace app\controllers;
+    
+    use yii\web\Controller;
+    
+    class SiteController extends Controller
+    {
+        public function actionIndex()
+        {
+            return $this->render('index');
+        }
+    
+        public function actionHelloWorld()
+        {
+            return 'Hello World';
+        }
+    }
+
+    	
+    动作ID： 
+    动作通常是用来执行资源的特定操作，因此， 动作ID通常为动词，如view, update等。
+    动作ID应仅包含英文小写字母、数字、下划线和中横杠，操作ID中的中横杠用来分隔单词。 例如view, update2, comment-post是真实的动作 ID，view?, Update不是动作ID.
+    可通过两种方式创建动作ID，内联动作和独立动作. An inline action is 内联动作在控制器类中定义为方法；独立动作是继承yii\base\Action或它的子类的类。 内联动作容易创建，在无需重用的情况下优先使用； 独立动作相反，主要用于多个控制器重用， 或重构为扩展。
+    
+	
+	内联动作
+	独立动作: ScreenapiController.php里面是独立动作
+	
+    	
+    动作结果： 
+    动作方法或独立操作的run()方法的返回值非常重要， 它表示对应动作结果。
+    返回值可为 响应 对象，作为响应发送给终端用户。
+    •	对于Web applications网页应用，返回值可为任意数据, 它赋值给yii\web\Response::$data， 最终转换为字符串来展示响应内容。
+    •	对于console applications控制台应用，返回值可为整数， 表示命令行下执行的 yii\console\Response::exitStatus 退出状态。
+    在上面的例子中，动作结果都为字符串，作为响应数据发送给终端用户， 下例显示一个动作通过 返回响应对象（因为redirect()方法返回一个响应对象） 可将用户浏览器跳转到新的URL。
+    public function actionForward()
+    {
+        // 用户浏览器跳转到 http://example.com
+        return $this->redirect('http://example.com');
+    }
+    	
+ 
+ 
+    动作参数： 
+    内联动作的操作方法和独立动作的 run() 方法可以带参数，称为动作参数。 参数值从请求中获取，对于Web applications网页应用， 每个动作参数的值从$_GET中获得，参数名作为键； 对于console applications控制台应用, 动作参数对应命令行参数。
+    如下例，动作view (内联动作) 申明了两个参数 $id 和 $version。
+    namespace app\controllers;
+    
+    use yii\web\Controller;
+    
+    class PostController extends Controller
+    {
+        public function actionView($id, $version = null)
+        {
+            // ...
+        }
+    }
+    动作参数会被不同的参数填入，如下所示：
+    •	http://hostname/index.php?r=post/view&id=123: $id 会填入'123'， $version 仍为 null 空因为没有version请求参数;
+    •	http://hostname/index.php?r=post/view&id=123&version=2: $id 和 $version 分别填入 '123' 和 '2'`；
+    •	http://hostname/index.php?r=post/view: 会抛出yii\web\BadRequestHttpException 异常 因为请求没有提供参数给必须赋值参数$id；
+    •	http://hostname/index.php?r=post/view&id[]=123: 会抛出yii\web\BadRequestHttpException 异常 因为$id 参数收到数字值 ['123']而不是字符串.
+    如果想让动作参数接收数组值，需要指定$id为array，如下所示：
+    public function actionView(array $id, $version = null)
+    {
+        // ...
+    }
+    现在如果请求为 http://hostname/index.php?r=post/view&id[]=123, 参数 $id 会使用数组值['123']， 如果请求为 http://hostname/index.php?r=post/view&id=123， 参数 $id 会获取相同数组值，因为无类型的'123'会自动转成数组。
+    上述例子主要描述网页应用的动作参数，对于控制台应用， 更多详情请参阅控制台命令。
+    
+
+    
+    默认动作： 
+    每个控制器都有一个由 yii\base\Controller::$defaultAction 属性指定的默认动作， 当路由 只包含控制器ID， 会使用所请求的控制器的默认动作。
+    默认动作默认为 index，如果想修改默认动作， 只需简单地在控制器类中覆盖这个属性，如下所示：
+    namespace app\controllers;
+    
+    use yii\web\Controller;
+    
+    class SiteController extends Controller
+    {
+        public $defaultAction = 'home';
+    
+        public function actionHome()
+        {
+            return $this->render('home');
+        }
+    }
+    	
+
+
+    
+    路由：
+    终端用户通过所谓的路由寻找到 动作，路由是包含以下部分的字符串：
+    模型ID: 仅存在于控制器属于非应用的模块;
+    控制器ID: 同应用（或同模块如果为模块下的控制器） 下唯一标识控制器的字符串;
+    动作ID: 同控制器下唯一标识操作的字符串。
+    如果用户的请求地址为 http://hostname/index.php?r=site/index, 会执行site 控制器的index 动作。 
+    
+    创建控制器： 
+    在Web applications网页应用中，控制器应继承yii\web\Controller 或它的子类。 同理在console applications控制台应用中，控制器继承yii\console\Controller 或它的子类。 如下代码定义一个 site 控制器:
+    namespace app\controllers;
+    （我们这个对应的是什么应用？？？？？？？？？？？）
+    use yii\web\Controller;
+    
+    class SiteController extends Controller
+    {
+    }
+
+    
+    控制器ID：（控制器ID是放在URL里面使用的？？？？）
+    通常情况下，控制器用来处理请求有关的资源类型， 因此控制器ID通常为和资源有关的名词。 例如使用article作为处理文章的控制器ID。    
+    控制器ID应仅包含英文小写字母、数字、下划线、中横杠和正斜杠， 例如 article 和 post-comment 是真实的控制器 ID，article?, PostComment, admin\post不是控制器ID。
+    控制器Id可包含子目录前缀，例如 admin/article 代表 controller namespace控制器命名空间下 admin子目录中 article 控制器。 子目录前缀可为英文大小写字母、数字、下划线、正斜杠， 其中正斜杠用来区分多级子目录(如 panels/admin)。
+    
+	
+    控制器类命名： （框架会把控制器ID按照规则扩展成控制器类名？？？？？）
+    控制器ID遵循以下规则衍生控制器类名：
+    1.	将用正斜杠区分的每个单词第一个字母转为大写。注意如果控制器ID包含正斜杠， 只将最后的正斜杠后的部分第一个字母转为大写；
+    2.	去掉中横杠，将正斜杠替换为反斜杠;
+    3.	增加Controller后缀;
+    4.	在前面增加controller namespace控制器命名空间.
+	
+    下面为一些示例，假设controller namespace 控制器命名空间为 app\controllers:
+    •	article 对应 app\controllers\ArticleController;
+    •	post-comment 对应 app\controllers\PostCommentController;
+    •	admin/post-comment 对应 app\controllers\admin\PostCommentController;
+    •	adminPanels/post-comment 对应 app\controllers\adminPanels\PostCommentController.
+    控制器类必须能被 自动加载，所以在上面的例子中， 控制器article 类应在 别名 为@app/controllers/ArticleController.php的文件中定义， 控制器admin/post-comment应在@app/controllers/admin/PostCommentController.php文件中。
+    最后一个示例 admin/post-comment 表示你可以将控制器放在 controller namespace控制器命名空间下的子目录中， 在你不想用 模块 的情况下给控制器分类，这种方式很有用。
+  
+  
+    默认控制器：（这个应该是在配置文件里面配置的） 
+    每个应用有一个由yii\base\Application::defaultRoute属性指定的默认控制器；当请求没有指定 路由，该属性值作为路由使用。 对于Web applications网页应用，它的值为 'site'， 对于 console applications控制台应用，它的值为 help， 所以URL为 http://hostname/index.php 表示由 site 控制器来处理。
+    可以在 应用配置 中修改默认控制器，如下所示：
+    [
+        'defaultRoute' => 'main',
+    ]
+    
+	
+    
 \will\jsga.wiiqq.com\modules\screen\controllers\ScreenController.php
 例如，要在screen模块中创建controllers控制器， 应像如下申明控制器类：
 
 <?php
-namespace app\modules\screen\controllers;
+namespace app\modules\screen\controllers;  //注意：要在此处声明控制器类
 
 use app\controllers\BaseController;
 use app\models\admin\Admin;
@@ -60,7 +242,30 @@ use wii\web\User;
 class ScreenController extends BaseController
 {
 .....
+
+    return $this->render('index.tpl');
+    //$this->render() 和 $this->renderPartial()都可以调用视图文件，两个的区别在于 render的时候会调用 lagout 的公共的文件(如 views/layouts/main.php)
+	//视图内的特殊变量 $this 不再指向当前控制器或小部件， 而是指向视图对象，视图对象为 yii\web\View 的实例，他代表了 MVC 模式中的视图部分。 如果你想要在视图中访问一个控制器或小部件，可以使用 $this->context。
 }
+
+
+控制器生命周期： 
+处理一个请求时， 应用主体 会根据请求路由创建一个控制器， 控制器经过以下生命周期来完成请求：
+•	在控制器创建和配置后，yii\base\Controller::init() 方法会被调用。
+•	控制器根据请求动作ID创建一个操作对象:
+•	如果动作ID没有指定，会使用default action ID默认操作ID；
+•	如果在action map找到动作ID， 会创建一个独立动作；
+•	如果动作ID对应操作方法，会创建一个内联操作；
+•	否则会抛出yii\base\InvalidRouteException异常。
+•	控制器按顺序调用应用主体、模块（如果控制器属于模块）、 控制器的 beforeAction() 方法；
+•	如果任意一个调用返回false，后面未调用的beforeAction()会跳过并且动作执行会被取消； action execution will be cancelled.
+•	默认情况下每个 beforeAction() 方法会触发一个 beforeAction 事件，在事件中你可以追加事件处理动作；
+•	控制器执行动作:
+•	请求数据解析和填入到动作参数；
+•	控制器按顺序调用控制器、模块（如果控制器属于模块）、 应用主体的 afterAction() 方法；
+•	默认情况下每个 afterAction() 方法会触发一个 afterAction 事件，在事件中你可以追加事件处理动作；
+•	应用主体获取动作结果并赋值给响应.
+
 
 
 
@@ -70,7 +275,30 @@ class ScreenController extends BaseController
 模块可指定 布局，它用在模块的控制器视图渲染。 布局文件默认放在 views/layouts 目录下， 可配置yii\base\Module::$layout属性指定布局名， 如果没有配置 layout 属性名，默认会使用应用的布局。
 当前的布局放在\will\jsga.wiiqq.com\modules\screen\views\layouts
 
-
+视图的文件全部放在 views 目录中，layout放的是公共文件，对应于控制器中的screen，在views里面新建一个screen文件夹，然后控制器名称小写作为子目录 , 接下来就是方法名.php例如 ScreenController中的index方法，则创建后的文件目录应该为views/screen/index.php
+    
+    视图名 
+    渲染视图时，可指定一个视图名或视图文件路径/别名，大多数情况下使用前者因为前者简洁灵活， 我们称用名字的视图为 视图名.
+    视图名可以依据以下规则到对应的视图文件路径：
+    •	视图名可省略文件扩展名，这种情况下使用 .php 作为扩展， 视图名 about 对应到 about.php 文件名；
+    •	视图名以双斜杠 // 开头，对应的视图文件路径为 @app/views/ViewName， 也就是说视图文件在 yii\base\Application::viewPath 路径下找， 例如 //site/about 对应到 @app/views/site/about.php。
+    •	视图名以单斜杠/开始，视图文件路径以当前使用模块 的yii\base\Module::viewPath开始， 如果不存在模块，使用@app/views/ViewName开始， 例如，如果当前模块为user， /user/create 对应成 @app/modules/user/views/user/create.php, 如果不在模块中，/user/create对应@app/views/user/create.php。
+    •	如果 context 渲染视图 并且上下文实现了 yii\base\ViewContextInterface, 视图文件路径由上下文的 view path 开始， 这种主要用在控制器和小部件中渲染视图，例如 如果上下文为控制器SiteController，site/about 对应到 @app/views/site/about.php。
+    •	如果视图渲染另一个视图，包含另一个视图文件的目录以当前视图的文件路径开始， 例如被视图@app/views/post/index.php 渲染的 item 对应到 @app/views/post/item。
+    根据以上规则，在控制器中 app\controllers\PostController 调用 $this->render('view')， 实际上渲染 @app/views/post/view.php 视图文件，当在该视图文件中调用 $this->render('_overview') 会渲染 @app/views/post/_overview.php 视图文件。
+ 
+     
+    视图负责将模型的数据展示用户想要的格式，总之，视图
+    •	应主要包含展示代码，如HTML, 和简单的PHP代码来控制、格式化和渲染数据；
+    •	不应包含执行数据查询代码，这种代码放在模型中；
+    •	应避免直接访问请求数据，如 $_GET, $_POST，这种应在控制器中执行， 如果需要请求数据，应由控制器推送到视图。
+    •	可读取模型属性，但不应修改它们。
+    为使模型更易于维护，避免创建太复杂或包含太多冗余代码的视图， 可遵循以下方法达到这个目标：
+    •	使用 布局 来展示公共代码（如，页面头部、尾部）；
+    •	将复杂的视图分成几个小视图， 可使用上面描述的渲染方法将这些小视图渲染并组装成大视图；
+    •	创建并使用 小部件 作为视图的数据块；
+    •	创建并使用助手类在视图中转换和格式化数据。
+    
 
 
 五、使用模块
@@ -81,44 +309,36 @@ class ScreenController extends BaseController
 
 
 
-六、路由动作？
+六、模型
+模型是 MVC 模式中的一部分， 模型代表数据、业务逻辑和规则
+用户中心展示的数据大多存在缓存中，由\will\jsga.wiiqq.com\models\task\ SyncEsTask.php控制，具体实现在\will\jsga.wiiqq.com\models\redis文件夹中，CoolService.php为大屏展示数据缓存实现类。
+可通过继承 yii\base\Model 或它的子类定义模型类， 基类yii\base\Model支持许多实用的特性：
+•	属性: 代表可像普通类属性或数组 一样被访问的业务数据;
+•	属性标签: 指定属性显示出来的标签;
+•	块赋值: 支持一步给许多属性赋值;
+•	验证规则: 确保输入数据符合所申明的验证规则;
+•	数据导出: 允许模型数据导出为自定义格式的数组。
+Model 类也是更多高级模型如Active Record 活动记录的基类， 更多关于这些高级模型的详情请参考相关手册。
+Info: 模型并不强制一定要继承yii\base\Model，但是由于很多组件支持yii\base\Model， 最好使用它做为模型基类。
 
-E:\www_jsga\data\code\will\jsga.wiiqq.com\modules\api\controllers\screen\Chart2Action.php    新增关注用户与新增实人用户
-
-
-http://www.jsgahost.com/screen/screenapi/map        url重写？？？
-
-\will\jsga.wiiqq.com\modules\api\controllers\screen\MapAction.php      对应地图数据
-\will\jsga.wiiqq.com\modules\api\controllers\screen\Chart2Action.php   对应具体数据  
-
-
-修改内容：
-
-大屏：
-3、点击地图某一地市时，大屏右上角需显示对应地市全市数据柱形图；（已修改）
-把省的改成市的
-
-
-54b74b34a49982f98ed9fabf8e5adbc32329ef78
-
-
-
-                //$cA[] = $data['city_name'];
-               // $cA[] = $cityId ? $data['city_name'] : {$vA, $data['city_name']};
-
-
-
- 数组赋值？？？？
-$pA[ ] = 0;这个写法是给$pA[0]赋值为0，还是给$pA全部赋值为0？
-如果$nA里面没值得话，就应该给键名0赋值为0，如果$nA有值得话，就追加一个值为0的元素
-没有值的话   指的是给键值为0 也就是第一个   赋值为0
-这种写法 通常是用来存储
+模型是代表业务数据、规则和逻辑的中心地方，通常在很多地方重用， 在一个设计良好的应用中， 模型通常比控制器代码多。
+归纳起来，模型
+•	可包含属性来展示业务数据;
+•	可包含验证规则确保数据有效和完整;
+•	可包含方法实现业务逻辑;
+•	不应直接访问请求，session和其他环境数据， 这些数据应该由控制器传入到模型;
+•	应避免嵌入HTML或其他展示代码，这些代码最好在 视图中处理;
+•	单个模型中避免太多的 场景.
+在开发大型复杂系统时应经常考虑最后一条建议， 在这些系统中，模型会很大并在很多地方使用，因此会包含需要规则集和业务逻辑， 最后维护这些模型代码成为一个噩梦， 因为一个简单修改会影响好多地方， 为确保模型好维护，最好使用以下策略：
+•	定义可被多个 应用主体 或 模块 共享的模型基类集合。 这些模型类应包含通用的最小规则集合和逻辑。
+•	在每个使用模型的 应用主体 或 模块中， 通过继承对应的模型基类来定义具体的模型类， 具体模型类包含应用主体或模块指定的规则和逻辑。
+例如，在高级应用模板， 你可以定义一个模型基类common\models\Post， 然后在前台应用中，定义并使用一个继承common\models\Post的具体模型类frontend\models\Post， 在后台应用中可以类似地定义backend\models\Post。 通过这种策略，你清楚frontend\models\Post只对应前台应用， 如果你修改它，就无需担忧修改会影响后台应用。
 
 
 
-            $cA = $cityId ? $cA : array($vA, $data['city_name']);
-            $nA = $cityId ? $nA : array($provCount_n, $nA);
-            $pA = $cityId ? $nA : array($provCount_p, $pA);
+
+模型、视图、控制器三者之间的文件路径关系和命名空间关系？？？？？？？
+
 
 
 			

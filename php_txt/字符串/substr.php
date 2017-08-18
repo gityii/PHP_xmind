@@ -1,5 +1,4 @@
 <?php
-
 /*
 substr — 返回字符串的子串
 string substr ( string $string , int $start [, int $length ] )

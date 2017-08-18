@@ -93,7 +93,7 @@ $article_comment = new Comt();
     }  
     class MyClass {  
      static function WhoAmI() {  
-    eturn __METHOD__;  
+    return __METHOD__;  
      }  
     }  
  ?>
@@ -113,7 +113,7 @@ $article_comment = new Comt();
 	 
 	class MyClass {  
 	 static function WhoAmI() {  
-	 eturn __METHOD__;  
+	 return __METHOD__;  
 	}  
     }   	
 

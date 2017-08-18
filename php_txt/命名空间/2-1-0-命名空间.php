@@ -78,6 +78,21 @@ PHP支持两种抽象的访问当前命名空间内部元素的方法，__NAMESPACE__ 魔术常量和namespa
  */
  
  
+//The following code will define the constant "MESSAGE" in the global namespace (i.e. "\MESSAGE").重点在这里
+
+<?php
+namespace test;
+define('MESSAGE', 'Hello world!');
+?>
+
+//The following code will define two constants in the "test" namespace.
+
+<?php
+namespace test;
+define('test\HELLO', 'Hello world!');
+define(__NAMESPACE__ . '\GOODBYE', 'Goodbye cruel world!');
+?>
+ 
  
  
 /*	 
@@ -98,8 +113,8 @@ namespace test;
 define('MESSAGE', 'Hello world!');
 
     define(__NAMESPACE__ .'\foo','111');
+    echo MESSAGE."<br/>"; 	
     define('foo','222');
-
     echo foo."<br/>";  // 111.默认是在当前目录下
 	//var_dump(foo)."<br/>";
     echo \foo."<br/>";  // 222.根目录下，全局性的

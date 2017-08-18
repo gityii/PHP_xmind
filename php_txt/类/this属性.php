@@ -1,4 +1,5 @@
 <?php
+/**方法体内想访问调用者的属性,必须用$this 如果不加,则理解为方法内部的一个局部变量./
 
 /*在类的成员方法里面，可以用 ->（对象运算符）：$this->property（其中 property 是该属性名）这种方式来访问非静态属性。
 静态属性则是用 ::（双冒号）：self::$property 来访问。
@@ -40,6 +41,69 @@ class Rectangle{
 
 /*在类的名称中使用get_和set_前缀是一种通用的规范，以set开始的方法用于向类的属性赋值，以get开始的方法用于返回值: 属性的值或者计算的结果*/
 
+
+/**************下面的例子表示了this的真实含义******单独的一个$this*********/
+
+<?php
+
+class  ServiceLocator
+{
+    public $controllerNamespace;
+
+    public function init()
+    {
+        $class = get_class($this);
+        echo 'classname is'.$class."</br>";
+
+    }
+
+}
+
+
+class Module extends ServiceLocator
+{
+
+    public $controllerNamespace = 'app\modules\screen\controllers';
+
+    public function init()
+    {
+        parent::init();
+    }
+}
+
+$echoname = new Module();
+
+$echoname->init();
+echo '.....'."<br/>";
+echo "Its name is " , get_class($echoname) , "\n";     //打印的类名字结果跟上面的一样
+
+
+/**************************************************************/
+
+
+
+
+get_class — 返回对象的类名
+string get_class ([ object $obj ] )
+返回对象实例 obj 所属类的名字。如果 obj 不是一个对象则返回 FALSE。 
+
+<?php
+class foo {
+    function name()
+    {
+        echo "My name is " , get_class($this) , "\n";
+    }
+}
+
+// create an object
+$bar = new foo();
+
+// external call
+echo "Its name is " , get_class($bar) , "\n";
+
+// internal call
+$bar->name();
+?> 
 
 
 
