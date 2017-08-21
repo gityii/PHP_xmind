@@ -3,3 +3,10 @@
 以Apache模块的方式安装PHP，在文件http.conf中首先要用语句____动态装载PHP模块，然后再用语句____使得Apache把所有扩展名为php的文件都作为PHP脚本处理。
 答：LoadModule php5_module “c:/php/php5apache2.dll”;
 AddType application/x-httpd-php .php
+
+
+
+2、PHP Startup Unable to load dynamic library php_mongo.dll
+Make sure you download the correct .DLL for your php installation. Good chance you're running apache x86, so download an x86 php_mongo.dll. Also if you're running PHP as an Apache module, make sure you pick the thread safe (ts) one. Also pick this type of dll that matches the php version you're running. The versions must match or else you will get a php startup error. Find these Mongo DLLs here. I did this then I got an error libsasl.dll not found. I simply copied the libsasl.dll found in my php installation directory to the apache installation directory (where httpd.exe is found). Then I restarted my apache. And it worked!
+
+Copy C:\xampp\php\libsasl.dll to C:\xampp\apache\bin\, restart Apache and enjoy.
