@@ -1,0 +1,20 @@
+--------------------------------------------------------
+
+http://www.jsfl.com/public     //       =act/public.php   进入捐款页面
+选择项目：   
+
+进入捐款环节：http://www.jsfl.com/public/pay?id=35
+
+捐款成功：    http://cms.jsnxetd.org.cn/public/success
+
+弹出图片：    /static/public/images/thanks.png
+
+
+1、 act/public.php
+
+    view/public/index
+	
+	http://cms.jsnxetd.org.cn/public/info?id=51
+	
+
+	view/public/pay.php是核心
