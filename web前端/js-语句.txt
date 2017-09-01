@@ -1,0 +1,284 @@
+
+JS解释器依照语句的编写顺序依次执行。
+一个JS程序无非是一个以分号分隔的语句集合。
+条件语句：if/switch
+循环语句：while/for
+跳转语句: break/return/throw
+
+复合语句和空语句：
+用花括号将多条语句括起来就可以形成一条复合语句，如下所示：
+
+{
+    x = Math.PI;
+    cx = Math.cos(x);
+    console.log("cos(π) = " + cx);
+}
+
+语句块需要注意的地方是，语句块的结尾不需要分号，块中的原始语句必须以分号结束，但语句块不需要。
+空语句不执行任何动作，如下所示:
+ ;
+// Initialize an array a
+for(i = 0; i < a.length; a[i++] = 0) ;
+
+
+声明语句，创建变量和函数。
+var i;                                        // One simple variable
+var j = 0;                                    // One var, one value
+var p, q;                                     // Two variables
+var greeting = "hello" + name;                // A complex initializer
+var x = 2.34, y = Math.cos(0.75), r, theta;   // Many variables
+var x = 2, y = x*x;                           // Second var uses the first
+var x = 2,                                    // Multiple variables...
+    f = function(x) { return x*x },           // each on its own line
+    y = f(x);
+
+var语句出现在函数体内，那么它定义的是一个局部变量，其作用域就是这个函数。如果在顶层代码中使用var语句，它声明的是全局变量，var声明的变量是无法通过delete删除的。如果var语句中的变量没有指定初始化表达式，那么这个变量的值初始化为undefined。	
+
+
+function
+function用来定义函数，有两种定义写法：
+
+var f = function(x) { return x+1; }  // Expression assigned to a variable
+function f(x) { return x+1; }        // Statement includes variable name
+
+A function declaration statement has the following syntax:
+function funcname([arg1 [, arg2 [..., argn]]]) {
+      statements
+}
+
+函数声明语句通常出现在JS代码的最顶层。
+
+
+switch(n) {
+  case 1:                      // Start here if n == 1
+    // Execute code block #1.
+    break; 
+                     // Stop here
+  case 2:                      // Start here if n == 2
+    // Execute code block #2.
+    break;                     // Stop here
+  case 3:                      // Start here if n == 3
+    // Execute code block #3.
+    break;                     // Stop here
+  default:                     // If all else fails...
+    // Execute code block #4.
+    break;                     // stop here
+}
+
+
+function convert(x) {
+    switch(typeof x) {
+      case 'number':            // Convert the number to a hexadecimal integer
+        return x.toString(16);
+      case 'string':            // Return the string enclosed in quotes
+        return '"' + x + '"';
+      default:                  // Convert any other type in the usual way
+        return String(x);
+    }
+}
+
+
+循环语句：
+
+for/in:
+for (variable in object)
+      statement
+
+使用for循环来遍历数组元素：	  
+for(var i = 0; i < a.length; i++)  // Assign array indexes to variable i
+    console.log(a[i]);             // Print the value of each array element
+
+而使用for/in循环是来更方便地遍历对象属性成员：	
+for(var p in o)        // Assign property names of o to variable p
+    console.log(o[p]); // Print the value of each property	
+
+如果表达式等于一个原始值，这个原始值将会转换为与之对应的包装对象，JS会依次枚举对象的属性来执行循环，然而在每次循环之前，JS都会先计算variable表达式的值，并将属性名(一个字符串)赋值给它。
+只要for/in循环中variable的值可以当做赋值表达式的左值，它可以是任意表达式。每次循环都会计算这个表达式，也就是说每次循环它计算的值可能不同。如下将所有对象属性复制至一个数组中：
+var o = {x:1, y:2, z:3};
+var a = [], i = 0;
+for(a[i++] in o) /* empty */;
+
+for/in循环不会遍历对象的所有属性，只有可枚举的属性才会遍历到，由JS语句定义的内置方法就不是可枚举的。而代码中定义的所有属性和方法都是可枚举的。对象可以继承其他对象的属性，那些继承的自定义属性也可以使用for/in枚举出来。
+属性枚举的顺序一般是按照属性定义的先后顺序来枚举的。	
+
+
+跳转语句：
+标签
+标签是由语句前的标识符和冒号组成：identifier:statement
+通过给语句定义标签，就可以在程序的任何地方通过标签名引用这条语句。break和continue是JS中唯一可以使用语句标签的语句。
+mainloop: while(token != null) {
+    // Code omitted...
+    continue mainloop;  // Jump to the next iteration of the named loop
+    // More code omitted...
+}	
+
+在循环中，不论出于什么原因，只要不想继续执行整个循环，就可以用break来提前退出。
+for(var i = 0; i < a.length; i++) {
+    if (a[i] == target) break;
+}
+
+JS中同样允许break关键字后面跟随一个语句标签: break labename;
+
+var matrix = getData();  // Get a 2D array of numbers from somewhere
+// Now sum all the numbers in the matrix.
+var sum = 0, success = false;
+// Start with a labeled statement that we can break out of if errors occur
+compute_sum: if (matrix) {
+    for(var x = 0; x < matrix.length; x++) {
+        var row = matrix[x];
+        if (!row) break compute_sum;
+        for(var y = 0; y < row.length; y++) {
+            var cell = row[y];
+            if (isNaN(cell)) break compute_sum;
+            sum += cell;
+        }
+    }
+    success = true;
+}
+// The break statements jump here. If we arrive here with success == false
+// then there was something wrong with the matrix we were given.
+// Otherwise sum contains the sum of all cells of the matrix.
+
+
+continue语句：
+for(i = 0; i < data.length; i++) {
+    if (!data[i]) continue;  // Can't proceed with undefined data
+    total += data[i];
+}
+
+
+
+throw语句：
+
+在JS中，当产生运行时错误或者程序使用throw语句时就会显式地抛出异常，使用try/catch/finally语句都可以捕获异常
+throw语句的语法如下：throw expression;
+
+expression的值可以是任意类型的。可以抛出一个代表错误码的数字，或者包含可读的错误消息的字符串。当
+JS解释器抛出异常的时候通常采用error类型和其子类型，一个ERROR对象有一个name属性表示错误类型，一个message属性用来存放给构造函数的字符串。如下例：
+
+function factorial(x) {
+    // If the input argument is invalid, throw an exception!
+    if (x < 0) throw new Error("x must not be negative");
+    // Otherwise, compute a value and return normally
+    for(var f = 1; x > 1; f *= x, x--) /* empty */ ;
+    return f;
+}
+
+
+try/catch/finally语句:
+try/catch/finally语句是JS的异常处理机制，其中try定义了需要处理的异常所在的代码块；catch跟随在try之后，当try块内某处发生异常时，调用catch内的代码逻辑。catch后跟随finally块，后者中放置清理代码，不管try块中是否产生异常，finally块内的逻辑总是会执行的。catch和finally都是可选的，但必须二者有一。
+try {
+  // Normally, this code runs from the top of the block to the bottom
+  // without problems. But it can sometimes throw an exception,
+  // either directly, with a throw statement, or indirectly, by calling
+  // a method that throws an exception.
+}
+catch (e) {
+  // The statements in this block are executed if, and only if, the try
+  // block throws an exception. These statements can use the local variable
+  // e to refer to the Error object or other value that was thrown.
+  // This block may handle the exception somehow, may ignore the
+  // exception by doing nothing, or may rethrow the exception with throw.
+}
+finally {
+  // This block contains statements that are always executed, regardless of
+  // what happens in the try block. They are executed whether the try
+  // block terminates:
+  //   1) normally, after reaching the bottom of the block
+  //   2) because of a break, continue, or return statement
+  //   3) with an exception that is handled by a catch clause above
+  //   4) with an uncaught exception that is still propagating
+}
+
+
+关键字catch后跟随了一对圆括号，里面是一个标识符，这个标识符跟函数参数很像。当捕获一个异常时，把和异常相关的值赋给这个参数，下面是一个关于try/catch的例子：
+try {
+    // Ask the user to enter a number
+    var n = Number(prompt("Please enter a positive integer", ""));
+    // Compute the factorial of the number, assuming the input is valid
+    var f = factorial(n);
+    // Display the result
+    alert(n + "! = " + f);  
+}
+catch (ex) {    // If the user's input was not valid, we end up here
+    alert(ex);  // Tell the user what the error is
+}
+
+
+其他语句(with,debugger,use strict)
+
+with用于临时扩展作用域链，语法如下：
+with (object)
+    statement
+这条语句将object添加到作用域链的头部，然后执行statement，最后把作用域链恢复到原始状态。
+在严格模式中是禁止使用with语句的，且在非严格模式下也不推荐使用。
+
+	
+debugger语句用来产生一个断点，JS代码的执行会停止在断点的位置	
+
+
+use strict指令的目的是说明后续的代码将会解析为严格代码
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

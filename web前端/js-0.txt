@@ -280,7 +280,9 @@ window.onload = function() {  // Run this function when the document loads
 一个名为$()的函数。
 
 
-
+6、WEB应用
+WEB应用并不是讨论如何通过编写操控内容、样式和行为的脚本使用WEB浏览器来渲染文档，而是讲解如何将WEB浏览器当
+作应用平台，并描述了用以支持更复杂精细的客户端WEB应用的现代浏览器API。
 
 
 

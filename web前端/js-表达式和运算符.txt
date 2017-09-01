@@ -1,0 +1,144 @@
+对象和数组的初始化表达式：
+数组初始化表达式是通过一对方括号和其内由逗号隔开的列表构成的。初始化的结果是一个新创建的数组，数组的元素是逗号分隔的表达式的值。
+[]         // An empty array: no expressions inside brackets means no elements
+[1+2,3+4]  // A 2-element array.  First element is 3, second is 7
+
+数组表达式是可以嵌套的：
+var matrix = [[1,2,3], [4,5,6], [7,8,9]];
+
+数组直接量中的列表逗号之间的元素可以省略，这时省略的空位会填充undefined。
+var sparseArray = [1,,,,5];
+
+数组直接量的元素列表结尾处可以留下单个逗号，这时并不会创建一个新的值为undefined的元素。
+
+
+对象初始化跟数组初始化类似，只是方括号被花括号代替，并每个子表达式都包含一个属性名和一个冒号作为前缀，对象也是可以嵌套的：
+var p = { x:2.3, y:-1.2 };  // An object with 2 properties
+var q = {};                 // An empty object with no properties
+q.x = 2.3; q.y = -1.2;      // Now q has the same properties as p
+
+
+属性访问：
+var o = {x:1,y:{z:3}};  // An example object
+var a = [o,4,[5,6]];    // An example array that contains the object
+o.x                     // => 1: property x of expression o
+o.y.z                   // => 3: property z of expression o.y
+o["x"]                  // => 1: property x of object o
+a[1]                    // => 4: element at index 1 of expression a
+a[2]["1"]               // => 6: element at index 1 of expression a[2]
+a[0].x                  // => 1: property x of expression a[0]
+
+
+对象创建表达式：
+如果一个对象创建表达式不需要传入任何参数给构造函数的话，那么这对空圆括号是可以省略掉的：
+new object 等价于 new object()
+
+
+“+”运算符：
+1 + 2                        // => 3
+"hello" + " " + "there"      // => "hello there"
+"1" + "2"                    // => "12"
+"1" + 2                      // => "12": concatenation after number-to-string
+1 + {}                       // => "1[object Object]": concatenation after object-to-string
+true + true                  // => 2: addition after boolean-to-number
+2 + null                     // => 2: addition after null converts to 0
+2 + undefined                // => NaN: addition after undefined converts to NaN
+
+
+
+in运算符：
+in运算符希望它的左操作数是一个字符串或可以转换为字符串，希望它的右操作数是一个对象；如果右侧的对象拥有一个名为左操作数值得属性名，那么表达式返回true，如下：
+1 + 2        // Addition. Result is 3.
+"1" + "2"    // Concatenation. Result is "12".
+"1" + 2      // Concatenation. 2 is converted to "2". Result is "12".
+11 < 3       // Numeric comparison. Result is false.
+"11" < "3"   // String comparison. Result is true.
+"11" < 3     // Numeric comparison. "11" converted to 11. Result is false.
+"one" < 3    // Numeric comparison. "one" converted to NaN. Result is false.
+
+
+instanceof运算符：
+instanceof运算符希望左操作数是一个对象，右操作数标示对象的类。如果左侧的对象是右侧类的实例，则表达式返回true;否则返回false，比如：
+var d = new Date();  // Create a new object with the Date() constructor
+d instanceof Date;   // Evaluates to true; d was created with Date()
+d instanceof Object; // Evaluates to true; all objects are instances of Object
+d instanceof Number; // Evaluates to false; d is not a Number object
+var a = [1, 2, 3];   // Create an array with array literal syntax
+a instanceof Array;  // Evaluates to true; a is an array
+a instanceof Object; // Evaluates to true; all arrays are objects
+a instanceof RegExp; // Evaluates to false; arrays are not regular expressions
+
+为了计算表达式 o instanceof f，js首先计算 f.prototype，然后在原型链中查找o，如果找到，那么o是f(或者f的父类)的一个实例，表达式返回true，否则返回false。
+
+
+表达式计算：
+eval("3+2")    // => 5
+
+
+
+typeof运算符：
+typeof是一元运算符，放在其单个操作数的前面，操作数可以是任意类型，返回值为表示操作数类型的一个字符串。
+x 					                              typeof x
+undefined 			                              "undefined"
+null 				                              "object"
+true or false 		                              "boolean"
+any number or NaN	                              "number"
+any string 			   		                      "string"
+any function 					                  "function"
+any nonfunction native object	                  "object"
+any host object 				                  An implementation-defined string, but not “undefined”, “boolean”, “number”, or “string”.
+
+typeof最常用的用法是写在表达式中的，如下：
+(typeof value == "string") ? "'" + value + "'" : value
+
+
+
+delete运算符：
+delete是一元操作符，它用来删除对象属性或者数组元素。
+var o = { x: 1, y: 2}; // Start with an object
+delete o.x;            // Delete one of its properties
+"x" in o               // => false: the property does not exist anymore
+var a = [1,2,3];       // Start with an array
+delete a[2];           // Delete the last element of the array
+a.length               // => 3
+
+var o = {x:1, y:2};    // Define a variable; initialize it to an object
+delete o.x;            // Delete one of the object properties; returns true
+typeof o.x;            // Property does not exist; returns "undefined"
+delete o.x;            // Delete a nonexistent property; returns true
+delete o;              // Can't delete a declared variable; returns false.
+                       // Would raise an exception in strict mode.
+delete 1;              // Argument is not an lvalue: returns true
+this.x = 1;            // Define a property of the a global object without var
+delete x;              // Try to delete it: returns true in non-strict mode
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

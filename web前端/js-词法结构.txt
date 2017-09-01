@@ -1,0 +1,322 @@
+js是用Unicode字符集编写的。
+js是区分大小写的，但是HTML不区分大小写。
+在HTML中，标签和属性名可以大写也可以小写，而在JS中则必须小写。
+例如，在HTML中设置事件处理程序时，onclick属性可以写成onClick，但在javascript代码中，必须使用小写的
+onclick。
+js会忽略空格和换行符。回车符加换行符在一起被解析为一个单行结束符。
+
+注释：
+//
+/**/
+
+
+直接量：
+直接量就是程序中直接使用的数据值，下面列出的都是直接量：
+
+12               // The number twelve
+1.2              // The number one point two
+"hello world"    // A string of text
+'Hi'             // Another string
+true             // A Boolean value
+false            // The other Boolean value
+/javascript/gi   // A "regular expression" literal (for pattern matching)
+null             // Absence of an object
+
+标识符：
+在JS中，标识符是用来对变量和函数命名的，或者用在某些循环语句中的跳转位置的标记。JS标识符必须以字母、下划线或者$符开始。
+
+
+
+数据类型：
+JS的数据类型分为原始类型和对象类型。原始类型包括数字、字符串和布尔值，
+JS中除了数字、字符串、布尔值、null和undefined之外的就是对象。对象是属性的集合。每个属性由名/值对构成。
+数组是一种特殊的对象，表示带编号的值得有序集合。
+函数也是一种特殊的对象，函数是具有与它相关联的可执行代码的对象，通过调用函数来运行可执行代码，并返回运算结果。
+
+JS解释器有自己的内存管理机制，可以自动对内存进行垃圾回收。
+
+JS是一种面向对象的语言。不严格的讲，数据类型本身可以定义方法来使用值，例如，要对数组a中的元素进行排序，不必要将a传入sort()函数，而是调用a的一个方法sort():  a.sort();//a的面向对象的版本
+从技术上讲，只有Js对象才能拥有方法，然而数字、字符串和布尔值也可以拥有自己的方法。在JS中只有null和undefined是无法拥有方法的。
+
+js变量是无类型的，变量可以被赋予任何类型的值，使用var来声明变量。不在任何函数内声明的变量称作全局变量，在函数内声明的变量具有函数作用域，且只在函数内可见。
+
+
+算术运算：
+Math.pow(2,53)           // => 9007199254740992: 2 to the power 53
+Math.round(.6)           // => 1.0: round to the nearest integer
+Math.ceil(.6)            // => 1.0: round up to an integer
+Math.floor(.6)           // => 0.0: round down to an integer
+Math.abs(-5)             // => 5: absolute value
+Math.max(x,y,z)          // Return the largest argument
+Math.min(x,y,z)          // Return the smallest argument
+Math.random()            // Pseudo-random number x where 0 <= x < 1.0
+Math.PI                  // π: circumference of a circle / diameter
+Math.E                   // e: The base of the natural logarithm
+Math.sqrt(3)             // The square root of 3
+Math.pow(3, 1/3)         // The cube root of 3
+Math.sin(0)              // Trigonometry: also Math.cos, Math.atan, etc.
+Math.log(10)             // Natural logarithm of 10
+Math.log(100)/Math.LN10  // Base 10 logarithm of 100
+Math.log(512)/Math.LN2   // Base 2 logarithm of 512
+Math.exp(3)              // Math.E cubed
+
+
+JS算术运算不会报错。JS预定义了全局变量Infinity和NaN，用来表示正无穷大和非数字值。
+
+
+日期和时间：
+JS语言核心包括Date()构造函数，用来创建表示日期和时间的对象。例子如下：
+
+var then = new Date(2010, 0, 1);  // The 1st day of the 1st month of 2010
+var later = new Date(2010, 0, 1,  // Same day, at 5:10:30pm, local time
+                     17, 10, 30);
+var now = new Date();          // The current date and time
+var elapsed = now - then;      // Date subtraction: interval in milliseconds 
+later.getFullYear()            // => 2010
+later.getMonth()               // => 0: zero-based months
+later.getDate()                // => 1: one-based days
+later.getDay()                 // => 5: day of week.  0 is Sunday 5 is Friday.
+later.getHours()               // => 17: 5pm, local time
+later.getUTCHours()            // hours in UTC time; depends on timezone
+later.toString()               // => "Fri Jan 01 2010 17:10:30 GMT-0800 (PST)"
+later.toUTCString()            // => "Sat, 02 Jan 2010 01:10:30 GMT"
+later.toLocaleDateString()     // => "01/01/2010"
+later.toLocaleTimeString()     // => "05:10:30 PM"
+later.toISOString()            // => "2010-01-02T01:10:30.000Z"; ES5 only
+
+
+
+文本(string)：
+字符串是一组由16位值组成的不可变的有序序列，每个字符通常来自于Unicode字符集。
+JS中的字符串直接量，是由单引号或双引号括起来的字符序列，由单引号定界的字符串中可以包含双引号，由双引号定界的字符串中也可以包含单引号。
+在客户端JS程序设计中，JS代码会夹杂HTML代码的字符串，HTML代码也会夹杂JS代码，和JS一样，HTML也使用单引号或者双引号来定界字符串，因此，当JS代码和HTML代码混杂在一起的时候，最好在JS和HTML代码中各自使用独立的引号风格。
+例如，在JS表达式中使用单引号表示字符串"Thank you"，而在HTML事件处理程序属性中则使用双引号表示字符串：<button onclick="alert('Thank you')">Click Me</button>
+
+
+转义字符：
+反斜线(\)后加一个字符，就是一个转义字符。
+\'表示单引号，当单引号不是用来标记字符串结尾时，它只是一个撇号。
+
+Sequence Character represented
+\0       The NUL character (\u0000)
+\b       Backspace (\u0008)
+\t       Horizontal tab (\u0009)
+\n       Newline (\u000A)
+\v       Vertical tab (\u000B)
+\f       Form feed (\u000C)
+\r       Carriage return (\u000D)
+\"       Double quote (\u0022)
+\'       Apostrophe or single quote (\u0027)
+\\       Backslash (\u005C)
+\x       XX The Latin-1 character specified by the two hexadecimal digits XX
+\u       XXXX The Unicode character specified by the four hexadecimal digits XXXX
+如果“\”没有出现在上面列出的字符前，则忽略“\”。
+
+
+
+
+字符串的使用：
+如果将加号(+)用于数字，表示两个数相加；但是将它用于字符串，则表示字符串连接，将第二个字符串拼接在第一个后。
+要获取字符串s的长度：s.length
+
+其他字符串可以调用的方法：
+
+var s = "hello, world"        // Start with some text.
+s.charAt(0)                   // => "h": the first character.
+s.charAt(s.length-1)          // => "d": the last character.
+s.substring(1,4)              // => "ell": the 2nd, 3rd and 4th characters.
+s.slice(1,4)                  // => "ell": same thing
+s.slice(-3)                   // => "rld": last 3 characters
+s.indexOf("l")                // => 2: position of first letter l.
+s.lastIndexOf("l")            // => 10: position of last letter l.
+s.indexOf("l", 3)             // => 3: position of first "l" at or after 3
+s.split(", ")                 // => ["hello", "world"] split into substrings
+s.replace("h", "H")           // => "Hello, world": replaces all instances
+s.toUpperCase()               // => "HELLO, WORLD"
+
+在JS中字符串是固定不变的，类似replace()和toUpperCase()的方法都返回新字符串，原字符串并没有发生改变。
+
+
+模式匹配：
+JS定义了RegExp()构造函数，用来创建表示文本匹配模式的对象。JS采用Perl中的正则表达式语法。String和RegExp对象均定义了利用正则表达式进行模式匹配和查找与替换的函数。
+在两条斜线之间的文本构成了一个正则表达式直接量，第二条斜线之后也可以跟随一个或多个字母，用来修饰匹配模式的含义，如：
+/^HTML/              // Match the letters HTML at the start of a string
+/[1-9][0-9]*/        // Match a non-zero digit, followed by any # of digits
+/\bjavascript\b/i    // Match "javascript" as a word, case-insensitive
+
+
+RegExp对象定义了很多有用的方法，如：
+var text = "testing: 1, 2, 3";   // Sample text
+var pattern = /\d+/g             // Matches all instances of one or more digits
+pattern.test(text)               // => true: a match exists
+text.search(pattern)             // => 9: position of first match
+text.match(pattern)              // => ["1", "2", "3"]: array of all matches
+text.replace(pattern, "#");      // => "testing: #, #, #"
+text.split(/\D+/);               // => ["","1","2","3"]: split on non-digits
+
+
+
+布尔值：ture false
+
+
+null
+常用来描述“空值”，typeof(null)结果返回字符串“object”，可以将null认为是一特殊的对象值，含义是“非对象”。
+
+undefined
+用来表示值得空缺，它是变量的一种取值，表明变量没有初始化，如果要查询对象属性或数组元素的值时返回undefined则说明这个属性或元素不存在；如果函数没有返回任何值，则返回undefined。
+
+
+
+全局对象：
+当JS解释器启动时，它将创建一个新的全局对象，并给它一组定义的初始化属性：
+全局属性，比如undefined、Infinity和NaN
+全局函数，比如isNaN()、parseInt()和eval()
+构造函数，比如Date()/RegExp()/String()/Object()和Array()
+全局对象，比如Math和JSON
+
+在代码的最顶级——不在任何函数的JS代码——可以使用JS关键字this来引用全局对象：
+var global = this;
+
+在客户端JS中，在其表示的浏览器窗口中的所有JS代码中，Window对象充当了全局对象，这个全局Window对象有一个属性window引用其自身，它可以代替this来引用全局对象。
+
+
+包装对象：
+JS对象是一种复合值，它是属性或已命名值的集合。通过“.”符号来引用属性值。当属性值是一个函数的时候，称其为方法。存取字符串、数字或布尔值的属性时创建的临时对象称为包装对象。包装对象只是被看做是一种实现细节，这个不用特别关注。
+
+可以通过String()，Number()或Boolean()构造函数来显式创建包装对象。
+var s = "test", n = 1, b = true;  // A string, number, and boolean value.
+var S = new String(s);            // A String object
+var N = new Number(n);            // A Number object
+var B = new Boolean(b);           // A Boolean object
+
+
+
+类型转换：
+10 + " objects"     // => "10 objects".  Number 10 converts to a string
+"7" * "4"           // => 28: both strings convert to numbers
+var n = 1 - "x";    // => NaN: string "x" can't convert to a number
+n + " objects"      // => "NaN objects": NaN converts to string "NaN"
+
+
+转换和相等性：
+null == undefined // These two values are treated as equal.
+"0" == 0          // String converts to a number before comparing.
+0 == false        // Boolean converts to number before comparing.
+"0" == false      // Both operands convert to numbers before comparing.
+
+显示类型转换：
+Number("3")           // => 3
+String(false)         // => "false"  Or use false.toString()
+Boolean([])           // => true
+Object(3)             // => new Number(3)
+
+如果“+”运算符的一个操作数是字符串，它将会把另外一个操作数转换为字符串；一元“+”运算符将其操作数转换为数字；同样一元“!”运算符将其操作数转换为布尔值并取反。
+x + ""           // Same as String(x)
++x               // Same as Number(x).  You may also see x-0
+!!x              // Same as Boolean(x). Note double !
+
+
+指数计数法：
+var n = 123456.789;
+n.toFixed(0);         // "123457"
+n.toFixed(2);         // "123456.79"
+n.toFixed(5);         // "123456.78900"
+n.toExponential(1);   // "1.2e+5"
+n.toExponential(3);   // "1.235e+5"
+n.toPrecision(4);     // "1.235e+5"
+n.toPrecision(7);     // "123456.8"
+n.toPrecision(10);    // "123456.7890"
+
+
+
+数值转换:
+parseInt("3 blind mice")     // => 3
+parseFloat(" 3.14 meters")   // => 3.14
+parseInt("-12.34")           // => -12
+parseInt("0xFF")             // => 255
+parseInt("0xff")             // => 255
+parseInt("-0XFF")            // => -255
+parseFloat(".1")             // => 0.1
+parseInt("0.1")              // => 0
+parseInt(".1")               // => NaN: integers can't start with "."
+parseFloat("$72.47");        // => NaN: numbers can't start with "$"
+parseInt("11", 2);           // => 3 (1*2 + 1)
+parseInt("ff", 16);          // => 255 (15*16 + 15)
+parseInt("zz", 36);          // => 1295 (35*36 + 35)
+parseInt("077", 8);          // => 63 (7*8 + 7)
+parseInt("077", 10);         // => 77 (7*10 + 7)
+
+
+
+对象的转换为原始值：
+对象转换到布尔值，所有的对象(包括数组和函数)都转换为true
+
+所有的对象继承了两个转换方法，第一个是tostring()，它的作用是返回一个反映这个对象的字符串。
+({x:1, y:2}).toString()    // => "[object Object]"
+
+
+很多类定义了更多特定版本的tostring()方法，如下所示：
+[1,2,3].toString()                  // => "1,2,3"
+(function(x) { f(x); }).toString()  // => "function(x) {\n    f(x);\n}"
+/\d+/g.toString()                   // => "/\\d+/g"
+new Date(2010,0,1).toString()  // => "Fri Jan 01 2010 00:00:00 GMT-0800 (PST)"
+
+
+
+
+
+变量声明：
+var i=0,sum="hello";
+如果未在var声明语句中给变量指定初始值，那么虽然声明了这个变量，但在给它存入一个值之前，它的初始值就是undefined。
+
+
+变量作用域：
+
+var scope = "global";         // Declare a global variable
+function checkscope() {
+    var scope = "local";      // Declare a local variable with the same name
+    return scope;             // Return the local value, not the global one
+}
+checkscope()                  // => "local"
+
+
+scope = "global";            // Declare a global variable, even without var.
+function checkscope2() {
+    scope = "local";         // Oops! We just changed the global variable.
+    myscope = "local";       // This implicitly declares a new global variable.
+    return [scope, myscope]; // Return two values.
+}
+checkscope2()                // => ["local", "local"]: has side effects!
+scope                        // => "local": global variable has changed.
+myscope                      // => "local": global namespace cluttered up.
+
+
+函数作用域和声明提前：
+JS的函数作用域是指在函数内声明的所有变量在函数体内始终是可见的。JS的这个特性被非正式地称为声明提前，即js函数里声明的所有变量(但不涉及赋值)都被提前至函数体的顶部。如下：
+var scope = "global";
+function f() {
+    console.log(scope);  // Prints "undefined", not "global"
+    var scope = "local"; // Variable initialized here, but defined everywhere
+    console.log(scope);  // Prints "local"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
