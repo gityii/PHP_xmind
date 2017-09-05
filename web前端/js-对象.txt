@@ -1,0 +1,174 @@
+对象： 
+对象可以看做是属性的无序集合，每个属性都是一个名/值对。属性名是字符串，因此可以把对象看成是从字符串到值得映射。JS对象还可以从一个称为原型的对象继承属性。
+JS对象是动态的——可以新增属性也可以删除属性。
+除了字符串、数字、true、false、null和undefined之外，JS中的值都是对象。
+
+我们通过引用而非值来操作对象。如果变量X是指向一个对象的引用，那么执行代码var y = x;变量y也是指向同一个对象的引用，而非这个对象的副本。
+
+对象最常见用法是创建、设置、查找、删除、检测和枚举它的属性。
+
+除了名字和值之外，每个属性还有一些与之相关的值，称为属性特性：
+可写，表明是否可以设置该属性的值
+可枚举，表明是否可以通过for/in循环返回该属性
+可配置，表明是否可以删除或修改该属性
+
+三类JS对象和两类属性的区分：
+内置对象，由ECMAScript规范定义的对象或类，如数组、函数、日期和正则表达式。
+宿主对象，是由JS解释器所嵌入的宿主环境(比如WEB浏览器)定义的。客户端JS中表示网页结构的HTMLElement对象均是宿主对象。
+自定义对象，是由运行中的JS代码创建的对象。
+自有属性，是直接在对象中定义的属性。
+继承属性，是在对象的原型对象中定义的属性。
+
+
+创建对象：
+可以通过对象直接量、关键字new和object.create()函数来创建对象。
+
+对象直接量是由若干名/值对组成的映射表，名/值对中间用冒号分隔，名/值对之间用逗号分隔，整个映射表用花括号括起来。
+属性名可以是JS标识符也可以是字符串直接量(包括空字符串)。
+属性的值可以是任意类型的JS表达式，表达式的值就是这个属性的值。
+
+对象直接量创建对象：
+var empty = {};                           // An object with no properties
+var point = { x:0, y:0 };                 // Two properties
+var point2 = { x:point.x, y:point.y+1 };  // More complex values
+var book = {                      
+    "main title": "JavaScript",           // Property names include spaces,
+    'sub-title': "The Definitive Guide",  // and hyphens, so use string literals
+    "for": "all audiences",               // for is a reserved word, so quote
+    author: {                             // The value of this property is
+        firstname: "David",               // itself an object.  Note that
+        surname: "Flanagan"               // these property names are unquoted.
+    }
+};
+
+对象直接量是一个表达式，这个表达式的每次运算都创建并初始化一新的对象。每次计算对象直接量的时候，也都会计算它的每个属性值。也就是说，在一个重复调用的函数中的循环体内使用了对象直接量，它将创建很多新对象，并且每次创建的对象属性值也可能不同。
+
+
+
+通过new创建对象：
+new运算符创建并初始化一个新对象。关键字new后跟随一个函数调用，这里的函数称做构造函数，构造函数用以初始化一个新创建的对象。
+JS语言核心中的原始类型都包含内置构造函数，如：
+var o = new object();//创建一个空对象，和{}一样
+var a = new Array(); //创建一个空数组，和[]一样
+var d = new Date();  //创建一个表示当前时间的date对象
+var r = new RegExp("js"); //创建一个可以进行模式匹配的RegExp对象
+
+所有通过对象直接量创建的对象都具有同一个原型对象，并可以通过Javascript代码object.prototype获得对原型对象的引用。
+通过new和构造函数调用创建的对象的原型就是构造函数的prototype属性的值。因此，同使用{}创建对象一样，通过new object()创建的对象也继承自object.prototype。
+所有的内置构造函数都具有一个继承自object.prototype的原型，例如，date.prototype的属性继承自object.prototype，因此由new date()创建的date对象的属性同时继承自date.prototype和object.prototype，这一系列链接的原型对象就是所谓的“原型链”。
+
+
+object.create()
+var o1 = object.create({x:1, y:2});  //o1继承了属性x和y
+var o2 = object.create(null); //o2不继承任何属性和方法
+var o3 = object.create(object.prototype); //创建一个普通的空对象
+
+
+通过原型继承创建一个新对象
+function inherit(p) {
+    if (p == null) throw TypeError(); // p must be a non-null object
+    if (Object.create)                // If Object.create() is defined...
+        return Object.create(p);      //    then just use it.
+    var t = typeof p;                 // Otherwise do some more type checking
+    if (t !== "object" && t !== "function") throw TypeError();
+    function f() {};                  // Define a dummy constructor function.
+    f.prototype = p;                  // Set its prototype property to p.
+    return new f();                   // Use f() to create an "heir" of p.
+}
+
+inherit()函数的其中一个用途是防止库函数无意间修改那些不受控的对象。不是将对象直接作为参数传入函数，而是将它的继承对象传入函数。当函数读取继承对象的属性时，实际上读取的是继承来的值，如果给继承对象的属性赋值，则这些属性只会影响这个继承对象自身，而不是原始对象。
+
+
+属性的查询和设置：
+可以通过(.)或者方括号([])来获取属性的值。
+var author = book.author;      // Get the "author" property of the book.
+var name = author.surname      // Get the "surname" property of the author.
+var title = book["main title"] // Get the "main title" property of the book.
+
+也可以通过(.)或者方括号([])来创建属性或给属性赋值
+book.edition = 6;                   // Create an "edition" property of book.
+book["main title"] = "ECMAScript";  // Set the "main title" property.
+
+
+
+作为关联数组的对象：
+下面两个JS表达式的值相同
+object.property
+object["property"]  //关联数组，散列，映射或字典，JS对象都是关联数组
+
+
+for/in循环：
+function getvalue(portfolio) {
+    var total = 0.0;
+    for(stock in portfolio) {           // For each stock in the portfolio:
+        var shares = portfolio[stock];  //   get the number of shares
+        var price = getquote(stock);    //   look up share price
+        total += shares * price;        //   add stock value to total value
+    }
+    return total;                       // Return total value.
+}
+
+
+继承：
+对象的原型属性构成了一个链，通过这个链可以实现属性的继承。
+var o = {}            // o inherits object methods from Object.prototype
+o.x = 1;              // and has an own property x.
+var p = inherit(o);   // p inherits properties from o and Object.prototype
+p.y = 2;              // and has an own property y.
+var q = inherit(p);   // q inherits properties from p, o, and Object.prototype
+q.z = 3;              // and has an own property z.
+var s = q.toString(); // toString is inherited from Object.prototype    
+q.x + q.y             // => 3: x and y are inherited from o and p
+
+
+在JS中，只有在查询属性时才会体会到继承的存在，而设置属性和继承无关，该特性让程序员可以选择地覆盖继承的属性。
+
+var unitcircle = { r:1 };     // An object to inherit from
+var c = inherit(unitcircle);  // c inherits the property r
+c.x = 1; c.y = 1;             // c defines two properties of its own
+c.r = 2;                      // c overrides its inherited property
+unitcircle.r;                 // => 1: the prototype object is not affected
+
+
+属性访问错误：
+查询一个不存在的属性并不会报错，如果在对象自身属性或继承的属性中均未找到要查找的属性，属性访问表达式会返回undefined。但是如果对象不存在，那么试图查询这个不存在的对象的属性就会报错。
+
+
+删除属性：
+delete可以删除对象的属性。它的操作数应该是一个属性访问表达式。delete只是断开属性和宿主对象的联系，而不会去操作属性中的属性。delete运算只能删除自有属性，不能删除继承属性。
+delete book.author;          // The book object now has no author property.
+delete book["main title"];   // Now it doesn't have "main title", either.
+
+
+检测属性：
+判断某个属性是否存在于某个对象中，可以通过in运算符、hasOwnPreperty()和propertyIsEnumerable()方法来完成这个工作。in运算符的左侧是属性名(字符串)，右侧是对象：
+var o = { x: 1 }
+"x" in o;         // true: o has an own property "x"
+"y" in o;         // false: o doesn't have a property "y"
+"toString" in o;  // true: o inherits a toString property
+
+对象的hasOwnProperty()方法用来检测给定的名字是否是对象的自有属性，对于继承属性它将返回false：
+var o = { x: 1 }
+o.hasOwnProperty("x");        // true: o has an own property x
+o.hasOwnProperty("y");        // false: o doesn't have a property y
+o.hasOwnProperty("toString"); // false: toString is an inherited property
+
+
+还一种方法是使用"!=="判断一个属性是否是undefined：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

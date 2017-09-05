@@ -1,0 +1,45 @@
+分享证书时的文字改为：（证书领取人的）微信名+成为第？？？？个儿童公益传递天使，现邀请您一起加入爱心团队！
+
+
+	echo json_encode($res);
+	
+	
+
+
+	
+	        $.ajax({
+            url: '/public/certifiorder',
+            async:true,
+            type: 'post',
+            dataType: 'json',
+            data: {},
+            success: function (data) {
+                payname = data.payname,
+                paytime = data.paytime,
+                orderid = data.id;
+
+            },error:function(){
+
+            }
+        });
+		
+		
+		
+------------------------------------
+
+
+$res = array(
+'status'=>1,
+'msg'=>'',
+'data'=>array()
+);
+
+
+echo json_encode($res);
+
+
+
+		
+
+		
+		
