@@ -157,6 +157,106 @@ o.hasOwnProperty("toString"); // false: toString is an inherited property
 还一种方法是使用"!=="判断一个属性是否是undefined：
 
 
+枚举属性：
+for/in过滤
+for(p in o) {
+    if (!o.hasOwnProperty(p)) continue;       // Skip inherited properties
+}
+for(p in o) {
+    if (typeof o[p] === "function") continue; // Skip methods
+}
+
+
+
+属性getter和setter(暂时跳过)
+
+
+对象的三个属性：
+每一个对象都有与之相关的原型、类和可扩展性。
+对象的原型属性是用来继承属性的。通过对象直接量创建的对象使用object.prototype作为他们的原型。
+通过new创建的对象使用构造函数的prototype属性作为他们的原型。
+通过object.create()创建的对象使用第一个参数(也可以是null)作为他们的原型。
+
+将对象作为参数传入object.getprototypeof()可以查询它的原型。要想检测一个对象是否是另一个对象的原型(或处于原型链中)，请使用isPrototypeOf()方法，如下：
+
+var p = {x:1};                    // Define a prototype object.
+var o = Object.create(p);         // Create an object with that prototype.
+p.isPrototypeOf(o)                // => true: o inherits from p
+Object.prototype.isPrototypeOf(o) // => true: p inherits from Object.prototype
+
+
+类属性：
+对象的类属性是一个字符串，用以表示对象的类型信息。有一种间接的方法可以查询它，默认的toString()方法(继承自Objicet.prototype)返回如下格式的字符串: [object class]，因此想获得对象的类，可以调用对象的toString()方法，然后提取已返回字符串的第8个到倒数第二个位置之间的字符。
+下面的classsof()函数可以返回传递给它的任意对象的类：
+
+function classof(o) {
+    if (o === null) return "Null";
+    if (o === undefined) return "Undefined";
+    return Object.prototype.toString.call(o).slice(8,-1);
+}
+
+class函数可以传入任何类型的参数。
+classof(null)       // => "Null"
+classof(1)          // => "Number"
+classof("")         // => "String"
+classof(false)      // => "Boolean"
+classof({})         // => "Object"
+classof([])         // => "Array"
+classof(/./)        // => "Regexp"
+classof(new Date()) // => "Date"
+classof(window)     // => "Window" (a client-side host object)
+function f() {};    // Define a custom constructor
+classof(new f());   // => "Object"
+
+
+
+可扩展性：
+对象的可扩展性用以表示是否可以给对象添加新属性。通过将对象传入Object.esExtensible()来判断该对象是否可扩展。
+
+
+
+序列化对象：
+
+对象序列号是指将对象的状态转换为字符串，也可将字符串还原为对象。ES5提供了内置函数JSON.stringify()和JSON.parse()用来序列化和还原JS对象。例如：
+
+o = {x:1, y:{z:[false,null,""]}}; // Define a test object
+s = JSON.stringify(o);            // s is '{"x":1,"y":{"z":[false,null,""]}}'
+p = JSON.parse(s);                // p is a deep copy of o
+
+JSON语法是JS语法的子集，它并不能表示JS里的所有值，支持对象、数组、字符串、无穷大数字、true、false和null，它们可以序列化和还原。函数、RegExp、Error对象和undefined值不能序列化和还原。
+
+
+
+对象方法：
+所有js对象都从object.prototype继承属性，这些继承属性主要是方法。
+
+toString()方法没有参数，它将返回一个表示调用这个方法的对象值得字符串。在需要将对象转换为字符串的时候，JS会调用这个方法。默认的toString()方法并不会输出很多有用的信息，因此很多类都带有自定义的toString()。比如Array.toString()、Date.toString()以及Function.toString()。
+
+
+toJSON()方法
+
+valueOf()方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
