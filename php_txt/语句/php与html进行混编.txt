@@ -1,0 +1,79 @@
+
+一、在html中嵌入php代码
+
+创建一个 hello 脚本，命名为 hello.php：
+<html>
+<head>
+<title>PHP Test</title>
+</head>
+<body>
+<?php echo '<p>Hello World</p>'; ?>
+</body>
+</html>
+
+上面的 HTML 代码中，在 PHP 代码中打印 Hello。在 HTML 中编写 PHP 代码需要使用 <?php ?> tags。
+
+我们也可以在 HTML 中编写更复杂的 PHP 代码，更高级的代码示例：
+<html>
+<head>PHP HTML Integration</head>
+<body>
+<ul> <?php for($i=1;$i<=5;$i++){ 
+     ?> <li>Item No <?php echo $i; ?></li> <?php   //注意在php中嵌入html的语法是用 ?> <?php包住html
+	 }?> 
+</ul>   
+</body>
+</html>
+
+输出结果：
+Item No 1
+Item No 2
+Item No 3
+Item No 4
+Item No 5
+
+
+php跟html混编，会用到的一种for循环的简写方式：
+<body>
+ <?php for($i=1;$i<=5;$i++):
+ ?<p>这是段落<?=$i?></p><?php
+ endfor?>
+ for循环的简写方式for(;;): 代码块endfor
+ 
+ 
+ php跟html混编中的if...if else else简写方式(待定)
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

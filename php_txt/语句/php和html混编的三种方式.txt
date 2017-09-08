@@ -1,0 +1,113 @@
+
+在W3school 上学PHP，看到第一句就是“PHP 文件可包含文本、HTML 标签以及脚本” 
+
+在后来的学习别人的代码，发现在需要HTML代码的PHP脚本中，多用这么几种方法 
+
+第一种是在HTML中加PHP。大段大段的html代码中，在各个需要执行php的地方<?php .... ?>。这种方法在ASP的程序中比较常见。 
+例子： 
+
+<html>
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta http-equiv="Content-Language" content="zh-CN" /> 
+<title>Hello World</title>
+    <style>
+        body{font-size:15px;color:#000;font-family:Arial,Helvetica,sans-serif;}
+        a{color:#039;text-decoration:none;}
+    </style> 
+</head>
+<body>
+        </b> 
+        <?php 
+            echo "Hello world!这是正文"; 
+        ?> 
+        <br>
+        <a href=# >这是一个超链接</a>
+        </b>
+    </body>
+</html>
+
+
+第二种用echo输出HTML。但是HTML中有双引号，所用echo输出的内容用单引号括起来，避免出错，也省了转义这一步。
+比如这样的代码： 
+
+<?php 
+if(!$_POST) 
+    { 
+    echo '<form action="" method="post"> 
+            服务器地址：<input type="text" name="host" value="localhost" /><br /> 
+            数据库账号：<input type="text" name="user" value="" /><br /> 
+            数据库密码：<input type="password" name="pwd" value="" /><br /> 
+            指定数据库：<input type="text" name="db" value="test" /><br /> 
+            <input type="submit" value="确定"/> 
+           </form><hr/>说明：<b>……<br /></b>
+         '; 
+    } 
+?>
+
+不过比较多见的还是加了转义符号的，个人觉得阅读起来不爽 
+
+echo "<input type=\"submit\" value=\"确定\"/>"
+
+
+
+第三种就是用（<<<）标记符了，这是在PHP168的模板代码中首次见到的。 
+
+<<<EOT
+EOT;
+
+中间的文档直接输出，一个比较好理解的说法是“一个多行的echo ”。 
+优点是输出大段HTML方便，不需要转义，而且可以引用变量。
+一个例子：
+
+<?php
+
+    $label1 = "deepblue_mainslide";
+    $label2 = "deepblue_mainh1";
+    $label3 = "deepblue_maint1";
+    $label4 = "deepblue_maint2";
+    $rs = array("http://123.abc.com", "abc", "ABC");
+ 
+    print <<<EOT
+        <div class="slidecont">{$label1}</div> 
+        <div class="newcontainter"> 
+        <div class="head">{$label2}</div> 
+        <div class="cont" id="Tab1"> 
+            {$label3} 
+        </div> 
+        <div class="cont" id="Tab2"> 
+            {$label4} 
+        </div> 
+        </div> 
+        <a href="$rs[0]" title="$rs[1]" target="_blank">$rs[2]</a> 
+EOT;
+?>
+
+在上面的例子干净利索的输出了大段HTML+变量的值，非常棒。 
+但是在使用（<<<EOT） 标记符还有一点需要注意：
+标识符结束字符串即EOT;要独占一行，前后都不许再有内容。 
+PS.注意不但EOT;前面不能有空格，而且<<<EOT后面也不能有任何空格！！！否则不但什么都不会输出，而且还会报错！！！
+
+
+尤其容易犯的失误就是在标识符前加空格和缩进符，下面的例子什么都不会输出 
+
+<?php 
+    print <<<EOT[1]
+    <a href="http://blog.i1728.com/" title="东方天宇的博客">东方天宇的博客</a> 
+[2]EOT;[3]
+    echo "喂~人家在等你呢！"; 
+?>
+
+我们会发现，[如果三个地方任何一个地方加了空格]，会显示以下三种不同的错误提示，最后的echo也没有执行。
+
+
+
+
+
+
+
+
+
+
+
+

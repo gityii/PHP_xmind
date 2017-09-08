@@ -1,0 +1,208 @@
+
+JSON(JavaScript Object Notation) 是一种轻量级的数据交换格式。
+简而论之，不管是xml还是json都是为了方便在客户端与服务器端交互数据的中转站，特别是用于对象型数据，比如最常见的数组。
+
+下面将分别将数组从php传送给javascript，以及将数组从javascript传送给php示例说明，例子比较简单，明白概念即可。不管从php传送给javascript，还是javascript传送给php，json在传送之前都会将对象扁平化即一维化为字符串。
+
+=====================PHP 向 JavaScript 传值==========================
+
+PHP 文件 json.php:
+<?php
+
+  $arr = array(
+      'name' => '希亚',
+      'nick' => 'Gonn',
+      'contact' => array(
+          'email' => 'gonnsai@163.com',
+          'website' => 'http://www.nowamagic.net',
+      )
+  );
+  $json_string = json_encode($arr);
+  echo "getProfile($json_string)";
+?>
+
+光执行这个文件，其结果如下：
+
+getProfile({"name":"u5e0cu4e9a","nick":"Gonn",
+    "contact":{"email":"gonnsai@163.com","website":"http://www.nowamagic.net"}})
+	
+
+json.php 是通过 json_encode 函数将数组扁平化，然后发送，相反有个 json_decode 函数。
+
+
+那么在 JavaScript 如何调用呢？很简单，定义一个变量获取 PHP 传来的 Json，该 Json 具备对象的特性，我们可以用 array.name 这种方式来获取该 Json 的属性。
+
+<script type="text/javascript">
+
+function getProfile(str) { 
+
+    var arr = str; 
+
+    document.getElementById('name').innerHTML = arr.name; 
+
+    document.getElementById('nick').innerHTML = arr.nick; 
+
+    document.getElementById('email').innerHTML = arr.contact.email;
+
+    document.getElementById('website').innerHTML = arr.contact.website;
+
+} 
+
+</script>
+
+<body>
+
+<div id="name"></div>
+
+<div id="nick"></div>
+
+<div id="email"></div>
+
+<div id="website"></div>
+
+</body>
+
+<script type="text/javascript" src="json.php"></script>
+
+
+
+
+=================JavaScript 向 PHP 传值==================================
+
+json_encode.html
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>json:From javascript To php</title>
+
+<script src="json2.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+function JSON_test(o)
+
+{
+
+   var user = {
+
+        name:document.getElementById('txt_name').value,
+
+        email:document.getElementById('txt_email').value,
+
+        password:document.getElementById('txt_password').value
+
+    }
+
+    var json_string = JSON.stringify(user);
+
+    document.getElementById('txt_json').value=json_string;
+
+    alert("点击确定后将提交表单");
+
+    o.submit();
+
+}
+
+</script>
+
+</head>
+
+<body>
+ 
+   <form id="form1" name="form1" method="post" action="json_encode.php" onsubmit="JSON_test(this);return flase;">
+ 
+       <label for="txt_name">姓名</label>
+ 
+       <p><input type="text" name="txt_name" id="txt_name" /></p>
+ 
+       <label for="txt_email">邮箱</label>
+ 
+       <p><input type="text" name="txt_email" id="txt_email" /></p>
+ 
+       <p><label for="txt_password">密码</label></p>
+ 
+       <p><input type="text" name="txt_password" id="txt_password" /></p>
+ 
+       <p><input type="text" name="txt_json" id="txt_json" />
+ 
+           <label for="button"></label>
+ 
+           <input type="submit" name="button" id="button" value="JSON" />
+ 
+       </p>
+ 
+    </form>
+
+</body>
+
+</html>
+
+
+
+
+这里javascript扁平化需要一个插件：http://www.json.org/json2.js，通过JSON.stringify(str)将对象扁平化然后传送给php。
+
+注：另有一个http://www.json.org/json.js，对应的是toJSONString方法。
+
+var last=obj.toJSONString(); //针对json.js
+
+var last=JSON.stringify(obj); //针对json2.js
+
+
+
+json_encode.php:
+
+
+<?php
+   
+    header('Content-Type: text/html; charset=utf-8');
+   
+    $json_string = $_POST["txt_json"];
+   
+    //echo $json_string;
+   
+    if(ini_get("magic_quotes_gpc")=="1")
+   
+    {
+   
+        $json_string=stripslashes($json_string);
+   
+    }
+   
+    $user = json_decode($json_string);
+   
+   
+   
+    echo var_dump($user);
+   
+   
+   
+    echo '<br /><br /><br /><br />';
+   
+    echo $user->name.'<br />';
+   
+    echo $user->email.'<br />';
+   
+    echo $user->password.'<br />';
+   
+?>
+
+这里就需要用到json_decode()这个函数，然后调用其中数据用 $obj->属性即可
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+注意：
+php、js、html混合的执行过程：后台先执行php，然后才执行js和html，因此php是无法直接调用js的，因为在执行php的时候js根本就没有执行结果，对于php来说js语法只不过是一串字符串。
+
+while($row = mysql_fetch_array($result))
+{
+
+    echo "<li><img src=\"../images/sanjiaoxing.jpg\"/><a href=\"#\">在PPT中插入视频</a></li>";
+
+}
+你需要把双引号转义一下！使用反斜杠\，或者把双引号改成单引号也可以，如：
+while($row = mysql_fetch_array($result))
+{
+    echo "<li><img src=‘../images/sanjiaoxing.jpg’/><a href=‘#’>在PPT中插入视频</a></li>";
+}
+
+
+PHP和HTML嵌套有下面几种情况：
+1、混合。比如你要在输出"<ul></ul>"1到19。可使用的写法是：
+[html文件]
+<ul>
+<?php 
+for($i=1;$i<20;$i++){
+?><li><?php echo "我在这里输出的是\$i的值：$i"; ?></li><?php
+}
+?>
+</ul>
+
+
+这是嵌套最“完全的一种”，也是所谓比较高级的方式。
+
+
+
+2，融合，意思是用echo 或print将html的东西输出。
+比如上面的那个例子可以写成：
+[php文件]
+<?php 
+echo "<ul>";
+for ($i=1;$i<20;$i++){
+echo "<li>我在这里输出的是\$i的值：$i</li>";
+}
+echo "</ul>";
+?>
+
+
+
+3,对于php里面包含大段的HTML代码可以用所谓的定界符：
+[php文件]
+<?php 
+$name = 'kitty'; 
+echo <<<Eof
+<table height="20"> 
+<tr><td> 
+{$name}<br/> 
+<script> 
+var p='hello world'; 
+document.writeln(p); 
+</script> 
+</td></tr> 
+</table> 
+Eof;
+?>
+
+
