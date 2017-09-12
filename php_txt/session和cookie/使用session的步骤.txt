@@ -8,3 +8,10 @@
 	1.可以使用unset删除单个session；
 	2.使用$_SESSION=array()的方式，一次注销所有的会话变量；
 3.使用session_destroy()函数来彻底销毁session。
+
+
+
+session里面有什么？
+
+
+如何使用session？
