@@ -1,0 +1,83 @@
+一、__autoload  
+
+这是一个自动加载函数，在PHP5中，当我们实例化一个未定义的类时，就会触发此函数。看下面例子：  
+
+print.class.php:
+
+<?php 
+
+class PRINT{
+    function doPrint{
+    echo 'hello world';
+    }
+}
+
+index.php:
+
+<?php
+
+function __autoload($class){
+    $file = $class.'.class.php';
+    if(is_file($file)){
+    require_once($file);
+    }
+}
+
+
+$obj = new PRINT();
+$obj->doPrint();
+
+运行index.php后正常输出hello world。在index.php中，由于没有包含printit.class.php，在实例化printit时，自动调用__autoload函数，参数$class的值即为类名printit，此时printit.class.php就被引进来了。  
+
+
+
+二、spl_autoload_register()  
+
+再看spl_autoload_register()，这个函数与__autoload有异曲同工之妙，看个简单的例子：  
+
+<?php
+
+function loadprint($class){
+    $file = $class.'.class.php';
+    if(is_file($file)){
+    require_once($file);
+    }
+}
+
+spl_autoload_register('loadprint');
+
+$obj = new PRINT();
+$obj->doPrint();
+
+
+将__autoload换成loadprint函数。但是loadprint不会像__autoload自动触发，这时spl_autoload_register()就起作用了，它告诉PHP碰到没有定义的类就执行loadprint()。 
+
+
+
+spl_autoload_register() 调用静态方法：
+
+
+ <?php
+
+class test{
+	function loadprint($class){
+		$file = $class.'.class.php';
+		if(is_file($file)){
+		require_once($file);
+		}
+	}
+
+}
+
+
+spl_autoload_register(array('test','loadprint'));
+//另一种写法：spl_autoload_register('test::loadprint');
+
+$obj = new PRINT();
+$obj->doPrint();
+
+
+
+
+
+

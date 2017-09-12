@@ -17,7 +17,7 @@ throw                 此参数设置了 autoload_function 无法成功注册时
 prepend               如果是 true，spl_autoload_register() 会添加函数到队列之首，而不是队列尾部。
 
 
-返回值:
+返回值:	
 成功时返回 TRUE， 或者在失败时返回 FALSE。 
 
 */
@@ -79,6 +79,97 @@ void __autoload ( string $class )
 参数:     class     待加载的类名。 
 返回值:   没有返回值。
 */
+
+
+/*自动加载的机制，自动加载在哪个阶段*/
+
+
+/*自动加载机制使用类方法的例子：
+
+
+* You can use a static method :
+
+<?php
+
+class MyClass {
+  public static function autoload($className) {
+    // ...
+  }
+}
+
+spl_autoload_register(array('MyClass', 'autoload'));
+
+?>
+
+* Or you can use an instance :
+
+<?php
+
+class MyClass {
+  public function autoload($className) {
+    // ...
+  }
+}
+
+$instance = new MyClass();
+spl_autoload_register(array($instance, 'autoload'));
+
+?>
+
+
+
+
+*/
+
+
+
+/**-----jsfl--------**/
+
+//创建类自动加载机制
+if(function_exists('spl_autoload_register')) {
+	spl_autoload_register(array('system','autoload'));
+} else {
+	function __autoload($class) {    //函数无需在调用之前被定义，除非函数是有条件被定义时。 
+		system::autoload($class);
+	}
+}
+
+
+	/**
+	 * autoload
+	 * 类自动加载
+	 * @access public
+	 * @param $class 类名
+	 */
+	public static function autoload($class){
+		$file = __ROOT__.'/source/class/'.$class.'.php';
+		if (is_file($file)){
+			include_once $file;
+		}
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

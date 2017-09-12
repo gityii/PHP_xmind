@@ -1,0 +1,67 @@
+__CLASS__获取当前的类名
+get_class()也是获取当前的类名
+get_called_class()获取当前主调类的类名
+
+例子：
+
+<?php  
+
+    class A
+    {
+         function say(){
+             echo "A is".__CLASS__."<br/>";
+             echo "A is".get_class()."<br/>";
+             echo "A is".get_called_class()."<br/>";
+
+         }
+    }
+
+    class B
+    {
+         function say(){
+             parent::say();
+             echo "B is".__CLASS__."<br/>";
+             echo "B is".get_class()."<br/>";
+             echo "B is".get_called_class()."<br/>";
+
+         }
+    }
+
+
+    $b=new B();
+    $b->say();
+
+
+?>
+ 
+结果如下：
+
+A is A
+A is A
+A is B
+B is B
+B is B
+B is B
+
+
+
+
+MVC框架中，涉及到单例时很好用，一般在基类中:
+
+    public static function getInstance() {
+        $class_name = get_called_class();
+        if (isset(self::$instance[$class_name])) {
+            return self::$instance[$class_name];
+        }
+        self::$instance[$class_name] = new $class_name;
+        return self::$instance[$class_name];
+    }
+
+
+其他类只要继承这个类，然后通过getInstance()就实现了单例模式
+
+
+
+
+
+

@@ -5,7 +5,9 @@ list -- 遍历数组
 explode -- 将字符串转成数组
 implode -- 将数组转成一个新字符串
 array_merge -- 合并一个或多个数组
-is_array -- 检查是否是数组		
+
+is_array -- 检查是否是数组，如果 var是 array，则返回 TRUE，否则返回 FALSE。 		
+
 
 print_r -- 输出数组
 sort -- 数组排序

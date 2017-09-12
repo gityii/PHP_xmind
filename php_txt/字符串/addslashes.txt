@@ -1,0 +1,17 @@
+addslashes
+addslashes — 使用反斜线引用字符串
+string addslashes ( string $str )
+返回字符串，该字符串为了数据库查询语句等的需要在某些字符前加上了反斜线。这些字符是单引号（'）、双引号（"）、反斜线（\）与 NUL（NULL 字符）。 
+
+参数    str    要转义的字符。
+
+返回值  返回转义后的字符。 
+
+
+<?php
+$str = "Is your name O'reilly?";
+
+// 输出： Is your name O\'reilly?
+echo addslashes($str);
+?> 
+
