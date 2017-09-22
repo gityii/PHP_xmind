@@ -1,0 +1,4 @@
+
+解决开启extension=php_curl.dll后curl扩展开启仍失败的问题 
+
+今天要用到PHP的curl扩展，将php.ini中的;extension=php_curl.dll的注释去掉后，重启apache后仍然报Call to undefined function curl_init()的错误。百度多次，尝试很多方法，也不能成功的将curl成功开启。最后在官方说明文档中的http://php.NET/manual/zh/curl.installation.php这个页面得到了提示，只要将php安装目录下的libssh2.dll复制到apache的bin目录，并重新启动apache，于是乎curl成功开启。此事让我意识到了文档的重要性，大伙也得注意多在文档中找问题答案。

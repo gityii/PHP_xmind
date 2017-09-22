@@ -1,0 +1,8 @@
+https://github.com/LegendOfMCPE/LoM-CMS/wiki/How-to-Install-LibYAML
+
+For NON-XAMPP Users：
+    Copy yaml.dll to PHP root directory
+    Copy php_yaml.dll to PHP/ext directory
+    Add extension=php_yaml.dll to php.ini
+    Restart Apache
+

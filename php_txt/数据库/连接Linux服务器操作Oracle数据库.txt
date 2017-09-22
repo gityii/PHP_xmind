@@ -1,0 +1,46 @@
+项目已经上线，现场的数据库服务器不允许直接用Oracle的客户端plsqldev.exe来连接，只能通过Linux服务器的命令来操作。 以下是用SecureCRT 5.1客户端连接Linux服务器来操作Oracle数据库： 
+
+1.连接到Linux服务器(输入服务器的ip地址) 
+
+ssh 10.199.94.227 
+
+连接成功后会提示输入密码，输入成功会提示。 
+
+2.切换到操作Oracle数据库 
+
+su - oracle 
+
+切换成功会提示相关数据库的实例。例如：oracle@linux-cg01:~>  
+
+3.切换到sqlplus操作 
+
+sqlplus /nolog 
+
+切换成功会提示相关的提示：例如： 
+
+SQL*Plus: Release 11.2.0.2.0 Production on Thu Jan 19 11:19:48 2012 
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved. 
+
+ 
+4.输入数据库的用户名和密码 
+conn personal/personal 
+
+ 
+5.会提示Connected.(连接成功)，显示 SQL> ： 
+
+
+================================================================================================================================================================================
+
+Linux系统下可以用sqlplus命令连接oracle数据库，方法如下：
+
+sqlplus命令语法：
+
+#sqlplus usr/pwd@//host:port/sid
+#usr：用户名
+#pwd：密码
+#host：数据库服务器IP
+#port：端口
+#sid：数据库标识符
+
+
