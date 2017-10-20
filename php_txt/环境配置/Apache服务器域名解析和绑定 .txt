@@ -23,6 +23,8 @@
     </VirtualHost>  
 	
 
-当开启虚拟主机功能的时候，所有请求都将进入<VirtruaHost>，而第一个<VirtruaHost>将作为默认处理配置，也就是说www.aaa.com将进入第二个<VirtruaHost>，
+注意：当开启虚拟主机功能的时候，所有请求都将进入<VirtruaHost>，而第一个<VirtruaHost>将作为默认处理配置，也就是说www.aaa.com将进入第二个<VirtruaHost>，
 
 而其他没匹配到的都将进入第一个<VirtruaHost>配置，如localhost系列。	
+
+注意：访问本地根目录时要去掉代理！！！！！
