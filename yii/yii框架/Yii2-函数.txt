@@ -1,0 +1,8 @@
+1、this的使用
+2、 \Yii::$app->user->login($this->getAdmin()   这种写法
+   Yii::$app->request->post()
+   表达式 Yii::$app 代表应用实例，它是一个全局可访问的单例。 同时它也是一个服务定位器， 能提供 request，response，db 等等特定功能的组件。 在上面的代码里就是使用 request 组件来访问应用实例收到的 $_POST  数据。
+
+
+
+

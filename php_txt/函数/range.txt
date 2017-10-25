@@ -1,0 +1,13 @@
+range() 函数
+
+<?php
+$number = range(0,5);
+print_r ($number);
+?>
+
+定义和用法
+range() 函数创建一个包含指定范围的元素的数组。
+该函数返回一个包含从 low 到 high 之间的元素的数组。
+注释：如果 low 参数大于 high 参数，则创建的数组将是从 high 到 low。
+说明
+该函数创建一个数组，包含从 low 到 high （包含 low 和 high）之间的整数或字符。如果 high 比 low 小，则返回反序的数组。
