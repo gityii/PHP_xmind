@@ -1,0 +1,777 @@
+
+主要有以下几个要点：
+
+ajax的基本语法结构
+jQuery基本语法
+json数组基本结构
+ajax回调函数中的json数组解析及局部刷新
+php基本语法
+ajax与php的对接
+php中post数据提交方式与接收
+
+
+
+ajax基本语法
+
+[html] view plain copy
+$.ajax({  
+    type: "post",  //数据提交方式（post/get）  
+    url: "demo.php",  //提交到的url  
+    data: {username:username,password:password},//提交的数据  
+    dataType: "json",//返回的数据类型格式  
+    success: function(msg){  
+      ...//返回成功的回调函数  
+    },  
+    error:function(msg){  
+      ...//返回失败的回调函数  
+    }  
+});  
+
+
+php端的接收方法
+
+[html] view plain copy
+<?php  
+    $username=$_POST['username'];//接收以post方式提交来的username数据  
+    $password=$_POST['password'];  
+
+
+例子：demo.html
+
+html端代码demo.html
+[html] view plain copy
+<!doctype html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>ajaxTest</title>  
+</head>  
+<body>  
+    <input type="text" id="username">  
+    <input type="text" id="password">  
+    <button id="sub">查询</button>  
+    <span id="text"></span><!-- 用以显示返回来的数据，只刷新这部分地方 -->  
+</body>  
+<script src="//cdn.bootcss.com/jquery/3.0.0-alpha1/jquery.min.js"></script>  
+</html>  
+
+php端代码demo.php
+[html] view plain copy
+<?php  
+    header('Content-type:text/json;charset=utf-8');  
+    $username=$_POST['username'];  
+    $password=$_POST['password'];  
+  
+    $data='{username:"' . $username . '",password:"' . $password .'"}';//组合成json格式数据  
+    echo json_encode($data);//输出json数据  
+
+
+在demo.html中加入以下js代码
+[html] view plain copy
+<script>  
+  $(function(){  
+    $('#sub').click(function(){  
+      var username=$('#username').val();  
+      var password=$('#password').val();  
+      $.ajax({  
+        type: "post",  
+        url: "demo.php",  
+        data: {username:username,password:password},//提交到demo.php的数据  
+        dataType: "json",//回调函数接收数据的数据格式  
+        success: function(msg){  
+          $('#text').empty();   //清空Text里面的所有内容  
+          var data='';  
+          if(msg!=''){  
+            data = eval("("+msg+")");    //将返回的json数据进行解析，并赋给data  
+          }  
+          $('#text').html("用户名为：" + data.username + ",密码为：" + data.password);    //在#text中输出  
+          console.log(data);    //控制台输出  
+        },  
+        error:function(msg){  
+          console.log(msg);  
+        }  
+      });  
+    });  
+  })  
+</script>  
+
+
+
+===============================================================================================================================
+
+
+html页面：
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<script type="text/javascript" src="jquery-1.8.2.min.js"></script>
+<script type="text/javascript">
+ $(function(){
+   $("#send").click(function(){
+    var cont = $("input").serialize();
+    $.ajax({
+      url:'ab.php',
+      type:'post',
+      dataType:'json',
+      data:cont,
+      success:function(data){
+       var str = data.username + data.age + data.job;
+       $("#result").html(str);
+    }
+  });
+ });
+ });
+</script>
+</head>
+<body>
+<div id="result">一会看显示结果</div>
+<form id="my" action="" method="post">
+ <p><span>姓名：</span> <input type="text" name="username" /></p>
+ <p><span>年龄：</span><input type="text" name="age" /></p>
+ <p><span>工作：</span><input type="text" name="job" /></p>
+</form>
+<button id="send">提交</button>
+</body>
+</html>
+
+
+
+php页面：
+
+<?php
+header("Content-type:text/html;charset=utf-8");
+    $username = $_POST['username'];
+    $age = $_POST['age'];
+    $job = $_POST['job'];
+    $json_arr = array("username"=>$username,"age"=>$age,"job"=>$job);
+    $json_obj = json_encode($json_arr);
+    echo $json_obj;
+?>
+
+
+
+使用post方式
+
+<script type="text/javascript">
+ $(function(){
+ $("#send").click(function(){
+   var cont = {username:$("input")[0].value,age:$("input")[1].value,job:$("input")[2].value};
+   var url = 'ab.php';
+   $.post(url,cont,function(data){
+    var res = eval("(" + data + ")");//转为Object对象
+   var str = res.username + res.age + res.job;
+  $("#result").html(str);
+  });
+ });
+ });
+</script>
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+另一个例子：
+
+Php代码 ：
+ 
+<html>  
+<title>php+jquery+ajax+json简单小例子</title>  
+<?php  
+header("Content-Type:text/html;charset=utf-8");  
+?>  
+<head>  
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>  
+<script type="text/javascript">  
+$(function() {  
+$("#subbtn").click(function() {  
+var params = $("input").serialize();  
+var url = "1.php";  
+$.ajax({  
+type: "post",  
+url: url,  
+dataType: "json",  
+data: params,  
+success: function(msg){  
+var backdata = "您提交的姓名为：" + msg.name +  
+"<br /> 您提交的密码为：" + msg.password;  
+$("#backdata").html(backdata);  
+$("#backdata").css({color: "green"});  
+}  
+});  
+});  
+  
+});  
+  
+</script>  
+</head>  
+<body>  
+<p><label for="name">姓名：</label>  
+<input id="name" name="name" type="text" />  
+</p>  
+  
+<p><label for="password">密码：</label>  
+<input id="password" name="password" type="password" />  
+</p>  
+  
+<span id="backdata"></span>  
+<p><input id="subbtn" type="button" value="提交数据" /></p>  
+</body>  
+</html>  
+
+
+Php代码 ：
+ 
+<?php  
+echo json_encode($_POST);  
+?>  
+
+
+ajax通过 HTTP 请求加载远程数据。
+jQuery 底层 AJAX 实现。简单易用的高层实现见 $.get, $.post 等。$.ajax() 返回其创建的 XMLHttpRequest 对象。大多数情况下你无需直接操作该函数，除非你需要操作不常用的选项，以获得更多的灵活性。
+最简单的情况下，$.ajax()可以不带任何参数直接使用。
+注意，所有的选项都可以通过$.ajaxSetup()函数来全局设置。
+回调函数
+如果要处理$.ajax()得到的数据，则需要使用回调函数。beforeSend、error、dataFilter、success、complete。
+beforeSend 在发送请求之前调用，并且传入一个XMLHttpRequest作为参数。
+error 在请求出错时调用。传入XMLHttpRequest对象，描述错误类型的字符串以及一个异常对象（如果有的话）
+dataFilter 在请求成功之后调用。传入返回的数据以及"dataType"参数的值。并且必须返回新的数据（可能是处理过的）传递给success回调函数。
+success 当请求之后调用。传入返回后的数据，以及包含成功代码的字符串。
+complete 当请求完成之后调用这个函数，无论成功或失败。传入XMLHttpRequest对象，以及一个包含成功或错误代码的字符串。
+
+
+数据类型
+$.ajax()函数依赖服务器提供的信息来处理返回的数据。如果服务器报告说返回的数据是XML，那么返回的结果就可以用普通的XML方法或者jQuery的选择器来遍历。如果见得到其他类型，比如HTML，则数据就以文本形式来对待。
+通过dataType选项还可以指定其他不同数据处理方式。除了单纯的XML，还可以指定 html、json、jsonp、script或者text。
+其中，text和xml类型返回的数据不会经过处理。数据仅仅简单的将XMLHttpRequest的responseText或responseHTML属性传递给success回调函数，
+'''注意'''，我们必须确保网页服务器报告的MIME类型与我们选择的dataType所匹配。比如说，XML的话，服务器端就必须声明 text/xml 或者 application/xml 来获得一致的结果。
+如果指定为html类型，任何内嵌的JavaScript都会在HTML作为一个字符串返回之前执行。类似的，指定script类型的话，也会先执行服务器端生成JavaScript，然后再把脚本作为一个文本数据返回。
+如果指定为json类型，则会把获取到的数据作为一个JavaScript对象来解析，并且把构建好的对象作为结果返回。为了实现这个目的，他首先尝试使用JSON.parse()。如果浏览器不支持，则使用一个函数来构建。JSON数据是一种能很方便通过JavaScript解析的结构化数据。如果获取的数据文件存放在远程服务器上（域名不同，也就是跨域获取数据），则需要使用jsonp类型。使用这种类型的话，会创建一个查询字符串参数 callback=? ，这个参数会加在请求的URL后面。服务器端应当在JSON数据前加上回调函数名，以便完成一个有效的JSONP请求。如果要指定回调函数的参数名来取代默认的callback，可以通过设置$.ajax()的jsonp参数。
+注意，JSONP是JSON格式的扩展。他要求一些服务器端的代码来检测并处理查询字符串参数。更多信息可以参阅最初的文章。
+如果指定了script或者jsonp类型，那么当从服务器接收到数据时，实际上是用了&lt;script&gt;标签而不是XMLHttpRequest对象。这种情况下，$.ajax()不再返回一个XMLHttpRequest对象，并且也不会传递事件处理函数，比如beforeSend。
+发送数据到服务器
+默认情况下，Ajax请求使用GET方法。如果要使用POST方法，可以设定type参数值。这个选项也会影响data选项中的内容如何发送到服务器。
+data选项既可以包含一个查询字符串，比如 key1=value1&amp;key2=value2 ，也可以是一个映射，比如 {key1: 'value1', key2: 'value2'} 。如果使用了后者的形式，则数据再发送器会被转换成查询字符串。这个处理过程也可以通过设置processData选项为false来回避。如果我们希望发送一个XML对象给服务器时，这种处理可能并不合适。并且在这种情况下，我们也应当改变contentType选项的值，用其他合适的MIME类型来取代默认的 application/x-www-form-urlencoded 。
+高级选项
+global选项用于阻止响应注册的回调函数，比如.ajaxSend，或者ajaxError，以及类似的方法。这在有些时候很有用，比如发送的请求非常频繁且简短的时候，就可以在ajaxSend里禁用这个。更多关于这些方法的详细信息，请参阅下面的内容。
+如果服务器需要HTTP认证，可以使用用户名和密码可以通过username和password选项来设置。
+Ajax请求是限时的，所以错误警告被捕获并处理后，可以用来提升用户体验。请求超时这个参数通常就保留其默认值，要不就通过jQuery.ajaxSetup来全局设定，很少为特定的请求重新设置timeout选项。
+默认情况下，请求总会被发出去，但浏览器有可能从他的缓存中调取数据。要禁止使用缓存的结果，可以设置cache参数为false。如果希望判断数据自从上次请求后没有更改过就报告出错的话，可以设置ifModified为true。
+scriptCharset允许给&lt;script&gt;标签的请求设定一个特定的字符集，用于script或者jsonp类似的数据。当脚本和页面字符集不同时，这特别好用。
+Ajax的第一个字母是asynchronous的开头字母，这意味着所有的操作都是并行的，完成的顺序没有前后关系。$.ajax()的async参数总是设置成true，这标志着在请求开始后，其他代码依然能够执行。强烈不建议把这个选项设置成false，这意味着所有的请求都不再是异步的了，这也会导致浏览器被锁死。
+$.ajax函数返回他创建的XMLHttpRequest对象。通常jQuery只在内部处理并创建这个对象，但用户也可以通过xhr选项来传递一个自己创建的xhr对象。返回的对象通常已经被丢弃了，但依然提供一个底层接口来观察和操控请求。比如说，调用对象上的.abort()可以在请求完成前挂起请求。
+
+参数
+url,[settings]ObjectV1.5
+url:一个用来包含发送请求的URL字符串。
+settings:AJAX 请求设置。所有选项都是可选的。
+V1.0settings:选项
+acceptsMap
+默认： 取决于数据类型。
+内容类型发送请求头，告诉服务器什么样的响应会接受返回。如果accepts设置需要修改，推荐在$.ajaxSetup()方法中做一次。
+asyncBoolean
+(默认: true) 默认设置下，所有请求均为异步请求。如果需要发送同步请求，请将此选项设置为 false。注意，同步请求将锁住浏览器，用户其它操作必须等待请求完成才可以执行。
+beforeSend(XHR)Function
+发送请求前可修改 XMLHttpRequest 对象的函数，如添加自定义 HTTP 头。XMLHttpRequest 对象是唯一的参数。这是一个 Ajax 事件。如果返回false可以取消本次ajax请求。
+function (XMLHttpRequest) {
+    this; // 调用本次AJAX请求时传递的options参数
+}
+ 
+cacheBoolean
+(默认: true,dataType为script和jsonp时默认为false) jQuery 1.2 新功能，设置为 false 将不缓存此页面。
+complete(XHR, TS)Function
+请求完成后回调函数 (请求成功或失败之后均调用)。参数： XMLHttpRequest 对象和一个描述成功请求类型的字符串。 Ajax 事件。
+function (XMLHttpRequest, textStatus) {
+    this; // 调用本次AJAX请求时传递的options参数
+}
+
+contentsMapV1.5
+一个以"{字符串:正则表达式}"配对的对象，用来确定jQuery将如何解析响应，给定其内容类型。
+contentTypeString
+(默认: "application/x-www-form-urlencoded") 发送信息至服务器时内容编码类型。默认值适合大多数情况。如果你明确地传递了一个content-type给 $.ajax() 那么他必定会发送给服务器（即使没有数据要发送）
+contextObject
+这个对象用于设置Ajax相关回调函数的上下文。也就是说，让回调函数内this指向这个对象（如果不设定这个参数，那么this就指向调用本次AJAX请求时传递的options参数）。比如指定一个DOM元素作为context参数，这样就设置了success回调函数的上下文为这个DOM元素。就像这样：
+$.ajax({ url: "test.html", context: document.body, success: function(){
+    $(this).addClass("done");
+}});
+
+
+convertersmapV1.5
+默认： {"* text": window.String, "text html": true, "text json": jQuery.parseJSON, "text xml": jQuery.parseXML}
+一个数据类型对数据类型转换器的对象。每个转换器的值是一个函数，返回响应的转化值
+crossDomainmapV1.5
+默认： 同域请求为false
+跨域请求为true如果你想强制跨域请求（如JSONP形式）同一域，设置crossDomain为true。这使得例如，服务器端重定向到另一个域
+dataObject,String
+发送到服务器的数据。将自动转换为请求字符串格式。GET 请求中将附加在 URL 后。查看 processData 选项说明以禁止此自动转换。必须为 Key/Value 格式。如果为数组，jQuery 将自动为不同值对应同一个名称。如 {foo:["bar1", "bar2"]} 转换为 "&foo=bar1&foo=bar2"。
+dataFilterFunction
+给Ajax返回的原始数据的进行预处理的函数。提供data和type两个参数：data是Ajax返回的原始数据，type是调用jQuery.ajax时提供的dataType参数。函数返回的值将由jQuery进一步处理。
+function (data, type) {
+    // 对Ajax返回的原始数据进行预处理
+    return data  // 返回处理后的数据
+}
+
+
+dataTypeString
+ 
+预期服务器返回的数据类型。如果不指定，jQuery 将自动根据 HTTP 包 MIME 信息来智能判断，比如XML MIME类型就被识别为XML。在1.4中，JSON就会生成一个JavaScript对象，而script则会执行这个脚本。随后服务器端返回的数据会根据这个值解析后，传递给回调函数。可用值:
+"xml": 返回 XML 文档，可用 jQuery 处理。
+"html": 返回纯文本 HTML 信息；包含的script标签会在插入dom时执行。
+"script": 返回纯文本 JavaScript 代码。不会自动缓存结果。除非设置了"cache"参数。'''注意：'''在远程请求时(不在同一个域下)，所有POST请求都将转为GET请求。(因为将使用DOM的script标签来加载)
+"json": 返回 JSON 数据 。
+"jsonp": JSONP 格式。使用 JSONP 形式调用函数时，如 "myurl?callback=?" jQuery 将自动替换 ? 为正确的函数名，以执行回调函数。
+"text": 返回纯文本字符串
+ 
+errorFunction
+(默认: 自动判断 (xml 或 html)) 请求失败时调用此函数。有以下三个参数：XMLHttpRequest 对象、错误信息、（可选）捕获的异常对象。如果发生了错误，错误信息（第二个参数）除了得到null之外，还可能是"timeout", "error", "notmodified" 和 "parsererror"。Ajax 事件。
+function (XMLHttpRequest, textStatus, errorThrown) {
+    // 通常 textStatus 和 errorThrown 之中
+    // 只有一个会包含信息
+    this; // 调用本次AJAX请求时传递的options参数
+}
+ 
+
+globalBoolean
+(默认: true) 是否触发全局 AJAX 事件。设置为 false 将不会触发全局 AJAX 事件，如 ajaxStart 或 ajaxStop 可用于控制不同的 Ajax 事件。
+headersmapV1.5
+Default: {}
+一个额外的"{键:值}"对映射到请求一起发送。此设置被设置之前beforeSend函数被调用;因此，消息头中的值设置可以在覆盖beforeSend函数范围内的任何设置。
+ifModifiedBoolean
+(默认: false) 仅在服务器数据改变时获取新数据。使用 HTTP 包 Last-Modified 头信息判断。在jQuery 1.4中，他也会检查服务器指定的'etag'来确定数据没有被修改过。
+isLocalmapV1.5.1
+默认: 取决于当前的位置协议
+允许当前环境被认定为“本地”，（如文件系统），即使jQuery默认情况下不会承认它。以下协议目前公认为本地：file, *-extension, and widget。如果isLocal设置需要修改，建议在$.ajaxSetup()方法中这样做一次。
+jsonpString
+在一个jsonp请求中重写回调函数的名字。这个值用来替代在"callback=?"这种GET或POST请求中URL参数里的"callback"部分，比如{jsonp:'onJsonPLoad'}会导致将"onJsonPLoad=?"传给服务器。
+jsonpCallbackString
+为jsonp请求指定一个回调函数名。这个值将用来取代jQuery自动生成的随机函数名。这主要用来让jQuery生成度独特的函数名，这样管理请求更容易，也能方便地提供回调函数和错误处理。你也可以在想让浏览器缓存GET请求的时候，指定这个回调函数名。
+mimeTypeStringV1.5.1
+一个mime类型用来覆盖XHR的 MIME类型。
+passwordString
+用于响应HTTP访问认证请求的密码
+processDataBoolean
+(默认: true) 默认情况下，通过data选项传递进来的数据，如果是一个对象(技术上讲只要不是字符串)，都会处理转化成一个查询字符串，以配合默认内容类型 "application/x-www-form-urlencoded"。如果要发送 DOM 树信息或其它不希望转换的信息，请设置为 false。
+scriptCharsetString
+只有当请求时dataType为"jsonp"或"script"，并且type是"GET"才会用于强制修改charset。通常只在本地和远程的内容编码不同时使用。
+statusCodemapV1.5
+默认: {}
+一组数值的HTTP代码和函数对象，当响应时调用了相应的代码。例如，如果响应状态是404，将触发以下警报：
+$.ajax({
+  statusCode: {404: function() {
+    alert('page not found');
+  }
+});
+ 
+success(data, textStatus, jqXHR)Function,Array
+请求成功后的回调函数。参数：由服务器返回，并根据dataType参数进行处理后的数据；描述状态的字符串。还有 jqXHR（在jQuery 1.4.x的中，XMLHttpRequest） 对象 。在jQuery 1.5， 成功设置可以接受一个函数数组。每个函数将被依次调用。 Ajax 事件。
+function (data, textStatus) {
+    // data 可能是 xmlDoc, jsonObj, html, text, 等等...
+    this; // 调用本次AJAX请求时传递的options参数
+}
+ 
+traditionalBoolean
+如果你想要用传统的方式来序列化数据，那么就设置为true。请参考工具分类下面的jQuery.param 方法。
+timeoutNumber
+设置请求超时时间（毫秒）。此设置将覆盖全局设置。
+typeString
+(默认: "GET") 请求方式 ("POST" 或 "GET")， 默认为 "GET"。注意：其它 HTTP 请求方法，如 PUT 和 DELETE 也可以使用，但仅部分浏览器支持。
+urlString
+(默认: 当前页地址) 发送请求的地址。
+usernameString
+用于响应HTTP访问认证请求的用户名
+xhrFunction
+需要返回一个XMLHttpRequest 对象。默认在IE下是ActiveXObject 而其他情况下是XMLHttpRequest 。用于重写或者提供一个增强的XMLHttpRequest 对象。这个参数在jQuery 1.3以前不可用。
+xhrFieldsmapV1.5
+一对“文件名-文件值”在本机设置XHR对象。例如，如果需要的话，你可以用它来设置withCredentials为true的跨域请求。
+
+
+示例
+描述:
+加载并执行一个 JS 文件。
+jQuery 代码:
+$.ajax({
+  type: "GET",
+  url: "test.js",
+  dataType: "script"
+});
+描述:
+保存数据到服务器，成功时显示信息。
+jQuery 代码:
+$.ajax({
+   type: "POST",
+   url: "some.php",
+   data: "name=John&location=Boston",
+   success: function(msg){
+     alert( "Data Saved: " + msg );
+   }
+});
+描述:
+装入一个 HTML 网页最新版本。
+jQuery 代码:
+$.ajax({
+  url: "test.html",
+  cache: false,
+  success: function(html){
+    $("#results").append(html);
+  }
+});
+描述:
+同步加载数据。发送请求时锁住浏览器。需要锁定用户交互操作时使用同步方式。
+jQuery 代码:
+ var html = $.ajax({
+  url: "some.php",
+  async: false
+ }).responseText;
+描述:
+发送 XML 数据至服务器。设置 processData 选项为 false，防止自动转换数据格式。
+jQuery 代码:
+ var xmlDocument = [create xml document];
+ $.ajax({
+   url: "page.php",
+   processData: false,
+   data: xmlDocument,
+   success: handleResponse
+ });
+
+
+
+====================================================================================================================================
+
+过程分析：    php数组经过json_encode处理，变成json格式的php字符串，
+php字符串传入js中，js自动将其解析成json对象即js object，
+JSON.stringify将js object处理成json格式的js字符串，切记，只有字符串可以在php和js直接传值。
+js字符串到后台php文件，变成json格式的php字符串。json_decode将其解析成php对象或者数组。
+
+
+====================================================================================================================================
+
+
+基础概念:
+
+1.AJAX的全称： Asynchronous JavaScript and XML （异步的JavaScript和XML）
+
+2.有了XMLHttpRequest这个对象，才实现了从同步到异步的过渡。
+  XMLHttpRequest对象用于在后台与服务器交换数据。
+
+  // 兼容IE6以下版本
+  var request;
+  if (window.XMLHttpRequest) {
+    // IE7+,Firefox,Chrome
+    request = new XMLHttpRequest();
+  } else {
+    // IE6,IE5
+    request = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+3.HTTP：计算机通过网络进行通信的规则
+
+    HTTP请求：get/post方法，URL，请求头，请求体
+    HTTP响应：状态码，响应头，响应体
+
+4.XMLHttpRequest
+
+    4.1发送请求
+        open(method,url,async)
+        send(string)
+
+    4.2获取响应
+        responseText:获取字符串形式的响应数据
+        responseXML:
+        status和statusText:
+        getAllResponseHeader()
+        getResponseHeader()
+
+        监听readyState属性
+            0:请求未初始化，open还没有调用
+            1:服务器连接已建立，open已经调用了
+            2:请求已接收，也就是接收到头信息了
+            3:请求处理中，也就是接收到响应主体了
+            4:请求已完成，且响应已就绪，也就是响应完成了
+
+5.监听HTTP请求工具 Fiddler
+
+6.JSON：JavaScript Object Notation JavaScript对象表示法
+
+    6.1 JSON的长度比XML格式短
+    6.2 JSON读写的速度更快
+    6.3 JSON可以使用JavaScript内建的方法直接进行解析，转换成Javascript对象非常方便
+
+7.解析JSON的两种方法
+
+    7.1 eval和JSON.parse
+        在代码中使用eval是很危险的！特别是用它执行第三方的JSON数据（其中可能包含恶意代码）时，尽可能使用JSON.parse()方法解析字符串本身，该方法还可以捕捉JSON中的语法错误。
+
+        var jsondata = '{"staff":[{"name":"mike","age":22},{"name":"kk","age":alert(123)}]}';
+
+        var jsonobj = eval('(' + jsondata + ')'); // 123
+
+        alert(jsonobj.staff[0].name); // mike
+
+        这样会先执行json数据中的恶意代码，alert(123);
+
+    7.2 在线验证JSON格式工具： jsonlint.com
+
+8.使用JQuery实现Ajax
+
+    type:提交类型，默认为"GET"
+    url:发送请求的地址
+    data:连同请求发送到服务器的数据
+    dataType:预期服务器返回的数据类型
+    success:秦秋成功后的回调函数
+    error:请求失败时调用次函数。
+
+9. 跨域处理
+
+    JavaScript处于安全方面的考虑，不允许跨域调用其他页面的对象。
+    由于JavaScript同源策略的限制，a.com域名下的js无法操作b.com域名下的对象
+
+    处理方法： 
+
+        1.代理
+
+        2.JSONP 只能对Get请求起到效果
+
+            利用 <script> 元素的这个开放策略，网页可以得到从其他来源动态产生的 JSON 资料，而这种使用模式就是所谓的 JSONP。
+
+        3.HTML5提供的XHR2 IE10以下的版本都不支持（在服务端加入下列语句）
+
+            header('Access-Control-Allow-Origin:*'); // 所有域都可以访问
+            header('Access-Control-Allow-Methods:POST,GET'); 
+            header('Access-Control-Allow-Credentials:true'); 
+
+跨域
+
+代码示例：
+
+// 后台PHP代码（返回Json格式数据）
+
+<?php
+//设置页面内容是html编码格式是utf-8
+//header("Content-Type: text/plain;charset=utf-8"); 
+header("Content-Type: application/json;charset=utf-8"); 
+//header("Content-Type: text/xml;charset=utf-8"); 
+//header("Content-Type: text/html;charset=utf-8"); 
+//header("Content-Type: application/javascript;charset=utf-8"); 
+
+//定义一个多维数组，包含员工的信息，每条员工信息为一个数组
+$staff = array
+    (
+        array("name" => "洪七", "number" => "101", "sex" => "男", "job" => "总经理"),
+        array("name" => "郭靖", "number" => "102", "sex" => "男", "job" => "开发工程师"),
+        array("name" => "黄蓉", "number" => "103", "sex" => "女", "job" => "产品经理")
+    );
+
+//判断如果是get请求，则进行搜索；如果是POST请求，则进行新建
+//$_SERVER是一个超全局变量，在一个脚本的全部作用域中都可用，不用使用global关键字
+//$_SERVER["REQUEST_METHOD"]返回访问页面使用的请求方法
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    search();
+} elseif ($_SERVER["REQUEST_METHOD"] == "POST"){
+    create();
+}
+
+//通过员工编号搜索员工
+function search(){
+    //检查是否有员工编号的参数
+    //isset检测变量是否设置；empty判断值为否为空
+    //超全局变量 $_GET 和 $_POST 用于收集表单数据
+    if (!isset($_GET["number"]) || empty($_GET["number"])) {
+        echo '{"success":false,"msg":"参数错误"}';
+        return;
+    }
+    //函数之外声明的变量拥有 Global 作用域，只能在函数以外进行访问。
+    //global 关键词用于访问函数内的全局变量
+    global $staff;
+    //获取number参数
+    $number = $_GET["number"];
+    $result = '{"success":false,"msg":"没有找到员工。"}';
+
+    //遍历$staff多维数组，查找key值为number的员工是否存在，如果存在，则修改返回结果
+    foreach ($staff as $value) {
+        if ($value["number"] == $number) {
+            $result = '{"success":true,"msg":"找到员工：员工编号：' . $value["number"] . 
+                            '，员工姓名：' . $value["name"] . 
+                            '，员工性别：' . $value["sex"] . 
+                            '，员工职位：' . $value["job"] . '"}';
+            break;
+        }
+    }
+    echo $result;
+}
+
+//创建员工
+function create(){
+    //判断信息是否填写完全
+    if (!isset($_POST["name"]) || empty($_POST["name"])
+        || !isset($_POST["number"]) || empty($_POST["number"])
+        || !isset($_POST["sex"]) || empty($_POST["sex"])
+        || !isset($_POST["job"]) || empty($_POST["job"])) {
+        echo '{"success":false,"msg":"参数错误，员工信息填写不全"}';
+        return;
+    }
+    //获取POST表单数据并保存到数据库,这里只是个简单demo,数据库操作先省略
+
+    //提示保存成功
+    echo '{"success":true,"msg":"员工：' . $_POST["name"] . ' 信息保存成功！"}';
+}
+
+?>
+
+
+// 前端HTML代码（使用XMLHttpRequest对象和后台PHP进行Ajax交互）
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Demo</title>
+<style>
+body, input, select, button, h1 {
+    font-size: 15px;
+    line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+    <h1>员工查询</h1>
+    <label>请输入员工编号：</label>
+    <input type="text" id="keyword" />
+    <button id="search">查询</button>
+    <p id="searchResult"></p>
+
+    <h1>员工新建</h1>
+    <label>请输入员工姓名：</label>
+    <input type="text" id="staffName" />
+    <br>
+    <label>请输入员工编号：</label>
+    <input type="text" id="staffNumber" />
+    <br>
+    <label>请选择员工性别：</label>
+    <select id="staffSex">
+        <option>女</option>
+        <option>男</option>
+    </select>
+    <br>
+    <label>请输入员工职位：</label>
+    <input type="text" id="staffJob" />
+    <br>
+    <button id="save">保存</button>
+    <p id="createResult"></p>
+
+    <script>
+        document.getElementById("search").onclick = function() {
+            var request = new XMLHttpRequest();
+            request.open("GET", "serverjson.php?number="
+                    + document.getElementById("keyword").value);
+            request.send();
+            request.onreadystatechange = function() {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        // 解析json数据
+                        var data = JSON.parse(request.responseText);
+                        if (data.success) {
+                            document.getElementById("searchResult").innerHTML = data.msg;
+                        } else {
+                            document.getElementById("searchResult").innerHTML = "出现错误："
+                                    + data.msg;
+                        }
+                    } else {
+                        alert("发生错误：" + request.status);
+                    }
+                }
+            }
+        }
+
+        document.getElementById("save").onclick = function() {
+            var request = new XMLHttpRequest();
+            request.open("POST", "serverjson.php");
+            var data = "name=" + document.getElementById("staffName").value
+                    + "&number=" + document.getElementById("staffNumber").value
+                    + "&sex=" + document.getElementById("staffSex").value
+                    + "&job=" + document.getElementById("staffJob").value;
+            request.setRequestHeader("Content-type",
+                    "application/x-www-form-urlencoded");
+            request.send(data);
+            request.onreadystatechange = function() {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        // 解析json数据
+                        var data = JSON.parse(request.responseText);
+                        if (data.success) {
+                            document.getElementById("createResult").innerHTML = data.msg;
+                        } else {
+                            document.getElementById("createResult").innerHTML = "出现错误："
+                                    + data.msg;
+                        }
+                    } else {
+                        alert("发生错误：" + request.status);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+// 现在很少自己写原生的JS来实现Ajax请求，可以使用第三方JS库实现，它已经帮我们封装好Ajax方法，比如JQuery
+
+<script>
+    $(document).ready(function(){ 
+        $("#search").click(function(){ 
+            $.ajax({ 
+                type: "GET",    
+                url: "http://127.0.0.1:80/ajaxdemo/serverjson.php?number=" + $("#keyword").val(),
+                dataType: "json",
+                success: function(data) {
+                    if (data.success) { 
+                        $("#searchResult").html(data.msg);
+                    } else {
+                        $("#searchResult").html("出现错误：" + data.msg);
+                    }  
+                },
+                error: function(jqXHR){     
+                   alert("发生错误：" + jqXHR.status);  
+                },     
+            });
+        });
+
+        $("#save").click(function(){ 
+            $.ajax({ 
+                type: "POST",   
+                url: "serverjson.php",
+                data: {
+                    name: $("#staffName").val(), 
+                    number: $("#staffNumber").val(), 
+                    sex: $("#staffSex").val(), 
+                    job: $("#staffJob").val()
+                },
+                dataType: "json",
+                success: function(data){
+                    if (data.success) { 
+                        $("#createResult").html(data.msg);
+                    } else {
+                        $("#createResult").html("出现错误：" + data.msg);
+                    }  
+                },
+                error: function(jqXHR){     
+                   alert("发生错误：" + jqXHR.status);  
+                },     
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
