@@ -1,0 +1,61 @@
+<html>
+<head>
+    <title>无限级联</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <script src="/static/assets/js/vendor/jquery.min.js"></script>
+</head>
+<body>
+<div id="jilianContainer"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+    var getData = function(obj){
+        $.ajax({
+            url:'jl.php',
+            type:'POST',
+            data:{"pid":obj.val()},
+            dataType:'json',
+            async:false,
+            success:function(data){
+                if($(".selection").length){
+                    $(".selection:gt("+$(obj).index()+")").remove();    //移除后面所有子级下拉菜单
+                    $(".selection:last").after(data);                    //添加子级下拉菜单
+                }else {
+                    $("#jilianContainer").append(data);                    //初始加载情况
+                }
+                //所有下拉响应
+                $(".selection").unbind().change(function(){
+                    getData($(this));
+                });
+            },
+            error:function(msg){
+                alert('error');
+            }
+        });
+    }
+    
+    //Init
+    getData($(this));
+    
+});
+</script>
+
+<!-- 数据存储示例，仅提取数据，不做操作 -->
+
+<div style="height:100px;display:block;"></div>
+<input type="button" value="存储数据" id="save"></input>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#save").click(function(){
+        var data = [];
+        $(".selection").each(function(){
+            data.push($.trim($(this).val()));
+        })
+        
+        alert(data.join(','));
+    });
+});
+</script>
+
+</body>
+</html>

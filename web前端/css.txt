@@ -1,1 +1,26 @@
-﻿
+﻿1、margin:0 auto 表示什么意思？
+
+margin后面如果只有两个参数的话，第一个表示top和bottom，第二个表示left和right
+因为0 auto，表示上下边界为0，左右则根据宽度自适应相同值（即居中）
+
+2、背景设置透明色
+
+
+3、header 色调配置？？？
+
+
+6、可见即可得
+
+
+7、
+<div class="layui-body">
+
+</div>
+
+
+8、layui
+
+
+    <div class="main-bd">
+
+</div>

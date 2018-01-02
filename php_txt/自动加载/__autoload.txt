@@ -27,7 +27,7 @@ function __autoload($class){
 $obj = new PRINT();
 $obj->doPrint();
 
-运行index.php后正常输出hello world。在index.php中，由于没有包含printit.class.php，在实例化printit时，自动调用__autoload函数，参数$class的值即为类名printit，此时printit.class.php就被引进来了。  
+运行index.php后正常输出hello world。在index.php中，由于没有包含print.class.php，在实例化PRINT时，自动调用__autoload函数，参数$class的值即为类名PRINT，此时print.class.php就被引进来了。  
 
 
 

@@ -10,7 +10,7 @@ callback   对每个数组的每个元素作用的回调函数。
 arr1       将被回调函数（callback）执行的数组。 
 array      将被回调函数（callback）执行的数组列表。
 
-返回值:    返回一个数组，该数组的每个元素都是数组（arr1）里面的每个元素经过回调函数（callback）处理了的
+返回值:    返回一个数组，该数组的每个元素都是数组（arr1）里面的每个元素（注意这是数组里面的每一个元素即值），经过回调函数（callback）处理了的，注意返回值是一个数组，注意看内容要细心
 
 */
 
@@ -226,12 +226,6 @@ system.php:
 <?php
 class system{
 
-	/**
-	 * filter
-	 * 请求数据过滤
-	 * @access public
-	 * @param $data 需要过滤的数据
-	 */
 	public static function filter($data){
 		$data=is_array($data)?array_map(array(__CLASS__,'filter'),$data):addslashes($data);
 		return $data;
