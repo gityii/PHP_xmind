@@ -63,21 +63,11 @@ class record
         $success = false;
         $error = '';
 
-        $project = web::post('project', '');
-
-        if ($project == '') {
-            $msg['project'] = '请输入项目名称';
-        } else if (web::strlen($project) > 240) {
-            $msg['project'] = '项目名称不能超过100个汉字';
-
-        }
-        web::layout('/admin/views/layout/admin');
-        web::render('/record/views/groupadd', array(
+        web::render('/record/views/groupaddtest', array(
             'success' => $success,
             'error' => $error,
             'msg' => $msg,
             'data' => array(
-                'project' => $project,
 //                'grade' => $postgrade,
 
             ),
@@ -88,7 +78,7 @@ class record
     }
 
 
-    public static function jiliangrade()
+    public static function groupaddtest()
     {
         $msg = array();
         $success = false;
@@ -136,38 +126,25 @@ class record
             }
 
 
-//                if(($postgrade==0)){
-//                    $html = '<div  class="form-group">
-//                             <label class="col-sm-2 control-label" style="text-align:left; width: 8%" for="">上级：</label>
-//                             <div class=" col-xs-3">
-//                             <select id="" class="grade"><option value="">请选择</option>' . $ghtml . '</select>
-//                             </div></div>';
-//                }else{
-//                    $html = '<div class="class">
-//                             <label class="col-sm-2 control-label" style="text-align:left; width: 8%" for="">下级 :</label>
-//                             <div class="col-xs-3">
-//                             <select name="class" ><option value="">请选择</option>' . $chtml . '</select>
-//                             </div></div>';
-//                }
+//            $row = mysqli_fetch_assoc($class);
 
-        if(($postgrade==0))
-        {
-            $html = '<div class="grade form-group">
-                     <label class="col-sm-2 control-label" style="text-align:left; width: 8%" for="">年级： </label> 
-                     <div class="col-xs-3">
-                     <select id="grade" class="form-control"><option value="">请选择</option>' . $ghtml . '</select>
-                     </div></div>';
-        }else{
-            $html = '<div class="class form-group">
-                     <label class="col-sm-2 control-label" style="text-align:left;width: 8%" for="">班级： </label>
-                     <div class="col-xs-3">
-                     <select  class="form-control"><option value="">请选择</option>' . $chtml . '</select>
-                     </div></div>';
-        }
+//            //组装子级下拉菜单
+//            $html = '';
+//            while ($row = mysqli_fetch_assoc($class)) {
+//            $html .= '<option value="' . $row['id'] . '">' . $row['class'] . '</option>';
+//        }
 
 
+                if(($postgrade==0)){
+                    $html = '父类： <select id="fulei" class=""><option value="">请选择</option>' . $ghtml . '</select>';
 
-        //输出下拉菜单
+                }else{
+                    $html = '<div class="zilei">子类： <select id="" ><option value="">请选择</option>' . $chtml . '</select>
+                    </div>';
+                }
+
+
+            //输出下拉菜单
 //        }
         echo($html);
 //                exit();
@@ -194,7 +171,7 @@ class record
 
 
 
-    public static function groupaddbac()
+    public static function groupadd()
     {
         $msg = array();
         $success = false;
