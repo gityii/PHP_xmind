@@ -1,0 +1,8 @@
+
+1、  yAxis.minInterval   number
+[ default: 0 ]
+自动计算的坐标轴最小间隔大小。
+例如可以设置成1保证坐标轴分割刻度显示成整数。
+{
+    minInterval: 1
+}
